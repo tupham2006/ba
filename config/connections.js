@@ -40,24 +40,24 @@ module.exports.connections = {
   * Run: npm install sails-mysql                                             *
   *                                                                          *
   ***************************************************************************/
-  ba: {
-    adapter: 'sails-mysql',
-    host: '127.0.0.1',
-    user: 'root', //optional
-    password: '', //optional
-    database: 'ba' //optional
-  },
+  // ba: {
+  //   adapter: 'sails-mysql',
+  //   host: '127.0.0.1',
+  //   user: 'root', //optional
+  //   password: '', //optional
+  //   database: 'ba' //optional
+  // },
   
   /**
    * Deploy
    */
-  // ba: {
-  //   adapter: 'sails-mysql',
-  //   host: 'us-cdbr-gcp-east-01.cleardb.net',
-  //   user: 'b3ccee587d79c2', //optional
-  //   password: '5756084ada50108', //optional
-  //   database: 'gcp_773d21a189f46f049d17' //optional
-  // },
+  ba: {
+    adapter: 'sails-mysql',
+    host: 'us-cdbr-gcp-east-01.cleardb.net',
+    user: 'b3ccee587d79c2', //optional
+    password: '5756084ada50108', //optional
+    database: 'gcp_773d21a189f46f049d17' //optional
+  },
 
   /***************************************************************************
   *                                                                          *

@@ -119,5 +119,5 @@ nbproject
 
 # custom
 # config/connections.js
-assets/upload/book/
-assets/upload/user/
+assets/uploads/book/*.jpg
+assets/uploads/user/*.jpg
