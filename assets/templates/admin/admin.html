@@ -1,0 +1,130 @@
+<div id="user" ng-init="getUserList()">
+		<uib-tabset active="active">
+    <uib-tab index="0" heading="Thành viên">
+			<div class="row mb-10 mt-10">
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-3">
+							<input ng-change="getUserList()" type="text" ng-model="filter.typing" placeholder="Tìm kiếm theo tên, số điện thoại" class="form-control">
+						</div>
+						<div class="col-md-2">
+							<position-select ng-model="filter.position_id" ng-change="getUserList()"></position-select>
+						</div>
+						<div class="col-md-2">
+							<department-select ng-model="filter.department_id" ng-change="getUserList()"></department-select>
+						</div>
+						<div class="col-md-2">
+							<select class="form-control" ng-model="filter.actived" ng-change="getUserList()" convert-to-number>
+								<option value="0">Thành viên cũ</option>
+								<option value="1">Thành viên hiện tại</option>
+								<option value="2">Tất cả thành viên</option>
+							</select>
+						</div>
+						<div class="col-md-3">
+							<div class="pull-right">
+								<span class="pull-right count">Tổng số: {{ userCount }}</span>
+								<ul uib-pagination class="m-0" total-items="userCount" force-ellipses="true" items-per-page="filter.limit"  max-size="4" force-ellipses="true" direction-links="false" ng-model="filter.currentPage" ng-change="changePage()"></ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<table class="table table-bordered table-striped">
+						<tr>
+							<th></th>
+							<th>Tên</th>				
+							<th>Tên tài khoản</th>	
+							<th>Ban</th>	
+							<th>Chức vụ</th>
+							<th>Số điện thoại</th>
+							<th>Quyền</th>
+							<th></th>
+						</tr>
+						<tr ng-repeat = "user in userList">
+							<td class="text-center"> <avatar ng-model="user.image" av-size="40" av-type="'user'"></avatar> </td>
+							<td class="text-center"> {{ user.name }} </td>
+							<td class="text-center"> {{ user.account }} </td>
+							<td class="text-center"> {{ user.department_name }} </td>
+							<td class="text-center"> {{ user.position_name }} </td>
+							<td class="text-center"> {{ user.mobile }} </td>
+							<td class="text-center">
+								<select class="form-control" ng-model="user.role" ng-change="setUserRole(user.id, user.role)" convert-to-number>
+									<option ng-repeat="role in roleList track by $index" value="{{$index}}" >
+										{{role}}
+									</option>
+								</select>
+							</td>
+							<td class="text-center">
+								<button class="btn btn-blue" ng-click="openUserInfoModal(user.id)"><i class="fa fa-info-circle"></i> Chi tiết</button>
+							</td>
+						</tr>
+					</table>
+					
+				</div>
+			</div>
+		</uib-tab>
+    <uib-tab index="1" heading="Cài đặt">
+    	<div class="row mt-10">
+    		<div class="col-md-4">
+	    		<div class="row">
+	    			<span class="col-md-12 text-blue mb-5"><span class="text-bold"><i class="fa fa-sun-o"></i> Các chức vụ</span><a href="javascript:void(0)" class="pull-right" ng-click="openPositionModal()">+ Thêm mới</a></span>
+			    	<div class="col-xs-12 mb-20">
+				    	<table class="table table-bordered table-hover">
+				    		<tr>
+				    			<th>Tên chức vụ</th>
+				    			<th class="text-right">Sử dụng</th>
+				    		</tr>
+				    		<tr ng-repeat="position in positionList">
+				    			<td class="text-left">{{ position.name }}</td>
+				    			<td class="text-right">
+				    				<input type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="position.actived" ng-click="savePosition(position)" >
+				    			</td>
+				    		</tr>
+				    	</table>
+			    	</div>
+	    		</div>
+	    	</div>
+    		<div class="col-md-4">
+	    		<div class="row">
+			    	<span class="col-md-12 text-blue mb-5"><span class="text-bold"><i class="fa fa-users"></i> Các ban</span><a href="javascript:void(0)" class="pull-right" ng-click="openDepartmentModal()">+ Thêm mới</a></span>
+			    	<div class="col-xs-12 mb-20">
+				    	<table class="table table-bordered table-striped">
+				    		<tr>
+				    			<th>Tên ban</th>
+				    			<th class="text-right">Sử dụng</th>
+				    		</tr>
+				    		<tr ng-repeat="department in departmentList">
+				    			<td class="text-left">{{ department.name }}</td>
+				    			<td class="text-right">
+				    				<input type="checkbox" ng-click="saveDepartment(department)" ng-true-value="1" ng-false-value="0" ng-model="department.actived">
+				    			</td>
+				    		</tr>
+				    	</table>
+			    	</div>
+	    		</div>
+    		</div>
+    		<div class="col-md-4">
+    			<div class="row">
+	    			<span class="col-md-12 text-blue mb-5"><span class="text-bold"><i class="fa fa-credit-card"></i> Loại đặt cọc</span><a href="javascript:void(0)" class="pull-right" ng-click="openDepositModal()">+ Thêm mới</a></span>
+		    		<div class="col-xs-12 mb-20">
+				    	<table class="table table-bordered table-striped">
+				    		<tr>
+				    			<th>Tên loại đặt cọc</th>
+				    			<th class="text-right">Sử dụng</th>
+				    		</tr>
+				    		<tr ng-repeat="deposit in depositList">
+				    			<td class="text-left">{{ deposit.name }}</td>
+				    			<td class="text-right">
+					    			<input type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="deposit.actived" ng-click="saveDeposit(deposit)" >
+				    			</td>
+				    		</tr>
+				    	</table>
+			    	</div>
+			    </div>
+    		</div>
+    	</div>
+    </uib-tab>
+  </uib-tabset>
+</div>

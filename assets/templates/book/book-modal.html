@@ -1,0 +1,99 @@
+<form class="form" name="bookForm" ng-submit="saveBook()" novalidate>
+	<div class="modal-header modal-primary" ng-controller="BookCtrl">
+		<b ng-show="!bookInfo.id">Thêm sách mới</b>
+		<b ng-show="bookInfo.id">Chỉnh sửa thông tin sách</b>
+		<button type="button" class="close" ng-click="modalClose()">×</button>
+	</div>
+	<div class="modal-body">
+		
+		<div class="row mb-10">
+			<div class="label-control col-md-4 required-field">Tên sách</div>
+			<div class="col-md-8">
+				<input type="text" class="form-control" ng-change="checkExistBook()" name="bookName" ng-model="bookInfo.name" required>
+				<book-search ng-model="bookInfo.name" option = "{input: 'hide', status: 0 }" ></book-search>
+				<span class="validation-error-label" ng-show="bookForm.bookName.$touched && bookForm.bookName.$invalid"> Bạn chưa nhập tên sách </span>
+			</div>
+		</div>
+		<div class="row mb-10">
+			<div class="label-control col-md-4 required-field">Thể loại sách</div>
+			<div class="col-md-8">
+				<book-type-select ng-model="bookInfo.type_id" edit-mode="true"></book-type-select>
+			</div>
+		</div>
+		<div class="row mb-10">
+			<div class="label-control col-md-4">Tác giả</div>
+			<div class="col-md-8">
+				<input type="text" class="form-control text-cap-name" ng-model="bookInfo.author">
+			</div>
+		</div>
+		<div class="row mb-10">
+			<div class="label-control col-md-4">Số lượng</div>
+			<div class="col-md-8">
+				<div class="row">
+					<div class="col-md-6 ">
+						<div class="input-group">
+							<span class="input-group-addon">Sử dụng</span>
+							<input type="number" class="form-control" ng-model="bookInfo.use_quantity">
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="input-group">
+							<span class="input-group-addon">Trong kho</span>
+							<input type="number" class="form-control" ng-model="bookInfo.inventory_quantity">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row mb-10">
+			<div class="label-control col-md-4">Giới thiệu</div>
+			<div class="col-md-8">
+				<textarea class="form-control" ng-model="bookInfo.intro" placeholder="Giới thiệu về cuốn sách, phần này sẽ xuất hiện ở phần review sách"></textarea>
+			</div>
+		</div>
+		<div class="row mb-10">
+			<div class="label-control col-md-4">Ghi chú</div>
+			<div class="col-md-8">
+				<textarea class="form-control" ng-model="bookInfo.note"></textarea>
+			</div>
+		</div>
+		<div class="row mb-10">
+			<label class="text-normal col-md-4" for="bookHot">Sách hot</label>
+			<div class="col-md-8">
+				<input type="checkbox" id="bookHot" ng-true-value="1" ng-false-value="0" ng-model="bookInfo.hot" >
+			</div>
+		</div>
+		<div class="row mb-10">
+			<div class="label-control col-md-4">Hình ảnh sách</div>
+			<div class="col-md-8">
+				<input ng-hide="true" type="file" id="uploadImg" nv-file-select uploader="image">
+				<book-img ng-model="bookInfo.image" av-size="100" av-upload="true"></book-img>
+			</div>
+		</div>
+		<div ng-show="scope.isAdvance">
+			<hr>
+			<div class="row">
+				<div class="label-control col-md-4">Điều chỉnh sách mượn</div>
+				<div class="col-md-8">
+					<input type="number" class="form-control" ng-model="bookInfo.current_quantity">
+				</div>
+				<div class="col-md-12 mt-5">
+					<span class="text-orange">
+						* Sử dụng khi số lượng sách hiện tại có thể mượn không đúng với thực tế
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<span class="pull-left" ng-show="bookInfo.id">
+			<input type="checkbox" id="usingAdvance" ng-true-value="1" ng-false-value="0" ng-model="scope.isAdvance">
+			<label class="text-normal" for="usingAdvance">Cài đặt nâng cao</label>
+		</span>
+		<button type="submit" ng-disabled="bookForm.$invalid" class="btn btn-green width-100px text-green btn-label">
+			<b><i ng-show="saveLoading" class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></b>
+			<b ng-show="!saveLoading" class="fa fa-save"></b> Lưu
+		</button>
+		<button type="button" class="btn btn-white" ng-click="modalClose()">Hủy</button>
+	</div>
+</form>

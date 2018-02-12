@@ -1,0 +1,110 @@
+<div id="profilePage" ng-init="getUserInfo()">
+	<div class="row height-100">
+		<div class="col-md-2">
+				<div id="profileInfoBar">
+					<div class="avatar-border">
+						<input ng-hide="true" type="file" id="uploadImg" nv-file-select uploader="image">
+						<avatar ng-model="userInfo.image" for="uploadImg" av-size="150" av-upload="true" av-type="'user'"></avatar>
+					</div>
+					<div class="width-100 text-center p-5">
+					<i class="fa fa-key"></i> Đổi mật khẩu
+					</div>
+					<a href="javascript:void(0)" class="width-100 text-center p-5 display-block" ng-click="logout()">
+					 <i class="fa fa-sign-out"></i> Đăng xuất</a>
+			</div>
+		</div>
+		<div class="col-md-10 height-100">
+			<div id="leftBar">
+				<div class="row mb-20">
+					<div class="text-green div-form text-bold col-md-12">
+						<i class="fa fa-user"></i> 	@{{ user.account }}
+					</div>
+				</div>
+				<div class="row mb-20">
+					<span class="col-md-4 label-control"> Họ và tên </span>
+					<div class="col-md-8">
+						<input ng-model="userInfo.name" class="form-control" type="text">
+					</div>
+				</div>
+				<div class="row mb-20">
+					<span class="col-md-4 label-control"> Số điện thoại </span>
+					<div class="col-md-8">
+						<input ng-model="userInfo.mobile" ui-mask="9999 999 9999" ui-mask-placeholder ui-mask-placeholder-char=" " class="form-control" type="text">
+					</div>
+				</div>
+				<div class="row mb-20">
+					<span class="col-md-4 label-control"> Ban </span>
+					<div class="col-md-8">
+						<department-select ng-model="userInfo.department_id" edit-mode="true"></department-select>
+					</div>
+				</div>
+				<div class="row mb-20">
+					<span class="col-md-4 label-control"> Chức vụ </span>
+					<div class="col-md-8">
+						<position-select ng-model="userInfo.position_id" edit-mode="true"></position-select>
+					</div>
+				</div>
+				<div class="row mb-20">
+					<span class="col-md-4 label-control"> Giới tính </span>
+					<div class="col-md-8">
+						<gender-select ng-model="userInfo.gender"></gender-select>
+					</div>
+				</div>
+				<div class="row mb-20">
+					<span class="col-md-4 label-control"> Sinh nhật </span>
+					<div class="col-md-8">
+						<div class="row">
+							<div class="col-md-4">
+								<input ng-model="userInfo.dob_date" class="form-control" type="text" ui-mask="99" ui-mask-placeholder-char=" ">
+							</div>
+							<div class="col-md-4">
+								<input ng-model="userInfo.dob_month" class="form-control" type="text" ui-mask="99" ui-mask-placeholder-char=" ">
+							</div>
+							<div class="col-md-4">
+								<input ng-model="userInfo.dob_year" class="form-control" type="text" ui-mask="9999" ui-mask-placeholder-char=" ">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mb-20">
+					<span class="label-control col-md-4">Khoa</span>
+					<div class="col-xs-5">
+						<facutly-select ng-model="userInfo.facutly" edit-mode="true"></facutly-select>
+					</div>
+					<div class="label-control col-md-1 text-right p-0" >K.</div>
+					<div class="col-md-2">
+						<input type="text" class="form-control" ui-mask="999" ui-mask-placeholder-char=" " ng-model="userInfo.course">
+					</div>
+				</div>
+				<div class="row mb-20">
+					<span class="col-md-4 label-control"> Nick name </span>
+					<div class="col-md-8">
+						<input ng-model="userInfo.nick_name" class="form-control" type="text">
+					</div>
+				</div>
+				<!-- <div class="row mb-20">
+					<span class="col-md-4 label-control"> Tiểu sử trong CLB </span>
+					<div class="col-md-8">
+						<button ui-sref="event" class="btn btn-blue max-width" type="button"> Bấm vào đây để xem các sự kiện </button>
+					</div>
+				</div> -->
+			</div>
+			<div id="rightBar">
+				<div class="row mb-20">
+					<div class="col-md-12">
+						<button type="button" ng-click="updateUserInfo()" class="btn btn-green width-20 pull-right text-green btn-label">
+							<b><i ng-show="saveLoading" class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></b>
+							<b ng-show="!saveLoading" class="fa fa-save"></b> Lưu
+						</button>
+					</div>
+				</div>
+				<div class="row mb-20">
+					<div class="col-md-12">
+						<textarea ng-model="userInfo.note" placeholder="Giới thiệu về bản thân" rows="20" class="form-control"></textarea>
+					</div>
+				</div>
+				
+			</div>							
+		</div>
+	</div>
+</div>
