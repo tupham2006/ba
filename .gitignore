@@ -118,5 +118,6 @@ nbproject
 .node_history
 
 # custom
-assets/uploads
+assets/uploads/user/*
+assets/uploads/book/*
 config/connections.js
