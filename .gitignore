@@ -119,4 +119,4 @@ nbproject
 
 # custom
 assets/uploads
-config/connection.js
+config/connections.js
