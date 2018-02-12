@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="../const.js"></script>
+	<script type="text/javascript">
+
+	// Check user login
+		var token = CONST.getCookie('token');
+		var user = CONST.getCookie('user');
+
+		if(token && user){
+			window.location.href = "/#/borrow";
+		}
+
+	</script>
+	<title>Đăng nhập</title>
+	<link rel="stylesheet" type="text/css" href="../libs/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="../styles/style.css">
+	<link rel="stylesheet" type="text/css" href="../styles/const.css">
+	<link rel="stylesheet" type="text/css" href="../styles/theme.css">
+</head>
+<body class="login-background">
+	<div class="container-fluid">
+	<div class="row login-main" id="loginTab">
+		<div class="col-xs-4 col-xs-push-4">
+			<form id="loginForm">
+				<div class="row mb-20 text-red">
+					<div class="col-xs-12">
+						<div id="error"></div>
+					</div>
+				</div>
+				<div class="row mb-20">
+					<div class="col-xs-12">
+						<div class="col-form-label"><span>Tên đăng nhập</span></div>
+						<input class="form-control" id="account" type="text">
+					</div>
+				</div>
+				<div class="row mb-20">
+					<div class="col-xs-12">
+						<div class="col-form-label">Mật khẩu</div>
+						<input class="form-control" type="password" id="password">
+					</div>
+				</div>
+				<div class="row mb-20">
+					<div class="col-xs-6">
+						<a href="/register">Đăng ký nhanh</a>
+					</div>
+					<div class="col-xs-6">
+						<button type="button" class="btn btn-blue max-width mb-10" id="loginSubmit">Đăng nhập</button>
+					</div>
+				</div>
+			</form>
+			<div id="registerResult" class="display-none"></div>
+		</div>
+	</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="../libs/jquery/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="../libs/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(e){
+
+	// remove vn trails
+	$("#account").on("keyup", function(e){
+		var account = $("#account").val();
+		account = account.trim().toLowerCase();
+	  account = account.replace(/đ/g,"");
+	  account = account.replace(/ /g,"");
+	  account = account.replace(/[^0-9a-z_.]/g,"");
+		$("#account").val(account);
+	});
+	
+	$('input').change(function(e){
+		validate($(this).attr("id"));
+	});
+
+	$('input').blur(function(e){
+		validate($(this).attr("id"));
+	});
+
+	// login submit
+	$('#loginSubmit').click(function(e){
+	
+	// valid
+		validate();
+		if($("#error").css("display") != "none"){
+			return;
+		}
+
+	var account = $('#account').val();
+	var password = $('#password').val();
+
+		$.ajax({
+			type: "post",
+			url:"/login",
+			data: {
+				account: account,
+				password: password
+			},
+			success: function(response){
+				
+				var user = "{}";
+				if(response && !response.error){
+					try{
+						user = JSON.stringify(response.user);
+					} catch(e){
+						console.log(e);
+					}
+
+					var currentDate = new Date().getDate() + 10;
+					var exp = new Date(new Date().setDate(currentDate));
+					document.cookie = "token=" + response.token + "; expires = " + exp;
+					document.cookie = "user=" + user + "; expires = " + exp;
+
+					window.location.href = "/admin#/profile";
+				} else {
+					$('#error').show();
+					$('#error').html(response.message);
+				}
+			}
+		});
+		
+	});
+});
+
+	function validate(type){
+
+		if(type == "account" || !type){
+			var account = $("#account").val();
+			if(account.length < 6){
+				$('#error').html("Tên đăng nhập tối thiểu 6 ký tự.");
+				$("#error").show();
+				return;
+			} else {
+				$("#error").hide();
+			}
+		} 
+
+		if(type == "password" || !type){
+
+			var password = $("#password").val();
+			if(password.length < 6 || password.length > 100){
+
+				$('#error').html("Độ dài mật khẩu tối thiểu là 6 ký tự");
+				$("#error").show();
+				return;
+			} else {
+				$("#error").hide();
+			}
+		}
+	}
+</script>

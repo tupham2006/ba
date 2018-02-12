@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Đăng ký</title>
+	<link rel="stylesheet" type="text/css" href="../libs/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="../styles/style.css">
+	<link rel="stylesheet" type="text/css" href="../styles/const.css">
+	<link rel="stylesheet" type="text/css" href="../styles/theme.css">
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div  id="registerForm" class="col-md-8 col-md-push-2">
+				<div class="row mt-10 mb-20">
+					<div class="col-md-12">
+						Chào mừng bạn đã đến với trang đăng ký tài khoản thành viên, cộng tác viên của CLB Sách và Hành động Mỏ - Địa chất. Nếu bạn không phải là thành viên, cộng tác viên của CLB vui lòng thoát khỏi trang này!					
+					</div>
+				</div>
+				<div class="row mb-10 text-red">
+					<div class="col-md-8 col-md-push-4">
+						<div id="error"></div>
+					</div>
+				</div>
+				<div class="row mb-10">
+					<div class="col-form-label col-md-4 required-field">Tên đăng nhập</div>
+					<div class="col-md-8">
+						<input type="text" maxlength="50" class="form-control" placeholder="Viết liền không dấu từ 6 - 50 ký tự (Gồm chữ cái, số, dấu chấm và gạch dưới)" id="account"/>
+					</div>
+				</div>
+				<div class="row mb-10">
+					<div class="col-form-label col-md-4 required-field">Họ và tên</div>
+					<div class="col-md-8">
+						<input type="text" class="form-control text-cap-name" placeholder ="Tối đa 50 ký tự" maxlength="50" id="name"/>
+					</div>
+				</div>
+				<div class="row mb-10">
+					<div class="col-form-label col-md-4 required-field">Số điện thoại</div>
+					<div class="col-md-8">
+						<input type="number" class="form-control" placeholder="Từ 10 - 11 số" id="mobile"/>
+					</div>
+				</div>
+				<div class="row mb-10">
+					<div class="col-form-label col-md-4 required-field">Mật khẩu</div>
+					<div class="col-md-8">
+						<input type="password" class="form-control" placeholder="Tối thiểu 6 ký tự" maxLength="100" id="password"/>
+					</div>
+				</div>
+				<div class="row mb-10">
+					<div class="col-form-label col-md-4 required-field">Xác nhận mật khẩu</div>
+					<div class="col-md-8">
+						<input type="password" class="form-control" placeholder="Nhập trùng với mật khẩu" maxLength="100" id="rePassword"/>
+					</div>
+				</div>
+				<div class="row" style="margin-top: 50px">
+					<div class="col-md-12" style="display: flex;">
+						<button type="button" style="margin: auto; width: 300px; float: left;" class="btn btn-green" id="submit">Đăng ký</button>
+						<a href="/login" style="margin: auto; width: 200px" class="btn btn-white" id="submit">Về trang đăng nhập</a>
+					</div>
+				</div>
+			</div>
+		<div class="col-md-12" id="registerSuccess" style="display: none;">
+			<div>
+				Đăng ký thành công! Vui lòng chờ quản trị viên xét duyệt! <a href="/login"> Về trang chủ</a>
+			</div>
+		</div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="../libs/jquery/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="../libs/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(e){
+
+	// handle typing
+	// remove vn trails
+	$("#account").on("keyup", function(e){
+		var account = $("#account").val();
+		account = account.trim().toLowerCase();
+	  account = account.replace(/đ/g,"");
+	  account = account.replace(/ /g,"");
+	  account = account.replace(/[^0-9a-z_.]/g,"");
+		$("#account").val(account);
+	});
+
+	$('input').change(function(e){
+		validate($(this).attr("id"));
+	});
+
+	$('input').blur(function(e){
+		validate($(this).attr("id"));
+	});
+
+	// register sumit
+	$('#submit').click(function(e){
+		
+		// valid
+		validate();
+		if($("#error").css("display") != "none"){
+			return;
+		}
+
+		$.ajax({
+			type: "post",
+			url:"/register",
+			data: {
+				account: $('#account').val(),
+				password: $('#password').val(),
+				mobile: $('#mobile').val(),
+				name: $('#name').val()
+
+			},
+
+			success: function(res){
+				var resMessage = "";
+				
+				if(res && res.error == 0){
+					$('#registerForm').hide();
+					$('#registerSuccess').show();
+
+				} else if (res && res.error == 1) {
+					$('#error').show();
+					$('#error').html(res.message);
+
+				} else {
+					$('#error').show();
+					$('#error').html("Lỗi đưòng truyền");
+				}
+			}
+		});
+		
+	});
+
+	function validate(type){
+		if(type == "account" || !type){
+			var account = $("#account").val();
+			if(account.length < 6){
+				$('#error').html("Tên đăng nhập tối thiểu 6 ký tự.");
+				$("#error").show();
+				return;
+			} else {
+				$("#error").hide();
+			}
+		} 
+
+		if(type == "name" || !type){
+			var name = $("#name").val();
+			if(!name){
+				$('#error').html("Vui lòng không để trống họ và tên.");
+				$("#error").show();
+				return;
+			} else {
+				$("#error").hide();
+			}
+		}
+
+		if(type == "mobile" || !type){
+
+			var mobile = $("#mobile").val();
+			if(mobile.length != 11 && mobile.length != 10){
+
+				$('#error').html("Số điện thoại có độ dài 10 hoặc 11 số.");
+				$("#error").show();
+				return;
+			} else {
+				$("#error").hide();
+			}
+		}
+
+		if(type == "password" || !type){
+
+			var password = $("#password").val();
+			if(password.length < 6 || password.length > 100){
+
+				$('#error').html("Độ dài mật khẩu tối thiểu là 6 ký tự");
+				$("#error").show();
+				return;
+			} else {
+				$("#error").hide();
+			}
+		}
+
+		if(type == "rePassword" || !type){
+
+			var rePassword = $("#rePassword").val();
+			if(rePassword != $("#password").val()){
+
+				$('#error').html("Xác nhận lại mật khẩu không khớp");
+				$("#error").show();
+				return;
+			} else {
+				$("#error").hide();
+			}
+		}
+	}
+});
+</script>

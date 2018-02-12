@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%=typeof title == 'undefined' ? 'CLB Sách HUMG' : title%></title>
+
+    <!-- Viewport mobile tag for sensible mobile support -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+    <!--
+        Stylesheets and Preprocessors
+        ==============================
+
+        You can always bring in CSS files manually with `<link>` tags, or asynchronously
+        using a solution like AMD (RequireJS).  Or, if you like, you can take advantage
+        of Sails' conventional asset pipeline (boilerplate Gruntfile).
+
+        By default, stylesheets from your `assets/styles` folder are included
+        here automatically (between STYLES and STYLES END). Both CSS (.css) and LESS (.less)
+        are supported. In production, your styles will be minified and concatenated into
+        a single file.
+
+        To customize any part of the built-in behavior, just edit `tasks/pipeline.js`.
+        For example, here are a few things you could do:
+
+            + Change the order of your CSS files
+            + Import stylesheets from other directories
+            + Use a different or additional preprocessor, like SASS, SCSS or Stylus
+    -->
+
+    <!--STYLES-->
+    <link rel="stylesheet" href="/libs/angular-block-ui/angular-block-ui.min.css">
+    <link rel="stylesheet" href="/libs/angular-toastr/angular-toastr.min.css">
+    <link rel="stylesheet" href="/libs/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/libs/dateranger/daterangepicker.css">
+    <link rel="stylesheet" href="/styles/const.css">
+    <link rel="stylesheet" href="/styles/font-awesome.css">
+    <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/styles/theme.css">
+    <!--STYLES END-->
+  </head>
+
+  <body ng-app="ba">
+        <div id="header">
+        <div class="logo" ui-sref="dashboard"></div>
+        <div  ui-sref="borrow" ng-class="{'menu-active' : activePage == 'borrow'}" class="button"><i class="glyphicon glyphicon-star"></i> Mượn trả sách </div>
+        
+        <div ui-sref="book" ng-class="{'menu-active' : activePage == 'book'}" class="button"><i class="glyphicon glyphicon-book"></i> Sách</div>
+        <div ui-sref="reader" ng-class="{'menu-active' : activePage == 'reader'}" class="button"><i class="fa fa-user"></i> Bạn đọc</div>
+        <div ui-sref="report" class="button" ng-class="{'menu-active' : activePage == 'report'}"><i class="fa fa-pie-chart"></i> Thống kê</div>
+        <!-- <div class="button " ui-sref="event" ng-class="{'menu-active': activePage == 'event'}"><i class="fa fa-calendar"></i> Tạo sự kiện </div> -->
+        <div ng-if="user.role == 3" class="button " ui-sref="admin" ng-class="{'menu-active': activePage == 'admin'}"><i class="fa fa-flag"></i> Quản lý CLB </div>
+        <div class="pull-right right">
+          <div class="avatar" ui-sref="profile" >
+            <avatar ng-model="user.image" av-size="40" av-type="'user'"></avatar>
+          </div>
+        </div>
+      </div>
+      <div id="main" ng-class="{'borrow-bg': activePage =='borrow', 'flower-bg': activePage == 'profile'}">
+          <ui-view></ui-view>
+      </div>
+    <!--
+        Client-side Templates
+        ========================
+
+        HTML templates are important prerequisites of modern, rich client applications.
+        To work their magic, frameworks like Backbone, Angular, Ember, and Knockout require
+        that you load these templates client-side.
+
+        By default, your Gruntfile is configured to automatically load and precompile
+        client-side JST templates in your `assets/templates` folder, then
+        include them here automatically (between TEMPLATES and TEMPLATES END).
+
+        To customize this behavior to fit your needs, just edit `tasks/pipeline.js`.
+        For example, here are a few things you could do:
+
+            + Import templates from other directories
+            + Use a different template engine (handlebars, jade, dust, etc.)
+            + Internationalize your client-side templates using a server-side
+              stringfile before they're served.
+    -->
+    <!--TEMPLATES-->
+    <script type="text/javascript" src="/jst.js"></script>
+    <!--TEMPLATES END-->
+
+
+    <!--
+
+      Client-side Javascript
+      ========================
+
+      You can always bring in JS files manually with `script` tags, or asynchronously
+      on the client using a solution like AMD (RequireJS).  Or, if you like, you can
+      take advantage of Sails' conventional asset pipeline (boilerplate Gruntfile).
+
+      By default, files in your `assets/js` folder are included here
+      automatically (between SCRIPTS and SCRIPTS END).  Both JavaScript (.js) and
+      CoffeeScript (.coffee) are supported. In production, your scripts will be minified
+      and concatenated into a single file.
+
+      To customize any part of the built-in behavior, just edit `tasks/pipeline.js`.
+      For example, here are a few things you could do:
+
+          + Change the order of your scripts
+          + Import scripts from other directories
+          + Use a different preprocessor, like TypeScript
+
+    -->
+    <!--SCRIPTS-->
+    <script src="/js/dependencies/sails.io.js"></script>
+    <script src="/libs/angular/angular.min.js"></script>
+    <script src="/libs/jquery/jquery-3.2.1.js"></script>
+    <script src="/libs/moment/moment.min.js"></script>
+    <script src="/libs/angular-block-ui/angular-block-ui.min.js"></script>
+    <script src="/libs/angular-cookies/angular-cookies.min.js"></script>
+    <script src="/libs/angular-input-mask/mask.min.js"></script>
+    <script src="/libs/angular-toastr/angular-toastr.min.js"></script>
+    <script src="/libs/angular-toastr/angular-toastr.tpls.min.js"></script>
+    <script src="/libs/angular-ui-bootstrap/ui-bootstrap-tpls-2.5.0.min.js"></script>
+    <script src="/libs/angular-ui-routes/angular-ui-routes.js"></script>
+    <script src="/libs/angularjs-dropdown-multiselect/angularjs-dropdown-multiselect.min.js"></script>
+    <script src="/libs/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/libs/dateranger/angular-daterangepicker.js"></script>
+    <script src="/libs/dateranger/daterangepicker.js"></script>
+    <script src="/libs/jquery-input-mask/jquery.inputmask.bundle.js"></script>
+    <script src="/libs/upload-file/angular-file-upload.min.js"></script>
+    <script src="/app.js"></script>
+    <script src="/const.js"></script>
+    <script src="/jst.js"></script>
+    <script src="/services/Admin.js"></script>
+    <script src="/services/Book.js"></script>
+    <script src="/services/BookType.js"></script>
+    <script src="/services/Borrow.js"></script>
+    <script src="/services/BorrowBook.js"></script>
+    <script src="/services/Department.js"></script>
+    <script src="/services/Deposit.js"></script>
+    <script src="/services/Dialog.js"></script>
+    <script src="/services/Position.js"></script>
+    <script src="/services/Push.js"></script>
+    <script src="/services/Reader.js"></script>
+    <script src="/services/Request.js"></script>
+    <script src="/services/Store.js"></script>
+    <script src="/services/User.js"></script>
+    <script src="/directives/avatar.js"></script>
+    <script src="/directives/bookImg.js"></script>
+    <script src="/directives/bookSearch.js"></script>
+    <script src="/directives/bookType.js"></script>
+    <script src="/directives/convertToNumber.js"></script>
+    <script src="/directives/department.js"></script>
+    <script src="/directives/deposit.js"></script>
+    <script src="/directives/facutly.js"></script>
+    <script src="/directives/gender.js"></script>
+    <script src="/directives/mobileFormat.js"></script>
+    <script src="/directives/position.js"></script>
+    <script src="/filters/dayInWeek.js"></script>
+    <script src="/filters/numberDay.js"></script>
+    <script src="/filters/tel.js"></script>
+    <script src="/controllers/AdminCtrl.js"></script>
+    <script src="/controllers/BookCtrl.js"></script>
+    <script src="/controllers/BorrowCtrl.js"></script>
+    <script src="/controllers/DashboardCtrl.js"></script>
+    <script src="/controllers/DialogCtrl.js"></script>
+    <script src="/controllers/EventCtrl.js"></script>
+    <script src="/controllers/OverviewCtrl.js"></script>
+    <script src="/controllers/ReaderCtrl.js"></script>
+    <script src="/controllers/UserCtrl.js"></script>
+    <!--SCRIPTS END-->
+  </body>
+</html>

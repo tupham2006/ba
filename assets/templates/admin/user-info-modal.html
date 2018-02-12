@@ -1,0 +1,39 @@
+<div class="modal-header modal-primary" ng-controller="BookCtrl">
+	<b>Thông tin thành viên</b>
+</div>
+<div class="modal-body">
+		<div class="row">
+			<div class="label-control col-md-4">Họ và tên:</div>
+			<div class="label-control col-md-8">{{userInfo.name}}</div>
+		</div>
+		<div class="row">
+			<div class="label-control col-md-4">Chức vụ:</div>
+			<div class="label-control col-md-8">{{userInfo.position_name}} (Ban {{userInfo.department_name}})</div>
+		</div>
+		<div class="row">
+			<div class="label-control col-md-4">Liên hệ:</div>
+			<div class="label-control col-md-8">{{userInfo.mobile}}</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="label-control col-md-4">Tên tài khoản:</div>
+			<div class="label-control col-md-8">{{userInfo.account}}</div>
+		</div>
+		<div class="row">
+			<div class="label-control col-md-4">Sinh nhật:</div>
+			<div class="label-control col-md-8">{{userInfo.dob_date}}/{{userInfo.dob_month}}/{{userInfo.dob_year}}</div>
+		</div>
+		<div class="row">
+			<div class="label-control col-md-4">Giới tính:</div>
+			<div class="label-control col-md-8">
+				<gender-html	ng-model="userInfo.gender"></gender-html>
+			</div>
+		</div>
+		<div class="row">
+			<div class="label-control col-md-4">Khoa:</div>
+			<div class="label-control col-md-8">{{facutlyList[userInfo.facutly]}} - K{{userInfo.course}}</div>
+		</div>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-white" ng-click="openUserInfoModalInstance.close()">Đóng</button>
+</div>
