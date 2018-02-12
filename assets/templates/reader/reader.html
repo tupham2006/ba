@@ -1,0 +1,72 @@
+<div id="user" ng-init="getReaderList()">
+	<div class="row mb-10">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-1">
+					<button class="btn btn-green" ng-click="openReaderModal()" type="button">Thêm</button>
+				</div>
+				<div class="col-md-3">
+					<input ng-change="getReaderList()" type="text" ng-model="filter.typing" placeholder="Tìm theo tên, số điện thoại" class="form-control">
+				</div>
+				<div class="col-md-3">
+					<select class="form-control" ng-model="filter.actived" ng-change="getReaderList()" convert-to-number>
+						<option value="0">Không hoạt động</option>
+						<option value="1">Đang hoạt động</option>
+					</select>
+				</div>
+				<div class="col-md-2">
+					<facutly-select ng-model="filter.facutly" ng-change="getReaderList()"></facutly-select>
+				</div>
+				<div class="col-md-3">
+				<span class="pull-right count">Tổng số: {{ readerCount }}</span>
+					<ul uib-pagination class="m-0 pull-right" total-items="readerCount" force-ellipses="true" items-per-page="filter.limit" ng-model="filter.currentPage" direction-links="false" ng-change="changePage()"></ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-bordered table-striped">
+				<colgroup>
+			     <col class="width-15">
+			     <col class="width-10">
+			     <col class="text-center width-10">
+			     <col class="text-center width-20">
+			     <col class="text-center width-8">
+			     <col class="text-center width-15">
+			     <col class="text-center width-14">
+			     <col class="text-center width-8">
+			  </colgroup>
+				<thead>
+					<th>Họ và tên</th>
+					<th>Số điện thoại</th>	
+					<th>Lượt mượn</th>				
+					<th>Khoa</th>	
+					<th>Giới tính</th>	
+					<th>Tài khoản FB</th>	
+					<th>Ghi chú</th>	
+					<th></th>	
+				</thead>
+				<tbody>
+					<tr ng-repeat = "reader in readerList track by $index">
+						<td> 
+							<span>
+							 	{{ reader.name }} 
+								<text ng-show="reader.is_user">(CLB)</text>
+							</span> 
+						</td>
+						<td> {{ reader.mobile | tel }} </td>
+						<td> <span>{{ reader.borrow_time }}</span> </td>
+						<td> <span> {{ facutlyList[reader.facutly] }} </span> </td>
+						<td><gender-html ng-model="reader.gender"></gender-html></td>
+						<td> <span>{{ reader.facebook_id }}</span> </td>
+						<td> <span>{{ reader.note }}</span> </td>
+						<td class="text-center">
+							<button class="btn btn-blue" ng-click="openReaderModal(reader.id)" type="button">Sửa</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
