@@ -45,12 +45,12 @@ function request($http, $cookies, $rootScope, FileUploader, $q, blockUI){
 
 		    			resolve(res.data);
 		    			blockUI.stop();
-	    			}, 200);
+	    			}, 100);
 	    		}, function(err){
 		    		blockUI.stop();
 	    			if(err && err.status == -1) {
 	    				reject({
-	    					message: "Mất kết nối mạng. Vui lòng thử lại!"
+	    					message: "Mất kết nối. Vui lòng thử lại!"
 	    				});
 	    			}
 
@@ -65,7 +65,7 @@ function request($http, $cookies, $rootScope, FileUploader, $q, blockUI){
 	    			blockUI.stop();
 	    			if(err && err.status == -1) {
 	    				reject({
-	    					message: "Mất kết nối mạng. Vui lòng thử lại!"
+	    					message: "Mất kết nối. Vui lòng thử lại!"
 	    				});
 	    			}
 

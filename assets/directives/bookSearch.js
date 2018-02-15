@@ -4,7 +4,7 @@ angular.module('ba').directive('bookSearch', ["Book",
 			restrict: 'E',
 			scope: {
 				ngModel: "=",
-				ngClick: "=?",
+				selectBook: "=?",
 				option: "=?"
 			},
 			templateUrl: "/templates/directive/book-search.html",

@@ -219,8 +219,10 @@ angular.module('ba')
 	    	}
 	    };
 
-	    $scope.addBookToBorrow = function(id, name){
+	    $scope.addBookToBorrow = function(id, name, currentQuantity){
 	    	
+	    	if(currentQuantity == 0) return;
+
 	    	// not allow add 2 time 1 book
 	    	for(var i in $scope.borrowInfo.book){
 	    		if($scope.borrowInfo.book[i].book_id == id){
@@ -233,7 +235,6 @@ angular.module('ba')
 	    		book_name: name,
 	    		status: 1,
 	    	});
-	    	$rootScope._validate('array', $scope.borrowInfo.book);
 	    };
 
 	    $scope.removeBookFromBorrow = function(id){
@@ -257,12 +258,6 @@ angular.module('ba')
 	    };
 
 	    $scope.saveBorrow = function(type){
-	    		console.log($scope.borrowInfo.reader_mobile);
-
-	    	// validate
-	    	$rootScope._validate('name', $scope.borrowInfo.reader_name);
-	    	$rootScope._validate('mobile', $scope.borrowInfo.reader_mobile);
-	    	$rootScope._validate('array', $scope.borrowInfo.book);
 
 	    	if(Object.getOwnPropertyNames($rootScope._error).length) return;
 

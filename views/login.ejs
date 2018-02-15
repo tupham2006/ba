@@ -113,7 +113,7 @@ $(document).ready(function(e){
 					document.cookie = "token=" + response.token + "; expires = " + exp;
 					document.cookie = "user=" + user + "; expires = " + exp;
 
-					window.location.href = "/#/profile";
+					window.location.href = "/clb#/profile";
 				} else {
 					$('#error').show();
 					$('#error').html(response.message);

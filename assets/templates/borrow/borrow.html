@@ -49,6 +49,7 @@
 	</div>
 </div>
 <div  id="borrowCenter" name="myForm">
+	<form name="borrowForm" ng-submit="saveBorrow()" novalidate>
 	<div class="row">
 		<div class="col-md-12">
 			<div id="viewBorrow" ng-hide="viewMode != 'BORROW'">
@@ -60,17 +61,17 @@
 					</div>
 				</div>
 				<div class="row mb-10">
-					<label class="label-control col-md-4 required-field">Số điện thoại</label>
+					<label class="label-control col-md-4 required-field">Tên Bạn Đọc</label>
 					<div class="col-xs-8">
-						<input type="text" ng-disabled="existReader && borrowInfo.id" ng-model="borrowInfo.reader_mobile" placeholder="Hệ thống sẽ tìm kiếm nếu số điện thoại tồn tại" ng-blur="_validate('mobile', borrowInfo.reader_mobile)" ng-change="_validate('mobile', borrowInfo.reader_mobile); findReaderByMobile()" class="form-control" ui-mask="9999 999 9999" ui-mask-placeholder ui-mask-placeholder-char=" ">
-						<span class="validation-error-label" ng-show="_error.mobile"> Bạn chưa nhập số điện thoại </span>
+							<input type="text" ng-disabled="existReader" class="form-control" name="readerName" ng-model="borrowInfo.reader_name" required>
+							<span class="validation-error-label" ng-show="borrowForm.readerName.$touched && borrowForm.readerName.$invalid"> Bạn chưa nhập tên bạn đọc </span>
 					</div>
 				</div>
 				<div class="row mb-10">
-					<label class="label-control col-md-4 required-field">Tên Bạn Đọc</label>
+					<label class="label-control col-md-4 required-field">Số điện thoại</label>
 					<div class="col-xs-8">
-							<input type="text" ng-disabled="existReader" class="form-control" ng-change="_validate('name', borrowInfo.reader_name)" ng-blur="_validate('name', borrowInfo.reader_name)" ng-model="borrowInfo.reader_name">
-							<span class="validation-error-label" ng-show="_error.name"> Bạn chưa nhập tên bạn đọc </span>
+						<input type="text" ng-disabled="existReader && borrowInfo.id" ng-change="findReaderByMobile()" ng-model="borrowInfo.reader_mobile" placeholder="Hệ thống sẽ tìm kiếm nếu số điện thoại tồn tại" name="readerMobile" minLength="10" mobile-format class="form-control" required>
+						<span class="validation-error-label" ng-show="borrowForm.readerMobile.$touched && borrowForm.readerMobile.$invalid"> Số điện thoại chưa đúng định dạng </span>
 					</div>
 				</div>
 				<div class="row mb-10">
@@ -80,14 +81,15 @@
 					</div>
 					<div class="label-control col-md-1 text-right p-0">K.</div>
 					<div class="col-md-2">
-						<input type="text" class="form-control" ng-model="borrowInfo.course">
+						<input type="number" class="form-control" ng-model="borrowInfo.course">
 					</div>
 				</div>
 				
 				<div class="row mb-10">
 					<label class="label-control col-md-4">Tên sách</label>
 					<div class="col-md-8">
-						<span ng-show="!borrowInfo.book.length">Bấm vào sách trong danh sách sách ở bên phải để chọn</span>
+						<book-search ng-model="bookName" option = "{ status: 0, placeholder: 'Tìm tên sách' }" select-book="addBookToBorrow"></book-search>
+						<div class="mt-10"></div>
 						<span ng-repeat="book in borrowInfo.book" class="tags width-100">
 							<div>
 								<span class="pull-left">{{book.book_name}}</span>
@@ -98,7 +100,6 @@
 								</span>
 							</div>
 						</span>
-						<span class="validation-error-label" ng-show="_error.array"> Bạn chưa chọn sách mượn</span>
 					</div>
 				</div>
 				<div class="row mb-10" ng-show="borrowInfo.id">
@@ -157,10 +158,7 @@
 						<button type="button" title="Làm mới" ng-click="showBorrowDetail(borrowInfo.id)" class="btn btn-white btn-icon btn-label"><b class="fa fa-refresh"></b></button>
 					</div>
 					<div class="col-xs-3 pull-right">
-						<button type="button" ng-click="saveBorrow()" class="btn btn-green width-100 text-green btn-label">
-							<b><i ng-show="saveLoading" class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></b>
-							<b ng-show="!saveLoading" class="fa fa-save"></b> Lưu
-						</button>
+						<button class="btn btn-green pull-right" type="submit" ng-disabled="borrowForm.$invalid"><i class="fa fa-save"></i> Lưu</button>
 					</div>
 				</div>
 			</div>
@@ -184,6 +182,7 @@
 			</div>
 		</div>
 	</div>
+</form>
 </div>
 <div id="borrowRight">
 	<div class="filter">

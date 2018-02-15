@@ -34,14 +34,14 @@ module.exports.routes = {
 
   '/': {
     view: 'index',
-    // locals: {
-    //   layout: false
-    // }
+    locals: {
+      layout: false
+    }
   },
 
-  // '/admin': {
-  //   view: 'layout'
-  // },
+  '/clb': {
+    view: 'layout'
+  },
 
   /***************************************************************************
   *                                                                          *
