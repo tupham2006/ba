@@ -157,6 +157,8 @@ $(document).ready(function(e){
 
 				if(res && res.error == 0){
 					$('#successModal').modal('show');
+					$("#registerText").show();
+					$("#sendingText").hide();
 
 				} else if (res && res.error == 1) {
 					$('#error').show();

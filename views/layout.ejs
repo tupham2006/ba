@@ -41,22 +41,47 @@
     <!--STYLES END-->
   </head>
 
+
   <body ng-app="ba">
-        <div id="header">
-        <div class="logo" ui-sref="dashboard"></div>
-        <div  ui-sref="borrow" ng-class="{'menu-active' : activePage == 'borrow'}" class="button"><i class="glyphicon glyphicon-star"></i> Mượn trả sách </div>
-        
-        <div ui-sref="book" ng-class="{'menu-active' : activePage == 'book'}" class="button"><i class="glyphicon glyphicon-book"></i> Sách</div>
-        <div ui-sref="reader" ng-class="{'menu-active' : activePage == 'reader'}" class="button"><i class="fa fa-user"></i> Bạn đọc</div>
-        <div ui-sref="report.borrowTime" class="button" ng-class="{'menu-active' : activePage == 'report'}"><i class="fa fa-pie-chart"></i> Thống kê</div>
-        <!-- <div class="button " ui-sref="event" ng-class="{'menu-active': activePage == 'event'}"><i class="fa fa-calendar"></i> Tạo sự kiện </div> -->
-        <div ng-if="user.role == 3" class="button " ui-sref="admin" ng-class="{'menu-active': activePage == 'admin'}"><i class="fa fa-flag"></i> Quản lý CLB </div>
-        <div class="pull-right right">
-          <div class="avatar" ui-sref="profile" >
-            <avatar ng-model="user.image" av-size="40" av-type="'user'"></avatar>
+    <nav class="navbar navbar-default" id="header">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="logo" href="javascript:void(0)" ui-sref="dashboard"></a>
           </div>
-        </div>
-      </div>
+          <div id="navbar" class="navbar-collapse collapse" style="height: 40px">
+            <ul class="nav navbar-nav">
+                <li ng-class="{'menu-active' : activePage == 'borrow'}" class="button">
+                    <div ui-sref="borrow"><i class="glyphicon glyphicon-star"></i> Mượn trả sách </div>
+                </li>
+                <li ng-class="{'menu-active' : activePage == 'book'}" class="button">
+                    <div ui-sref="book" ><i class="glyphicon glyphicon-book"></i> Sách</div>
+                </li>
+                <li ng-class="{'menu-active' : activePage == 'reader'}" class="button">
+                    <div ui-sref="reader" ><i class="fa fa-user"></i> Bạn đọc</div>
+                </li>
+                <li class="button" ng-class="{'menu-active' : activePage == 'report'}">
+                    <div ui-sref="report.borrowTime"><i class="fa fa-pie-chart"></i> Thống kê</div>
+                </li>
+                <li ng-if="user.role == 3" class="button" ng-class="{'menu-active': activePage == 'admin'}">
+                    <div ui-sref="admin"><i class="fa fa-flag"></i> Quản lý CLB </div>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right mr-0">
+              <li>
+                  <div class="avatar" ui-sref="profile" >
+                    <avatar ng-model="user.image" av-size="40" av-type="'user'"></avatar>
+                  </div>
+              </li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </nav>
       <div id="main" ng-class="{'borrow-bg': activePage =='borrow', 'flower-bg': activePage == 'profile'}">
           <ui-view></ui-view>
       </div>

@@ -23,7 +23,7 @@
 <body class="login-background">
 	<div class="container-fluid">
 	<div class="row login-main" id="loginTab">
-		<div class="col-xs-4 col-xs-push-4">
+		<div class=" col-xs-12 col-md-4 col-md-push-4">
 			<form id="loginForm">
 				<div class="row mb-20 text-red">
 					<div class="col-xs-12">
@@ -44,10 +44,11 @@
 				</div>
 				<div class="row mb-20">
 					<div class="col-xs-6">
-						<a href="/register">Đăng ký nhanh</a>
+						<a href="/register">Đăng ký</a>
 					</div>
 					<div class="col-xs-6">
-						<button type="button" class="btn btn-blue max-width mb-10" id="loginSubmit">Đăng nhập</button>
+						<button type="submit" class="btn btn-blue max-width mb-10" id="loginSubmit">Đăng nhập</button>
+						<div class="mb-10 max-width text-right" style="display: none;" id="sendingText">Đang đăng nhập...</div>
 					</div>
 				</div>
 			</form>
@@ -80,17 +81,24 @@ $(document).ready(function(e){
 		validate($(this).attr("id"));
 	});
 
+	var isSending = false;
 	// login submit
-	$('#loginSubmit').click(function(e){
-	
-	// valid
+	$('#loginForm').submit(function(e){
+		
+		e.preventDefault();
+
+		if(isSending) return;
+		// valid
 		validate();
 		if($("#error").css("display") != "none"){
 			return;
 		}
+		isSending = true;
+		$("#loginSubmit").hide();
+		$("#sendingText").show();
 
-	var account = $('#account').val();
-	var password = $('#password').val();
+		var account = $('#account').val();
+		var password = $('#password').val();
 
 		$.ajax({
 			type: "post",
@@ -100,6 +108,9 @@ $(document).ready(function(e){
 				password: password
 			},
 			success: function(response){
+				isSending = false;
+				$("#loginSubmit").show();
+				$("#sendingText").hide();
 				
 				var user = "{}";
 				if(response && !response.error){
