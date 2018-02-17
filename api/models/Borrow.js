@@ -304,6 +304,5 @@ module.exports = {
 				return resolve(result);				
 			});
 		});
-
 	}
 };

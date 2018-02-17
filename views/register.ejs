@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>Đăng ký</title>
+	<meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,height=device-height">
 	<link rel="stylesheet" type="text/css" href="../libs/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="../styles/style.css">
 	<link rel="stylesheet" type="text/css" href="../styles/const.css">
@@ -10,64 +11,86 @@
 <body>
 	<div class="container-fluid">
 		<div class="row">
-			<div  id="registerForm" class="col-md-8 col-md-push-2">
-				<div class="row mt-10 mb-20">
-					<div class="col-md-12">
-						Chào mừng bạn đã đến với trang đăng ký tài khoản thành viên, cộng tác viên của CLB Sách và Hành động Mỏ - Địa chất. Nếu bạn không phải là thành viên, cộng tác viên của CLB vui lòng thoát khỏi trang này!					
+			<form id="registerForm">
+				<div class="col-md-6 col-md-push-3">
+					<div class="row mt-10 mb-20">
+						<div class="col-md-12">
+							<div class="text-center font-18 text-blue text-bold">
+								Đăng ký tài khoản
+							</div>
+						</div>
+					</div>
+					<div class="row mb-10 text-red">
+						<div class="col-md-8 col-md-push-4 ">
+							<div id="error"></div>
+						</div>
+					</div>
+					<div class="row mb-10">
+						<div class="col-form-label col-md-4 required-field">Tên đăng nhập</div>
+						<div class="col-md-8">
+							<input type="text" maxlength="50" class="form-control" placeholder="Viết liền không dấu từ 6 - 50 ký tự" id="account"/>
+						</div>
+					</div>
+					<div class="row mb-10">
+						<div class="col-form-label col-md-4 required-field">Họ và tên</div>
+						<div class="col-md-8">
+							<input type="text" class="form-control text-cap-name" placeholder ="Tối đa 50 ký tự" maxlength="50" id="name"/>
+						</div>
+					</div>
+					<div class="row mb-10">
+						<div class="col-form-label col-md-4 required-field">Số điện thoại</div>
+						<div class="col-md-8">
+							<input type="text" class="form-control" id="mobile"/>
+						</div>
+					</div>
+					<div class="row mb-10">
+						<div class="col-form-label col-md-4 required-field">Mật khẩu</div>
+						<div class="col-md-8">
+							<input type="password" class="form-control" placeholder="Tối thiểu 6 ký tự" maxLength="100" id="password"/>
+						</div>
+					</div>
+					<div class="row mb-10">
+						<div class="col-form-label col-md-4 required-field">Xác nhận mật khẩu</div>
+						<div class="col-md-8">
+							<input type="password" class="form-control" maxLength="100" id="rePassword"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 mt-20">
+							<button type="submit" style="margin: auto; width: 100%; display: block;" class="btn btn-green" id="submit">
+								<span id="registerText"">Đăng ký</span>
+								<span id="sendingText" style="display: none;">Đang gửi yêu cầu... </span>
+							</button>
+						</div>
+						<div class="col-md-6 mt-20">
+							<a href="/login" style="margin: auto; width: 100%; display: block;" class="btn btn-white">Đăng nhập</a>
+						</div>
+						</div>
 					</div>
 				</div>
-				<div class="row mb-10 text-red">
-					<div class="col-md-8 col-md-push-4">
-						<div id="error"></div>
-					</div>
-				</div>
-				<div class="row mb-10">
-					<div class="col-form-label col-md-4 required-field">Tên đăng nhập</div>
-					<div class="col-md-8">
-						<input type="text" maxlength="50" class="form-control" placeholder="Viết liền không dấu từ 6 - 50 ký tự (Gồm chữ cái, số, dấu chấm và gạch dưới)" id="account"/>
-					</div>
-				</div>
-				<div class="row mb-10">
-					<div class="col-form-label col-md-4 required-field">Họ và tên</div>
-					<div class="col-md-8">
-						<input type="text" class="form-control text-cap-name" placeholder ="Tối đa 50 ký tự" maxlength="50" id="name"/>
-					</div>
-				</div>
-				<div class="row mb-10">
-					<div class="col-form-label col-md-4 required-field">Số điện thoại</div>
-					<div class="col-md-8">
-						<input type="number" class="form-control" placeholder="Từ 10 - 11 số" id="mobile"/>
-					</div>
-				</div>
-				<div class="row mb-10">
-					<div class="col-form-label col-md-4 required-field">Mật khẩu</div>
-					<div class="col-md-8">
-						<input type="password" class="form-control" placeholder="Tối thiểu 6 ký tự" maxLength="100" id="password"/>
-					</div>
-				</div>
-				<div class="row mb-10">
-					<div class="col-form-label col-md-4 required-field">Xác nhận mật khẩu</div>
-					<div class="col-md-8">
-						<input type="password" class="form-control" placeholder="Nhập trùng với mật khẩu" maxLength="100" id="rePassword"/>
-					</div>
-				</div>
-				<div class="row" style="margin-top: 50px">
-					<div class="col-md-12" style="display: flex;">
-						<button type="button" style="margin: auto; width: 300px; float: left;" class="btn btn-green" id="submit">Đăng ký</button>
-						<a href="/login" style="margin: auto; width: 200px" class="btn btn-white" id="submit">Về trang đăng nhập</a>
-					</div>
-				</div>
+			</form>
+			<!-- Modal -->
+			<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h4 class="modal-title" id="myModalLabel">Thông báo</h4>
+			      </div>
+			      <div class="modal-body">
+			        Đăng ký thành công! Vui lòng đợi quản trị viên xét duyệt!
+			      </div>
+			      <div class="modal-footer">
+			        <a href="/login" class="btn btn-default">Đăng nhập</a>
+			      </div>
+			    </div>
+			  </div>
 			</div>
-		<div class="col-md-12" id="registerSuccess" style="display: none;">
-			<div>
-				Đăng ký thành công! Vui lòng chờ quản trị viên xét duyệt! <a href="/login"> Về trang chủ</a>
-			</div>
-		</div>
 		</div>
 	</div>
 </body>
 </html>
 <script type="text/javascript" src="../libs/jquery/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="../libs/jquery-input-mask/jquery.inputmask.bundle.js"></script>
 <script type="text/javascript" src="../libs/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(e){
@@ -91,14 +114,32 @@ $(document).ready(function(e){
 		validate($(this).attr("id"));
 	});
 
+	$('#mobile').inputmask('9999 999 999[9]', {'greedy' : false});
+
+	$("#successModal").modal({
+		backdrop: "static",
+		keyboard: false,
+		show: false
+	});
+
+	var isSending = false;
 	// register sumit
-	$('#submit').click(function(e){
+	$('#registerForm').submit(function(e){
+		e.preventDefault();
 		
+		if(isSending){
+			return;
+		}
+
 		// valid
 		validate();
 		if($("#error").css("display") != "none"){
 			return;
 		}
+
+		$("#registerText").hide();
+		$("#sendingText").show();
+		isSending = true;
 
 		$.ajax({
 			type: "post",
@@ -106,17 +147,16 @@ $(document).ready(function(e){
 			data: {
 				account: $('#account').val(),
 				password: $('#password').val(),
-				mobile: $('#mobile').val(),
+				mobile: $('#mobile').val().replace(/[^0-9]/g, ""),
 				name: $('#name').val()
-
 			},
 
 			success: function(res){
 				var resMessage = "";
-				
+				isSending = false;
+
 				if(res && res.error == 0){
-					$('#registerForm').hide();
-					$('#registerSuccess').show();
+					$('#successModal').modal('show');
 
 				} else if (res && res.error == 1) {
 					$('#error').show();
@@ -155,8 +195,9 @@ $(document).ready(function(e){
 		}
 
 		if(type == "mobile" || !type){
-
-			var mobile = $("#mobile").val();
+			
+			var mobile = $("#mobile").val().replace(/[^0-9]/g, "");
+			
 			if(mobile.length != 11 && mobile.length != 10){
 
 				$('#error').html("Số điện thoại có độ dài 10 hoặc 11 số.");

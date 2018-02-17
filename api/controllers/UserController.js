@@ -72,7 +72,7 @@ module.exports = {
     var name = req.param('name') ? req.param('name') : '';
     	name = name.toString().trim();
     var mobile = req.param('mobile') ? req.param('mobile') : '';
-    	mobile = mobile.toString().replace(/ /g, '');
+    	mobile = mobile.toString().replace(/[^0-9]/g, "");
 
 		if(account.length < 6 || account.length > 50 || password.length < 6 || password.length > 50 || !name || name.length > 50 || mobile.length > 11 || mobile.length < 10){
 			console.log("Register :: pass? :: account: " + account + ", password: " + password + ", name: " + name + ", mobile: " + mobile );
@@ -83,14 +83,19 @@ module.exports = {
 
 		}
     var condition = {
-	  	account: account
+    	where: {
+    		or: [
+	  			{ account: account },
+	  			{ mobile: mobile }
+    		]
+    	}
 		};
 		
 	  // check exist record
 	  User.findOne(condition)
 	    .then(function(result){
 	      if(result){
-	        throw { message: "Tên tài khoản đã tồn tại" };
+	        throw { message: "Tên tài khoản hoặc số điện thoại đã tồn tại" };
 	      }
 	    })
 
