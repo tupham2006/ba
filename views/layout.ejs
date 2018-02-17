@@ -48,7 +48,7 @@
         
         <div ui-sref="book" ng-class="{'menu-active' : activePage == 'book'}" class="button"><i class="glyphicon glyphicon-book"></i> Sách</div>
         <div ui-sref="reader" ng-class="{'menu-active' : activePage == 'reader'}" class="button"><i class="fa fa-user"></i> Bạn đọc</div>
-        <div ui-sref="report" class="button" ng-class="{'menu-active' : activePage == 'report'}"><i class="fa fa-pie-chart"></i> Thống kê</div>
+        <div ui-sref="report.borrowTime" class="button" ng-class="{'menu-active' : activePage == 'report'}"><i class="fa fa-pie-chart"></i> Thống kê</div>
         <!-- <div class="button " ui-sref="event" ng-class="{'menu-active': activePage == 'event'}"><i class="fa fa-calendar"></i> Tạo sự kiện </div> -->
         <div ng-if="user.role == 3" class="button " ui-sref="admin" ng-class="{'menu-active': activePage == 'admin'}"><i class="fa fa-flag"></i> Quản lý CLB </div>
         <div class="pull-right right">
@@ -113,6 +113,8 @@
     <script src="/libs/jquery/jquery-3.2.1.js"></script>
     <script src="/libs/moment/moment.min.js"></script>
     <script src="/libs/angular-block-ui/angular-block-ui.min.js"></script>
+    <script src="/libs/angular-char-js/Chart.min.js"></script>
+    <script src="/libs/angular-char-js/module-angular-chart.min.js"></script>
     <script src="/libs/angular-cookies/angular-cookies.min.js"></script>
     <script src="/libs/angular-input-mask/mask.min.js"></script>
     <script src="/libs/angular-toastr/angular-toastr.min.js"></script>
@@ -139,6 +141,7 @@
     <script src="/services/Position.js"></script>
     <script src="/services/Push.js"></script>
     <script src="/services/Reader.js"></script>
+    <script src="/services/Report.js"></script>
     <script src="/services/Request.js"></script>
     <script src="/services/Store.js"></script>
     <script src="/services/User.js"></script>
@@ -162,9 +165,9 @@
     <script src="/controllers/DashboardCtrl.js"></script>
     <script src="/controllers/DialogCtrl.js"></script>
     <script src="/controllers/EventCtrl.js"></script>
-    <script src="/controllers/OverviewCtrl.js"></script>
     <script src="/controllers/ReaderCtrl.js"></script>
     <script src="/controllers/UserCtrl.js"></script>
+    <script src="/controllers/report/ReportBorrowTimeCtrl.js"></script>
     <!--SCRIPTS END-->
   </body>
 </html>

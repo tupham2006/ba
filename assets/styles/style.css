@@ -610,3 +610,8 @@ button {
 	background: #4da1fe;
 	border-radius: unset;
 }
+
+.report-borrow-chart {
+	height: 70vh;
+	position: relative;
+}

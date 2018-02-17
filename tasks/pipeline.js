@@ -46,7 +46,8 @@ var jsFilesToInject = [
   'services/*.js',
   'directives/*.js',
   'filters/*.js',
-  'controllers/*.js'
+  'controllers/*.js',
+  'controllers/**/*.js'
 ];
 
 

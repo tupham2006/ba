@@ -1,4 +1,6 @@
 const CONST = require('../../const.js');
+const moment = require("moment");
+
 module.exports = {
 	schema: true,
   tableName: "borrow",
@@ -163,6 +165,7 @@ module.exports = {
 
 			for(var i in data.book){
 				data.book[i].borrow_id = borrowId;
+				data.book[i].borrow_date = data.borrow_date;
 			}
 
 			// console.log("data.book", data.book);
@@ -198,6 +201,7 @@ module.exports = {
 							// delete borrow book
 							BorrowBook.destroy({borrow_id: borrowUpdateResult[0].id})
 								.exec(function(destroyErr, destroyResult){
+									console.log("destroyResult", destroyResult);
 									if(destroyErr) return reject(destroyErr);
 
 									// create new
@@ -254,5 +258,52 @@ module.exports = {
 						});
 				});
 		});
+	},
+
+	reportBorrowTime: function(condition) {
+
+		return new Promise(function(resolve, reject){
+			if(!condition.start_date) {
+				condition.start_date = "1970-01-01T00:00:00.000Z";
+			}
+
+			if(!condition.end_date) {
+				condition.end_date = new Date().toISOString();
+			}
+
+			if(!condition.limit) condition.limit = 10;
+			if(isNaN(condition.offset)) condition.offset = 0;
+
+			var sql = ["SELECT "];
+			var value = [condition.start_date, condition.end_date, condition.limit, condition.offset];
+
+			// value select
+			sql.push("COUNT(*) AS times, borrow_date ");
+
+			// table select
+			sql.push("FROM borrow ");
+
+			// where
+			sql.push("WHERE deleted = 0 AND borrow_date >= ? ");
+
+			sql.push("AND borrow_date <= ? ");
+
+			// group
+			sql.push("GROUP BY DATE(borrow_date) ");
+
+			// order
+			sql.push("ORDER BY borrow_date DESC ");
+
+			// limit
+			sql.push("LIMIT ? OFFSET ? ");
+
+			var queryStatement = sql.join("");
+
+			Borrow.query(queryStatement, value, function(err, result){
+				if(err) return reject(err);
+				return resolve(result);				
+			});
+		});
+
 	}
 };

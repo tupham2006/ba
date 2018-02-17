@@ -8,7 +8,8 @@ angular.module('ba',[
 	"angularFileUpload",
 	"ngCookies",
 	"ui.mask",
-	"blockUI"
+	"blockUI",
+	"chart.js"
 ])
 
 // Router
@@ -16,8 +17,9 @@ angular.module('ba',[
 	'$stateProvider', 
 	'$locationProvider', 
 	'uiMask.ConfigProvider', 
-	"blockUIConfig", 
-	function ($stateProvider, $locationProvider, uiMaskConfigProvider, blockUIConfig) {
+	"blockUIConfig",
+	"ChartJsProvider", 
+	function ($stateProvider, $locationProvider, uiMaskConfigProvider, blockUIConfig, ChartJsProvider) {
 
 	$stateProvider
 		.state("dashboard",{
@@ -61,10 +63,11 @@ angular.module('ba',[
 			templateUrl: "/templates/borrow/borrow.html",
 			controller: "BorrowCtrl"
 		})
-		.state("report", {
-			url: "/report/overview",
-			templateUrl: "/templates/report/overview.html",
-			controller: "OverviewCtrl"
+		.state("report", {})
+		.state("report.borrowTime", {
+			url: "/report/borrow-time",
+			templateUrl: "/templates/report/borrow-time.html",
+			controller: "ReportBorrowTimeCtrl"
 		});
 
 		$locationProvider.hashPrefix('');
@@ -76,6 +79,32 @@ angular.module('ba',[
 
 	  // ui block 
 	  blockUIConfig.message = 'Đang tải';
+
+	  // chart
+	  ChartJsProvider.setOptions({
+	  	layout: {
+				padding: "10"
+			},
+      legend: {
+      	display: true,
+      	position: "bottom"
+      },
+      scales: {
+      	yAxes: [{
+      		ticks: {
+            beginAtZero:true,
+            stepSize: 1
+          },
+      	}],
+
+      	xAxes: [{
+          gridLines: {
+          	display:false
+          }
+      	}]
+      },
+			maintainAspectRatio: false
+	  });
 
 }])
 .run(["$rootScope", function($rootScope){

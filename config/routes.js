@@ -259,13 +259,11 @@ module.exports.routes = {
   },
 
   /*=====================================
-  =            Push register            =
+  =            Report register            =
   =====================================*/
-  // 'post /push/register': {
-  //   controller: "PushController",
-  //   action: "register"
-  // },
-
-  
+  'post /report/borrowTime': {
+    controller: "ReportController",
+    action: "reportBorrowTime"
+  }
   
 };
