@@ -43,19 +43,22 @@
 
 
   <body ng-app="ba">
-    <nav class="navbar navbar-default" id="header">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="logo" href="javascript:void(0)" ui-sref="dashboard"></a>
-          </div>
-          <div id="navbar" class="navbar-collapse collapse" style="height: 40px">
+    <nav class="navbar navbar-inverse" id="header">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="logo" href="javascript:void(0)" ui-sref="dashboard"></a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse m-0">
             <ul class="nav navbar-nav">
+                <li class="desktop-display">
+                    <a class="logo" href="javascript:void(0)" ui-sref="dashboard"></a>
+                </li>
                 <li ng-class="{'menu-active' : activePage == 'borrow'}" class="button">
                     <div ui-sref="borrow"><i class="glyphicon glyphicon-star"></i> Mượn trả sách </div>
                 </li>
@@ -72,17 +75,21 @@
                     <div ui-sref="admin"><i class="fa fa-flag"></i> Quản lý CLB </div>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right mr-0">
-              <li>
-                  <div class="avatar" ui-sref="profile" >
+            <ul class="nav navbar-nav navbar-right">
+              <li ui-sref="profile">
+                <div class="avatar pull-left">
                     <avatar ng-model="user.image" av-size="40" av-type="'user'"></avatar>
-                  </div>
+                </div>
+                <div class="mobile-display" style="line-height: 40px; vertical-align: middle; color: #FFFFFF">
+                     Trang cá nhân     
+                </div>
               </li>
             </ul>
-          </div><!--/.nav-collapse -->
-        </div><!--/.container-fluid -->
-      </nav>
-      <div id="main" ng-class="{'borrow-bg': activePage =='borrow', 'flower-bg': activePage == 'profile'}">
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+      <div id="main" ng-class="{'borrow-bg': activePage =='borrow'}">
           <ui-view></ui-view>
       </div>
     <!--

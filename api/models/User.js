@@ -26,6 +26,7 @@ module.exports = {
     facutly: { type: "string", size: 50, maxLength: 50, defaultsTo: 'Chưa phân khoa' },
     course: {type: 'integer', defaultsTo: 0 },
     image : { type: "string", maxLength: 200, defaultsTo: '' },
+    status: { type: "string", maxLength: 200, defaultsTo: ''},
     gender : { type: "integer", max: 2, defaultsTo: 0}, // 0: unknown, 1: male, 2: female
     dob_date : { type: "integer", min: 1, max:31, defaultsTo: 1 },
     dob_month : { type: "integer", min: 1, max: 12, defaultsTo: 1 },

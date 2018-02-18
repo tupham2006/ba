@@ -95,6 +95,7 @@ button {
 	background: url('../images/logo.png');
 	background-size: cover;
 	margin: 0 10px;
+	margin-left: 0px;
 	width: 40px;
 	height: 40px;	
 	float: left;
@@ -131,10 +132,13 @@ button {
 }
 
 #header #navbar {
-	 position: absolute;
-	 background: #4da1ff; 
-	 z-index: 100;
-	 width: 100%;
+	position: absolute;
+	left: 0;
+	width: 100%;
+	background: #4da1ff; 
+	z-index: 100;
+	margin: 0;
+	border-color: #FFFFFF !important;
 }
 
 #inlineSave {
@@ -577,29 +581,6 @@ button {
 	width: 100%;
 }
 
-#profileInfoBar {
-	background: rgba(255, 255, 255, 1);
-	padding: 10px;
-}
-
-#leftBar {
-	overflow: auto;
-	background: #FFF;
-	padding: 10px;
-	height: 100%;
-	float: left;
-	width: 50%;
-}
-
-#rightBar {
-	overflow: auto;
-	height: 100%;
-	background: #FFF;
-	padding: 10px;
-	float: left;
-	width: 50%;
-}
-
 .book-search-parent {
 	position: relative;
 }
@@ -638,4 +619,18 @@ button {
 .report-borrow-chart {
 	height: 70vh;
 	position: relative;
+}
+
+.mobile-display {
+	display: none !important;
+}
+
+@media (max-width: 767px) {
+	.desktop-display {
+		display: none !important;
+	}
+
+	.mobile-display {
+		display: block !important;
+	}
 }

@@ -11,6 +11,12 @@ angular.module('ba')
 	  function($scope, User, $rootScope, toastr, Dialog, Request, $timeout, $cookies){
 	  $rootScope.activePage = 'profile';
 	  $rootScope.userInfo = angular.copy($rootScope.user);
+	  var questionList = angular.copy(CONST.PROFILE_QUESTION);
+
+	  $scope.getRandomQuestion = function(){
+	  	$scope.question = questionList[Math.floor(Math.random()*questionList.length)];
+	  };
+	  $scope.getRandomQuestion();
 
 	  // init upload
 	  $scope.image = Request.upload("/upload/uploadImage", {type: 'user'});
@@ -27,21 +33,19 @@ angular.module('ba')
 	  };
 		
 		$scope.updateUserInfo = function(){
-			$rootScope.loading = $scope.saveLoading = true;
 
-			User.updateUserInfo($rootScope.userInfo)
+			User.updateUserInfo($scope.userInfo)
 				.then(function(res){
-					$scope.userInfo = res;
+					$scope.userInfo = angular.copy(res);
 					$rootScope.user = angular.copy(res);
+					
 
 					$cookies.putObject("user", res);
 
-					$rootScope.loading = $scope.saveLoading = false;
 					toastr.success("Cập nhật thông tin thành công");
 				})
 
 				.catch(function(err){
-					$rootScope.loading = $scope.saveLoading = false;
 					toastr.error(err);
 				});
 		};

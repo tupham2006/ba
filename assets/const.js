@@ -82,28 +82,18 @@ CONST.ROLE = [
   "Quản trị viên"
 ];
 
-/**
- * Troll function :v
- * @param  {[type]} a [description]
- * @param  {[type]} b [description]
- * @return {[type]}   [description]
- */
-CONST.c = function(a, b){
-  b.unshift(a);
-  return b;
-};
 
-CONST.cs = function(a, b){
-  return a.concat(b);
-};
-
-CONST.u = function(a, b){
-  for(var i in b){
-    if(b[i].id == a.id){
-      b[i] = a;
-      break;
-    }
-  }
-
-  return b;
-};
+CONST.PROFILE_QUESTION = [
+  "Bạn cao bao nhiêu?",
+  "Sở thích của bạn là gì?",
+  "Con vật yêu thích của bạn là gì",
+  "Tình trạng hôn nhân của bạn?",
+  "Bạn nặng bao nhiêu?",
+  "Thần tượng của bạn là ai?",
+  "Tài lẻ mà bạn có?",
+  "Bạn thân nhất của bạn là ai?",
+  "Ước mơ của bạn là gì?",
+  "Gia đình bạn gồm mấy người?",
+  "Bạn thích nhất môn học gì?",
+  "Bạn có thể kể một kỷ niệm đẹp của bạn đưọc chứ?"
+];

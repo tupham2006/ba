@@ -154,9 +154,9 @@ input[type="checkbox"], input[type="radio"]{
 }
 
 .btn-label {
-	position: relative;
-	padding-left: 32px;
-	padding-right: 0;
+  position: relative;
+  padding-left: 47px;
+  padding-right: 15px;
 }
 
 .btn-label b {

@@ -195,6 +195,10 @@ module.exports = {
 			data.course = req.param("course");
 		}
 
+		if(typeof req.param("status") == "string" && req.param("status").length <= 200) {
+			data.status = req.param("status");
+		}
+
 		User.updateUserInfo(condition, data)
 			.then(function(qUpdate){
 				if(!qUpdate || qUpdate.length == 0){
