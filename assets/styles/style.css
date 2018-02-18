@@ -5,7 +5,8 @@ html, body {
 #main {
 	padding: 10px;
 	height: calc(100% - 40px);
-	overflow: auto;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 table th, table td {
@@ -616,13 +617,15 @@ button {
 	border-radius: unset;
 }
 
-.report-borrow-chart {
-	height: 70vh;
-	position: relative;
-}
-
 .mobile-display {
 	display: none !important;
+}
+
+@media (min-width: 768px) {
+	.report-borrow-chart {
+		height: 70vh;
+		position: relative;
+	}
 }
 
 @media (max-width: 767px) {
