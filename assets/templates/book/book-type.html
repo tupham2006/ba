@@ -10,22 +10,22 @@
 				<div class="col-md-12">
 					<table class="table table-bordered table-striped">
 						<colgroup>
-				     <col class="width-15">
-				     <col class="text-center width-40">
-				     <col class="text-center width-30">
+				     <col class="width-15 hidden-xs">
+				     <col class="text-center width-40 hidden-xs">
+				     <col class="text-center width-30 hidden-xs">
 				  </colgroup>
 						<tr>
-							<th>ID</th>
+							<th class="hidden-xs">ID</th>
 							<th>Tên loại</th>
 							<th>Trạng thái</th>
 							<th></th>
 						</tr>
 						<tr ng-repeat="type in bookTypeList track by $index">
-							<td>{{ type.id }}</td>
+							<td class="hidden-xs">{{ type.id }}</td>
 							<td>{{ type.name }}</td>
 							<td>
-								<span ng-show="type.actived">Đang kích hoạt</span>
-								<span ng-show="!type.actived">Đang khóa</span>
+								<span ng-show="type.actived">Kích hoạt</span>
+								<span ng-show="!type.actived">Khóa</span>
 							</td>
 							<td>
 								<button class="btn btn-blue" ng-click="editBookType(type.id)">Sửa</button>
@@ -60,13 +60,12 @@
 		</div>
 		<div class="row">
 			<div class="col-md-6">
-				<button type="submit" ng-disabled="borrowBookForm.$invalid" class="btn btn-green width-100px text-green btn-label pull-right">
-					<b><i ng-show="borrowSaveLoading" class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></b>
-					<b ng-show="!borrowSaveLoading" class="fa fa-save"></b> Lưu
+				<button type="submit" ng-disabled="borrowBookForm.$invalid" class="btn btn-green width-100px btn-label pull-right">
+					<b class="fa fa-save"></b> Lưu
 				</button>
 			</div>
 			<div class="col-md-6">
-				<button class="btn btn-white pull-left" ng-click="backBookType()">Trở lại</button>
+				<button type="button" class="btn btn-white pull-left" ng-click="backBookType()">Trở lại</button>
 			</div>
 		</div>
 		</form>

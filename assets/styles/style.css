@@ -618,7 +618,11 @@ button {
 }
 
 .mobile-display {
-	display: none !important;
+	display: none;
+}
+
+.mobile-table-display {
+	display: none;
 }
 
 @media (min-width: 768px) {
@@ -635,5 +639,13 @@ button {
 
 	.mobile-display {
 		display: block !important;
+	}
+
+	#borrowLeft, #borrowCenter {
+		width: 100%
+	}
+
+	#borrowRight {
+		display: none;
 	}
 }

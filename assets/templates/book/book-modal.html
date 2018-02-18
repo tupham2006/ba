@@ -26,17 +26,17 @@
 				<input type="text" class="form-control text-cap-name" ng-model="bookInfo.author">
 			</div>
 		</div>
-		<div class="row mb-10">
+		<div class="row">
 			<div class="label-control col-md-4">Số lượng</div>
 			<div class="col-md-8">
 				<div class="row">
-					<div class="col-md-6 ">
+					<div class="col-md-6 mb-10">
 						<div class="input-group">
 							<span class="input-group-addon">Sử dụng</span>
 							<input type="number" class="form-control" ng-model="bookInfo.use_quantity">
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-6 mb-10">
 						<div class="input-group">
 							<span class="input-group-addon">Trong kho</span>
 							<input type="number" class="form-control" ng-model="bookInfo.inventory_quantity">
@@ -58,8 +58,8 @@
 			</div>
 		</div>
 		<div class="row mb-10">
-			<label class="text-normal col-md-4" for="bookHot">Sách hot</label>
-			<div class="col-md-8">
+			<label class="text-normal col-xs-4" for="bookHot">Sách hot</label>
+			<div class="col-xs-8">
 				<input type="checkbox" id="bookHot" ng-true-value="1" ng-false-value="0" ng-model="bookInfo.hot" >
 			</div>
 		</div>
