@@ -1,26 +1,26 @@
 <div id="user" ng-init="getUserList()">
 		<uib-tabset active="active">
     <uib-tab index="0" heading="Thành viên">
-			<div class="row mb-10 mt-10">
+			<div class="row mb-10">
 				<div class="col-md-12">
 					<div class="row">
-						<div class="col-md-3">
+						<div class="col-xs-12 col-md-3 mt-10">
 							<input ng-change="getUserList()" type="text" ng-model="filter.typing" placeholder="Tìm kiếm theo tên, số điện thoại" class="form-control">
 						</div>
-						<div class="col-md-2">
+						<div class="col-xs-12 col-md-2 mt-10">
 							<position-select ng-model="filter.position_id" ng-change="getUserList()"></position-select>
 						</div>
-						<div class="col-md-2">
+						<div class="col-xs-12 col-md-2 mt-10">
 							<department-select ng-model="filter.department_id" ng-change="getUserList()"></department-select>
 						</div>
-						<div class="col-md-2">
+						<div class="col-xs-12 col-md-2 mt-10">
 							<select class="form-control" ng-model="filter.actived" ng-change="getUserList()" convert-to-number>
 								<option value="0">Thành viên cũ</option>
 								<option value="1">Thành viên hiện tại</option>
 								<option value="2">Tất cả thành viên</option>
 							</select>
 						</div>
-						<div class="col-md-3">
+						<div class="col-xs-12 col-md-3 mt-10">
 							<div class="pull-right">
 								<span class="pull-right count">Tổng số: {{ userCount }}</span>
 								<ul uib-pagination class="m-0" total-items="userCount" force-ellipses="true" items-per-page="filter.limit"  max-size="4" force-ellipses="true" direction-links="false" ng-model="filter.currentPage" ng-change="changePage()"></ul>
@@ -33,22 +33,22 @@
 				<div class="col-md-12">
 					<table class="table table-bordered table-striped">
 						<tr>
-							<th></th>
+							<th class="hidden-xs"></th>
 							<th>Tên</th>				
-							<th>Tên tài khoản</th>	
-							<th>Ban</th>	
-							<th>Chức vụ</th>
-							<th>Số điện thoại</th>
+							<th class="hidden-xs">Tên tài khoản</th>	
+							<th class="hidden-xs">Ban</th>	
+							<th class="hidden-xs">Chức vụ</th>
+							<th class="hidden-xs">Số điện thoại</th>
 							<th>Quyền</th>
 							<th></th>
 						</tr>
 						<tr ng-repeat = "user in userList">
-							<td class="text-center"> <avatar ng-model="user.image" av-size="40" av-type="'user'"></avatar> </td>
+							<td class="text-center hidden-xs"> <avatar ng-model="user.image" av-size="40" av-type="'user'"></avatar> </td>
 							<td class="text-center"> {{ user.name }} </td>
-							<td class="text-center"> {{ user.account }} </td>
-							<td class="text-center"> {{ user.department_name }} </td>
-							<td class="text-center"> {{ user.position_name }} </td>
-							<td class="text-center"> {{ user.mobile }} </td>
+							<td class="text-center hidden-xs"> {{ user.account }} </td>
+							<td class="text-center hidden-xs"> {{ user.department_name }} </td>
+							<td class="text-center hidden-xs"> {{ user.position_name }} </td>
+							<td class="text-center hidden-xs"> {{ user.mobile }} </td>
 							<td class="text-center">
 								<select class="form-control" ng-model="user.role" ng-change="setUserRole(user.id, user.role)" convert-to-number>
 									<option ng-repeat="role in roleList track by $index" value="{{$index}}" >
@@ -69,7 +69,8 @@
     	<div class="row mt-10">
     		<div class="col-md-4">
 	    		<div class="row">
-	    			<span class="col-md-12 text-blue mb-5"><span class="text-bold"><i class="fa fa-sun-o"></i> Các chức vụ</span><a href="javascript:void(0)" class="pull-right" ng-click="openPositionModal()">+ Thêm mới</a></span>
+	    			<div class="col-md-12 text-blue mb-5"><span class="text-bold"><i class="fa fa-sun-o"></i> Các chức vụ</span>
+	    			<span><a href="javascript:void(0)" class="pull-right" ng-click="openPositionModal()">+ Thêm mới</a></span></div>
 			    	<div class="col-xs-12 mb-20">
 				    	<table class="table table-bordered table-hover">
 				    		<tr>
@@ -88,7 +89,7 @@
 	    	</div>
     		<div class="col-md-4">
 	    		<div class="row">
-			    	<span class="col-md-12 text-blue mb-5"><span class="text-bold"><i class="fa fa-users"></i> Các ban</span><a href="javascript:void(0)" class="pull-right" ng-click="openDepartmentModal()">+ Thêm mới</a></span>
+			    	<div class="col-md-12 text-blue mb-5"><span class="text-bold"><i class="fa fa-users"></i> Các ban</span><a href="javascript:void(0)" class="pull-right" ng-click="openDepartmentModal()">+ Thêm mới</a></div>
 			    	<div class="col-xs-12 mb-20">
 				    	<table class="table table-bordered table-striped">
 				    		<tr>
@@ -107,7 +108,7 @@
     		</div>
     		<div class="col-md-4">
     			<div class="row">
-	    			<span class="col-md-12 text-blue mb-5"><span class="text-bold"><i class="fa fa-credit-card"></i> Loại đặt cọc</span><a href="javascript:void(0)" class="pull-right" ng-click="openDepositModal()">+ Thêm mới</a></span>
+	    			<div class="col-md-12 text-blue mb-5"><span class="text-bold"><i class="fa fa-credit-card"></i> Loại đặt cọc</span><a href="javascript:void(0)" class="pull-right" ng-click="openDepositModal()">+ Thêm mới</a></div>
 		    		<div class="col-xs-12 mb-20">
 				    	<table class="table table-bordered table-striped">
 				    		<tr>
