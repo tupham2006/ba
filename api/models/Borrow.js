@@ -201,7 +201,7 @@ module.exports = {
 							// delete borrow book
 							BorrowBook.destroy({borrow_id: borrowUpdateResult[0].id})
 								.exec(function(destroyErr, destroyResult){
-									console.log("destroyResult", destroyResult);
+									// console.log("destroyResult", destroyResult);
 									if(destroyErr) return reject(destroyErr);
 
 									// create new

@@ -296,10 +296,14 @@ button {
 	height: 100%;
 	width: 40%;
 	float: left;
-	background-size: cover;
-	padding: 10px;
-	overflow-y: auto;
 	border: 1px solid #ccc;
+}
+
+#borrowCenter .content {
+	padding: 10px;
+	width: 100%;
+	height: 100%;
+	overflow-y: auto;
 	overflow-x: hidden;
 }
 
@@ -633,6 +637,10 @@ button {
 }
 
 @media (max-width: 767px) {
+	body, html {
+		font-size: 14px;
+	}
+	
 	.desktop-display {
 		display: none !important;
 	}

@@ -13,7 +13,6 @@ angular.module('ba')
 	  	$rootScope.activePage = 'borrow';
 
 	  	$scope.borrowList = [];
-	  	$scope.viewMode = 'BORROW';
 
 	  	$scope.filter = {
 	  		date: {
@@ -21,7 +20,9 @@ angular.module('ba')
 		  		endDate: moment().set({'hour': 23, 'minute': 59, 'second': 59, 'millisecond': 999})
 	  		},
 	  		typing: "",
-	  		type: 1
+	  		type: 1,
+	  		limit: 50,
+	  		skip: 0
 	  	};
 
 	  	// init dateranger
@@ -84,9 +85,8 @@ angular.module('ba')
 	    	type_id: 0,
 	    	search: '',
 	    	actived: 1,
-	    	limit: 5000
-
-	    	
+	    	limit: 50,
+	    	skip: 0
 	    };
 
 	    $scope.borrowList = [];
@@ -97,13 +97,21 @@ angular.module('ba')
 	    	$scope.getReaderList();
 	    };
 
-	    $scope.getBorrowList = function(id){
+	    $scope.getBorrowList = function(id, action){
+	    	
+	    	var params = angular.copy($scope.filter);
 
-	    	Borrow.getBorrowList($scope.filter)
+	    	if(action == "LOAD_MORE") {
+	    		params.skip = $scope.borrowList.length;
+	    	} else {
+	    		$scope.borrowList = [];
+	    	}
+
+	    	Borrow.getBorrowList(params)
 	    		.then(function(res){
 
 	    			var borrowList = angular.copy(res);
-			    	$scope.borrowList = borrowList;
+			    	$scope.borrowList = $scope.borrowList.concat(borrowList);
 			    	$scope.showBorrowDetail(id);
 	    		})
 
@@ -112,12 +120,20 @@ angular.module('ba')
 	    		});
 	    };
 
-	    $scope.getBookList = function(){
+	    $scope.getBookList = function(action){
+	    	
+	    	var params = angular.copy($scope.bookFilter);
+					    	
+	    	if(action == "LOAD_MORE") {
+	    		params.skip = $scope.bookList.length;
+	    	} else {
+	    		$scope.bookList = [];
+	    	}
 
-	    	Book.getBookList($scope.bookFilter)
+	    	Book.getBookList(params)
 	    		.then(function(resBook){
 
-	    			$scope.bookList = resBook.books;
+	    			$scope.bookList = $scope.bookList.concat(resBook.books);
 	    		})
 
 	    		.catch(function(err){
@@ -133,7 +149,6 @@ angular.module('ba')
 	    };
 
 	    $scope.showBookDefail =  function(id){
-	    	$scope.viewMode = "BOOK";
 
 	    	for(var i in $scope.bookList){
 	    		if($scope.bookList[i].id == id){
@@ -169,12 +184,11 @@ angular.module('ba')
 	    $scope.showBorrowDetail = function(id){
 	    	$scope.existReader = false;
 	    	$rootScope._error = {};
-		    $scope.viewMode = "BORROW";
     		for(var i in $scope.borrowList){
     			if($scope.borrowList[i].id == id){
     				$scope.borrowInfo = angular.copy($scope.borrowList[i]);
-    				$scope.existReader = true;
     				$scope.borrowList[i].is_selected = true;
+    				$scope.findReaderByMobile();
 	    			
     			} else {
     				if($scope.borrowList[i].is_selected){
@@ -259,8 +273,10 @@ angular.module('ba')
 
 	    $scope.saveBorrow = function(type){
 
-	    	if(Object.getOwnPropertyNames($rootScope._error).length) return;
-
+	    	if(!$scope.borrowInfo.book || !$scope.borrowInfo.book.length) {
+	    		toastr.error("Vui lòng chọn sách");
+	    		return;
+	    	}
 
 	    	var params = {
 	    		borrow_date: moment($scope.borrowDate.date).toISOString(),
@@ -326,26 +342,24 @@ angular.module('ba')
 
 
 	    $scope.findReaderByMobile	 = function(){
-	    	if($rootScope._error.mobile) return;
-	    		var params = {
-	    			mobile: $scope.borrowInfo.reader_mobile
-	    		};
-	    			console.log("$scope.borrowInfo.reader_mobile", $scope.borrowInfo.reader_mobile);
 
-	    		Reader.getReaderByMobile(params)
-	    			.then(function(res){
-	    				if(res){
-	    					$scope.borrowInfo.reader_id = res.id;
-	    					$scope.borrowInfo.reader_name = res.name;
-	    					$scope.existReader = true;
-	    				} else {
-	    					delete $scope.borrowInfo.reader_id;
-	    					delete $scope.borrowInfo.reader_name;
-	    					$scope.existReader = false;
-	    				}
-	    				$rootScope._validate('name', $scope.borrowInfo.reader_name);
-	    				
-	    			});
+    		var params = {
+    			mobile: $scope.borrowInfo.reader_mobile
+    		};
+
+    		Reader.getReaderByMobile(params)
+    			.then(function(res){
+    				if(res){
+    					$scope.borrowInfo.reader_id = res.id;
+    					$scope.borrowInfo.reader_name = res.name;
+    					$scope.borrowInfo.facutly = res.facutly;
+    					$scope.borrowInfo.course = res.course;
+    					$scope.existReader = true;
+    				} else {
+    					delete $scope.borrowInfo.reader_id;
+    					$scope.existReader = false;
+    				}    				
+    			});
 	    };
 
 	    $scope.whenChangeStatus = function(){

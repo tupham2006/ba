@@ -213,6 +213,7 @@
 	line-height: 34px;
 	height: 34px;
 	vertical-align: middle;
+	display: block;
 }
 
 .loading {
@@ -235,4 +236,10 @@
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.disabled {
+	  cursor: not-allowed;
+    pointer-events: none;
+    background: #EEE;
 }
