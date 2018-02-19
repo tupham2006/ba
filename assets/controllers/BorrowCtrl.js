@@ -167,7 +167,7 @@ angular.module('ba')
 	    	singleDatePicker: true,
 	    	eventHandlers: {
 		      'apply.daterangepicker': function(ev, picker) { // when user apply new date range
-	    			$scope.borrowInfo.warning_borrow_time = moment($scope.payDate.date).diff(moment($scope.borrowDate.date), "milliseconds");
+	    			$scope.borrowInfo.warning_borrow_time = Math.max(0, moment($scope.payDate.date).diff(moment($scope.borrowDate.date), "milliseconds"));
 		      }
 		  	}
 	    };
@@ -176,7 +176,7 @@ angular.module('ba')
 	    	singleDatePicker: true,
 	    	eventHandlers: {
 		      'apply.daterangepicker': function(ev, picker) { // when user apply new date range							  	
-	    			$scope.borrowInfo.warning_borrow_time = moment($scope.payDate.date).diff(moment($scope.borrowDate.date), "milliseconds");
+	    			$scope.borrowInfo.warning_borrow_time = Math.max(0, moment($scope.payDate.date).diff(moment($scope.borrowDate.date), "milliseconds"));
 		      }
 		  	}
 	    };
@@ -384,7 +384,7 @@ angular.module('ba')
 	    };
 
 	    $scope.calBorrowTime = function(){
-		    $scope.borrowInfo.warning_borrow_time = moment($scope.payDate.date).diff(moment($scope.borrowDate.date), "milliseconds");
+		    $scope.borrowInfo.warning_borrow_time = Math.max(0, moment($scope.payDate.date).diff(moment($scope.borrowDate.date), "milliseconds"));
 	    };
 
 	    $scope.init();

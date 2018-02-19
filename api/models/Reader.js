@@ -4,7 +4,7 @@ module.exports = {
   tableName: "reader",
   attributes: {
     id: { type: "integer", primaryKey: true, autoIncrement: true },
-    mobile : { type: "string", size:11, required: true, minLength: 10, maxLength: 11, defaultsTo: ''},
+    mobile : { type: "string", size:11, required: true, unique: true, minLength: 10, maxLength: 11, defaultsTo: ''},
     name : { type: "string", size: 50, required: true, maxLength: 50, defaultsTo: ''},
     facutly: {type: 'string', defaultsTo: "CHUA_PHAN_KHOA" },
     is_user: { type: 'integer', defaultsTo: 0 },

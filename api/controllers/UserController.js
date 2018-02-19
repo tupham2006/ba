@@ -202,22 +202,32 @@ module.exports = {
 		User.updateUserInfo(condition, data)
 			.then(function(qUpdate){
 				if(!qUpdate || qUpdate.length == 0){
-						return res.json({
-							error: CONST.ERROR.NO_RECORD_UPDATE,
-							message: "Cập nhật thông tin thất bại. Vui lòng kiểm tra đưòng truyền"
-						});
+					return res.json({
+						error: CONST.ERROR.NO_RECORD_UPDATE,
+						message: "Cập nhật thông tin thất bại. Vui lòng kiểm tra đưòng truyền"
+					});
 
-					} else {
-						req.session.user = qUpdate[0];
-						return res.json({
-							user: qUpdate[0]
-						});
-					}
+				} else {
+
+					// update reader after update user
+					Reader.update({is_user: qUpdate[0].id}, {
+						name: qUpdate[0].name,
+						facutly: qUpdate[0].facutly,
+						course: qUpdate[0].course,
+						gender: qUpdate[0].gender,
+						mobile: qUpdate[0].mobile
+					})
+					.then(function(){
+							req.session.user = qUpdate[0];
+							return res.json({
+								user: qUpdate[0]
+							});
+					});
+				}
 			})
 
-			.catch(function(err){
-				console.log("UserController :: setUserRole :: " + err.message);
-				return res.json(CONST.CATCH);
+			.catch(function(e){
+				return Service.catch(req, res, e, "updateUserInfo");
 			});
 	}
 

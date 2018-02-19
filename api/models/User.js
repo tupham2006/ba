@@ -13,8 +13,8 @@ module.exports = {
   tableName: "user",
   attributes: {
     id: { type: "integer", primaryKey: true, autoIncrement: true },
-    account: {type: 'string', size: 50, minLength: 6, maxLength: 50, defaultsTo: ''}, // mobile or name
-    mobile : { type: "string", size:11, required: true, minLength: 10, maxLength: 11, defaultsTo: ''},
+    account: {type: 'string', size: 50, minLength: 6, maxLength: 50, defaultsTo: '', unique: true }, // mobile or name
+    mobile : { type: "string", size:11, required: true, minLength: 10, maxLength: 11, defaultsTo: '', unique: true},
     password: {type: 'string', size: 200, minLength: 6, maxLength: 200, required: true, defaultsTo: ''},
     name : { type: "string", size: 50, maxLength: 50, required: true, defaultsTo: ''},
     role : { type: "integer", required: true, defaultsTo: 0 },
@@ -81,12 +81,32 @@ module.exports = {
   },
 
   updateUserInfo: function(condition, data){
+      
     return new Promise(function(resolve, reject){
-      User.update(condition, data)
-        .exec(function(err, result){
-          if(err) return reject(err);
-          return resolve(result);
-        });
+
+      // find exist user
+      User.findOne({
+        id: { "!": condition.id }, 
+        mobile: data.mobile
+       }).exec(function(findErr, findResult){
+      
+        if(findErr) return reject(findErr);
+
+        if(findResult) {
+          return reject({
+            message: "Số điện thoại này đã đưọc đăng ký"
+          });
+        }
+
+        // update
+        User.update(condition, data)
+          .exec(function(err, result){
+              
+            if(err) return reject(err);
+            return resolve(result);
+          });
+       });
+
     });
   },
 

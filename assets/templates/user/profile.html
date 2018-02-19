@@ -24,7 +24,7 @@
 				<div class="row mb-20">
 					<span class="col-md-4 label-control"> Số điện thoại </span>
 					<div class="col-md-8">
-						<input ng-model="userInfo.mobile" ui-mask="9999 999 9999" ui-mask-placeholder ui-mask-placeholder-char=" " class="form-control" type="text">
+						<input ng-model="userInfo.mobile" minLength="10" mobile-format class="form-control" type="text">
 					</div>
 				</div>
 				<div class="row mb-20">
