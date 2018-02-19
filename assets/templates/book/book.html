@@ -6,7 +6,7 @@
 					<button class="btn btn-green width-100" ng-click="openBookModal()" type="button">Thêm</button>
 				</div>
 				<div class="col-xs-6 col-md-1 mb-10">
-					<button class="btn btn-blue width-100" ng-click="openBookType()">Quản lý loại</button>
+					<button class="btn btn-blue width-100" ng-click="openBookType()">Loại sách</button>
 				</div>
 				<div class="col-xs-12 col-md-3 mb-10">
 					<input ng-change="getBookList()" type="text" ng-model="filter.typing" placeholder="Tìm tên sách" class="form-control">
@@ -23,7 +23,7 @@
 						<option value="4">Sách đã hủy</option>
 					</select>
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-3 mb-10">
 					<span class="pull-right count">Tổng số: {{ bookCount }}</span>
 					<ul uib-pagination class="m-0 pull-right" total-items="bookCount" force-ellipses="true" items-per-page="filter.limit" ng-model="filter.currentPage" direction-links="false" ng-change="changePage()"></ul>
 				</div>

@@ -1,8 +1,8 @@
 angular.module('ba').factory('Deposit', Deposit);
 
-Deposit.$inject = ['$rootScope', 'Request', '$q'];
+Deposit.$inject = ['Store', 'Request', '$q'];
 
-function Deposit($rootScope, Request, $q){
+function Deposit(Store, Request, $q){
 
 	var service = {
 		getDepositList: getDepositList,
@@ -13,17 +13,19 @@ function Deposit($rootScope, Request, $q){
 
 	function getDepositList(params){
 		var df = $q.defer();
-		// if(depositList.length){
-		// 	df.resolve(depositList);
+		depositList = Store.depositTable.list;
 
-		// } else {
+		if(depositList.length){
+			df.resolve(getDepositListStore(params));
+
+		} else {
 			Request.post("/deposit/getList", params)
 				.then(function(res){
 
 					if(!res.error){
 						depositList = res.deposits;
-
-						df.resolve(depositList);
+						Store.depositTable.list = res.deposits;
+						df.resolve(getDepositListStore(params));
 					} else {
 						df.reject(res.message);
 					}
@@ -32,28 +34,50 @@ function Deposit($rootScope, Request, $q){
 				.catch(function(err){
 					df.reject(err.message);
 				});
-		// }
+		}
 		return df.promise;
 	}
 
+
+	function getDepositListStore(param){
+
+		if(!param) param = {};
+		var actived = param.actived >= 0 ? param.actived : 1;
+		var data = angular.copy(depositList);
+
+		var filterList = [];
+
+		// start filter
+		for(var i in data){
+
+			// filter typing
+			if(actived){
+				if(data[i].actived != actived) data[i].remove = true;
+			}
+			
+			// push to list
+			if(!data[i].remove){
+				filterList.push(data[i]);
+			}			
+		}
+
+		return filterList;
+	}
+
 	function saveDeposit(params){
+
 		var df = $q.defer();
 		Request.post("/deposit/save", params)
 			.then(function(res){
+				console.log("res", res);
 
-				if(res && !res.error){
-					// if(Array.isArray(res.data) && res.data.length){ // update
-					// 	for(var i in depositList)	{
-					// 		if(depositList[i].id == res.data[0].id){
-					// 			depositList[i] = res.data[0];
-					// 		}
-					// 	}
-					// } else { // create new
-					// 	depositList.unshift(res.data);
-					// }
-
-					df.resolve();
-
+				if(res && !res.error && res.data){
+					if(params.id && res.data.length > 0) {
+						Store.depositTable.update = res.data[0];
+					} else {
+						Store.depositTable.create = res.data;
+					}
+						df.resolve();
 				} else {
 					df.reject(res.message);
 				}

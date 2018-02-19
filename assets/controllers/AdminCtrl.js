@@ -29,7 +29,14 @@ angular.module('ba')
 
 		$scope.changePage = function(){
 	  	$scope.filter.skip = $scope.filter.limit * ($scope.filter.currentPage -1);
-	  	$scope.getUserList();
+	  	Admin.getUserList($scope.filter)
+				.then(function(res){
+					$scope.userList = res.user;
+					$scope.userCount = res.count;
+				})
+				.catch(function(err){
+					toastr.error(err);
+				});
 	  };
 	  
 		var getPositionList = function(){
@@ -62,7 +69,7 @@ angular.module('ba')
 
 		var getDepositList = function(){
 			return new Promise(function(resolve, reject){
-				Deposit.getDepositList()
+				Deposit.getDepositList({ actived: 0 })
 					.then(function(deposits){
 						$scope.depositList = deposits;
 						return resolve();
