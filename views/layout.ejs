@@ -68,8 +68,15 @@
                 <li ng-class="{'menu-active' : activePage == 'reader'}" class="button">
                     <div ui-sref="reader" ><i class="fa fa-user"></i> Bạn đọc</div>
                 </li>
-                <li class="button" ng-class="{'menu-active' : activePage == 'report'}">
-                    <div ui-sref="report.borrowTime"><i class="fa fa-pie-chart"></i> Thống kê</div>
+                <li class="dropdown">
+                    <div class="button dropdown-toggle" ng-class="{'menu-active' : activePage == 'report'}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-pie-chart"></i> Thống kê <span class="caret"></span>
+                    </div>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="javascript:void(0)" ui-sref="report.borrowTime"> Mượn trả sách</a>
+                        </li>
+                    </ul>
                 </li>
                 <li ng-if="user.role == 3" class="button" ng-class="{'menu-active': activePage == 'admin'}">
                     <div ui-sref="admin"><i class="fa fa-flag"></i> Quản lý CLB </div>

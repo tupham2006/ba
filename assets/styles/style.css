@@ -142,6 +142,15 @@ button {
 	border-color: #FFFFFF !important;
 }
 
+#header .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+	background: #4da1ff;
+	color: #FFFFFF;
+}
+
+#header .nav > li > a {
+	padding: 0
+}
+
 #inlineSave {
 	position: fixed;
 	top: 10px;
