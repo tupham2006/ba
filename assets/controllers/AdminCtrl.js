@@ -27,6 +27,11 @@ angular.module('ba')
 		$scope.depositList = [];
 		$scope.facutlyList = CONST.FACUTLY;
 
+		$scope.changePage = function(){
+	  	$scope.filter.skip = $scope.filter.limit * ($scope.filter.currentPage -1);
+	  	$scope.getUserList();
+	  };
+	  
 		var getPositionList = function(){
 			return new Promise(function(resolve, reject){
 				Position.getPositionList()
