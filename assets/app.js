@@ -64,9 +64,9 @@ angular.module('ba',[
 			controller: "BorrowCtrl"
 		})
 		.state("report", {})
-		.state("report.borrowTime", {
-			url: "/report/borrow-time",
-			templateUrl: "/templates/report/borrow-time.html",
+		.state("report.borrow", {
+			url: "/report/borrow",
+			templateUrl: "/templates/report/borrow/borrow.html",
 			controller: "ReportBorrowTimeCtrl"
 		});
 
@@ -89,20 +89,7 @@ angular.module('ba',[
       	display: true,
       	position: "bottom"
       },
-      scales: {
-      	yAxes: [{
-      		ticks: {
-            beginAtZero:true,
-            stepSize: 1
-          },
-      	}],
-
-      	xAxes: [{
-          gridLines: {
-          	display:false
-          }
-      	}]
-      },
+      
 			maintainAspectRatio: false
 	  });
 

@@ -14,6 +14,7 @@ module.exports = {
     gender : { type: "integer", max: 2, defaultsTo: 0}, // 0: unknown, 1: male, 2: female
     actived : { type: "integer", defaultsTo: 1 }, // user is active in club 
     note: {type: 'string', size: 10000, maxLength: 10000, defaultsTo: '' },
+    // last_borrow: { type: "datetime", defaultsTo: null },
     createdAt: {type: "datetime", columnName: "created_at" },
     updatedAt: {type: "datetime", columnName: "updated_at" }
   },

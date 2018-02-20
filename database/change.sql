@@ -1,0 +1,3 @@
+-- 21/2/2018
+ALTER TABLE `reader`
+ADD COLUMN `last_borrow` TIMESTAMP(6) DEFAULT NULL

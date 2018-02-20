@@ -304,5 +304,84 @@ module.exports = {
 				return resolve(result);				
 			});
 		});
+	},
+
+	reportBorrowFacutly: function(condition) {
+
+		return new Promise(function(resolve, reject){
+			if(!condition.start_date) {
+				condition.start_date = "1970-01-01T00:00:00.000Z";
+			}
+
+			if(!condition.end_date) {
+				condition.end_date = new Date().toISOString();
+			}
+
+			var sql = ["SELECT "];
+			var value = [condition.start_date, condition.end_date];
+
+			// value select
+			sql.push("COUNT(*) AS times, facutly ");
+
+			// table select
+			sql.push("FROM borrow ");
+
+			// join
+			sql.push("INNER JOIN reader ON borrow.reader_id = reader.id ");
+
+			// where
+			sql.push("WHERE deleted = 0 AND borrow_date >= ? ");
+
+			sql.push("AND borrow_date <= ? ");
+
+			// group
+			sql.push("GROUP BY reader.facutly ");
+
+			var queryStatement = sql.join("");
+
+			Borrow.query(queryStatement, value, function(err, result){
+				if(err) return reject(err);
+				return resolve(result);				
+			});
+		});
+	},
+
+	reportBorrowCourse: function(condition){
+		return new Promise(function(resolve, reject){
+
+			if(!condition.start_date) {
+				condition.start_date = "1970-01-01T00:00:00.000Z";
+			}
+
+			if(!condition.end_date) {
+				condition.end_date = new Date().toISOString();
+			}
+
+			var sql = ["SELECT "];
+			var value = [condition.start_date, condition.end_date];
+
+			// value select
+			sql.push("COUNT(*) AS times, course ");
+
+			// table select
+			sql.push("FROM borrow ");
+
+			// join
+			sql.push("INNER JOIN reader ON borrow.reader_id = reader.id ");
+
+			// where
+			sql.push("WHERE deleted = 0 AND borrow_date >= ? ");
+
+			sql.push("AND borrow_date <= ? ");
+
+			// group
+			sql.push("GROUP BY reader.course ");
+
+			var queryStatement = sql.join("");
+			Borrow.query(queryStatement, value, function(err, result){
+				if(err) return reject(err);
+				return resolve(result);				
+			});			
+		});
 	}
 };

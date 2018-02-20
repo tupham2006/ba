@@ -36,7 +36,7 @@ module.exports = {
 			borrow_date: new Date(req.param("borrow_date")).toISOString(),
 			status: 0,
 			facutly: req.param("facutly") ? req.param("facutly") : "CHUA_PHAN_KHOA",
-			course: parseInt(req.param("facutly")) ? parseInt(req.param("facutly")) : moment().get('years') - 1956
+			course: parseInt(req.param("course")) ? parseInt(req.param("course")) : moment().get('years') - 1956
 		};
 		
 		if(!data.book || !Array.isArray(data.book) || !data.book.length){

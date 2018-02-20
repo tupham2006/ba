@@ -1,0 +1,33 @@
+<div class="row" ng-show="page.mode == 'BORROW_TIME'" style="height: calc(100% - 54px);">
+	<div class="col-xs-12 col-md-6" style="height: calc(100% - 54px);">
+		<div class="report-borrow-chart">
+			<canvas id="line" class="chart chart-line" chart-data="borrowTime" chart-labels="borrowDate" chart-series="series" chart-options="options"></canvas>
+		</div>
+	</div>
+	<div class="col-xs-12 col-md-6">
+		<table class="table table-bordered table-striped">
+			<thead>
+				<th>Ngày mượn</th>
+				<th>Lượt mượn</th>	
+				<th>Sách mượn</th>	
+			</thead>
+			<tbody>
+				<tr ng-repeat = "borrowTime in borrowTimeList track by $index">
+					<td> 
+						 	{{ borrowTime.borrow_date | date: "dd/MM/yyyy" }} 
+					</td>
+					<td class="text-right">
+						{{ borrowTime.times }}
+					</td>
+					<td class="text-right">
+						{{ borrowTime.borrow_book_times }}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="mt-10">
+			<ul uib-pagination class="m-0 pull-right" total-items="borrowTimeList.length" force-ellipses="true" items-per-page="filter.limit" ng-model="filter.currentPage" direction-links="false" ng-change="changePage()"></ul>
+		</div>
+	</div>
+	</div>
+</div>

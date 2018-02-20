@@ -1,0 +1,29 @@
+<div class="row" ng-show="page.mode == 'BORROW_FACUTLY'" style="height: calc(100% - 54px);">
+	<div class="col-xs-12 col-md-6" style="height: calc(100% - 54px);">
+		<div class="report-borrow-chart">
+			<canvas id="pie" class="chart chart-pie" chart-data="borrowFacutly" chart-labels="borrowFacutlyLabels" chart-series="borrowFacutlySeries" chart-options=" { cutoutPercentage: 0 }"></canvas>
+		</div>
+	</div>
+	<div class="col-xs-12 col-md-6">
+		<table class="table table-bordered table-striped">
+			<thead>
+				<th>Khoa</th>
+				<th>Lượt mượn</th>	
+				<th>Tỷ lệ</th>	
+			</thead>
+			<tbody>
+				<tr ng-repeat = "borrowFacutly in borrowFacutlyList track by $index">
+					<td> 
+						 	{{ facutly[borrowFacutly.facutly] }} 
+					</td>
+					<td class="text-right">
+						{{ borrowFacutly.times }}
+					</td>
+					<td class="text-right">
+						{{ borrowFacutly.percent }}%
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

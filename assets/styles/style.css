@@ -640,7 +640,7 @@ button {
 
 @media (min-width: 768px) {
 	.report-borrow-chart {
-		height: 70vh;
+		height: calc(100% - 50px);
 		position: relative;
 	}
 }
