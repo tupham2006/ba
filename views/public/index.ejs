@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Trang chủ</title>
+	<meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,height=device-height">
+	<link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="styles/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="styles/const.css">
+	<link rel="stylesheet" type="text/css" href="styles/theme.css">
+	<link rel="stylesheet" type="text/css" href="publics/jquery.fullpage.min.css">
+	<style type="text/css">
+		html {
+			height: 100%;
+		}
+
+		body {
+			font-size: 14px;
+			padding: 0;
+			margin-top: 50px;
+			height: calc(100% - 50px);
+		}
+
+		#header {
+			height: 50px;
+			line-height: 50px;
+			width: 100%;
+			background: none;
+			color: #FFFFFF;
+			border: none;
+			border-radius: unset;
+			position: fixed;
+			top: 0;
+			z-index: 1000;
+		}
+
+		#header .active {
+			font-weight: bold;
+			font-size: 16px;
+			transform: scale(1.0, 1.0);
+			pointer-events: none;
+		}
+
+		#header .logo {
+			background: url('../images/logo.png');
+			background-size: cover;
+			width: 40px;
+			margin-top: 5px;
+			height: 40px;	
+			float: left;
+			cursor: pointer;
+		}
+
+		#header .button {
+			padding: 0 10px;
+			min-width: 110px;
+			text-align: center;
+		}
+
+		#header .button:hover {
+			transform: scale(1.2, 1.2);
+			font-weight: bold;
+		}
+
+		#header .button a {
+			color: #FFFFFF;
+			text-decoration: none;
+			display: block;
+		}
+
+		#body {
+			height: 100%;
+		}
+
+		#footer {
+
+		}
+
+		@media(max-width: 767px) {
+			#header {
+				height: 50px;
+				line-height: 50px;
+				width: 100%;
+				background: #4da1ff;
+				color: #FFFFFF;
+				border: none;
+				border-radius: unset;
+				position: fixed;
+				top: 0;
+				z-index: 1000;
+			}
+
+			#header .navbar-toggle {
+				border-color: unset !important;
+			}
+
+			.navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus {
+				background: none;
+			}
+
+			.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+				border-color: #FFFFFF;
+				background: #4da1ff;
+			}
+		}
+
+	</style>
+</head>
+<body>
+	<nav class="navbar navbar-inverse" id="header">
+    <div class="container width-100">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="logo" href="javascript:void(0)"></a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse m-0">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="button active">
+               <div ui-sref="borrow"><a href="/"> TRANG CHỦ </a></div>
+            </li>
+            <li class="button">
+               <div ui-sref="borrow"><a href="#"> SÁCH </a></div>
+            </li>
+            <li class="button">
+               <div ui-sref="borrow"><a href="#"> SỰ KIỆN </a></div>
+            </li>
+            <li class="button">
+               <div ui-sref="borrow"><a href="#"> THÀNH VIÊN </a></div>
+            </li>
+            <li class="button">
+               <div ui-sref="borrow"><a href="#"> ĐĂNG NHẬP </a></div>
+            </li>
+          </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav>
+	<div id="body">
+		<%- body %>
+		<div id="footer" class="row">
+			<div class="col-xs-12">
+				CLB Sách và Hành động Mỏ - địa chất | Copyright 2018
+				Địa chỉ: Không gian sách, sảnh C12 tầng
+				Liên hệ: 0123456789
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="/libs/jquery/jquery-3.2.1.js"></script>
+	<script type="text/javascript" src="/libs/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/publics/jquery.fullpage.min.js"></script>
+	<script type="text/javascript" src="/publics/index.js"></script>
+	<script type="text/javascript" src="/publics/homepage.js"></script>
+</body>
+</html>

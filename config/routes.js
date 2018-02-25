@@ -33,9 +33,9 @@ module.exports.routes = {
   ***************************************************************************/
 
   '/': {
-    view: 'index',
+    view: 'public/homepage',
     locals: {
-      layout: false
+      layout: 'public/index'
     }
   },
 
