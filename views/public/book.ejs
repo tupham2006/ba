@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+	<style type="text/css">
+		#book {
+			height: 100%;
+		}
+
+		.book-data-main {
+			padding: 10px;
+			height: 300px;
+			width: 100%;
+			border-radius: 3px;
+			cursor: pointer;
+		}
+
+		.book-data-main:hover {
+			box-shadow: 3px 3px 10px 0px #CCC;
+		}
+
+		.book-data-image {
+			height: 225px;
+			line-height: 225px;
+			width: 100%;	
+		}
+
+		.book-data-title {
+			height: 30px;
+			margin-top: 5px;
+			line-height: 30px;
+			vertical-align: middle;
+			color: rgb(65, 140, 252);
+			text-align: center;
+		}
+
+		.book-data-rate {
+			width: 100%;
+			height: 20px;
+			line-height: 20px;
+			text-align: center;
+			vertical-align: middle;
+		}
+
+		.book-data-rate .love:before {
+			content: "\f08a"
+		}
+
+		.book-data-rate .love:hover:before {
+			content: "\f004";
+			color: red
+		}
+
+		.book-data-rate .hate:before {
+			content: "\f088";
+		}
+
+		.book-data-rate .hate:hover:before {
+			content: "\f165";
+		}
+
+		.book-data-rate .comment:before {
+			content: "\f27b";
+		}
+
+		.book-data-rate .comment:hover:before {
+			content: "\f075";
+			color: rgb(65, 140, 252);
+		}
+
+		.default-book {
+			vertical-align: middle;
+			text-align: center;
+			width: 100%;	
+			font-size: 100px;
+			color: #CCC;
+		}
+
+	</style>
+
+	<div id="book" class="container-fluid">
+		<div class="row height-100">
+			<div class="col-xs-12 col-md-3 height-100 pt-10 pb-10">
+				<div class="row mb-20">
+					<div class="col-xs-12 mb-10" style="font-size: 16px; color: rgb(65, 140, 252);">
+						<i class="fa fa-sort-amount-desc" id="sortIcon" style="cursor: pointer;"></i> 
+						<div class="display-inblock" role="button" data-toggle="collapse" href="#sort" aria-expanded="false" aria-controls="sort">Xếp theo: <span id="sortTitle">Sách mới</span> </div>
+						<div class="collapse" id="sort" style="margin-left: 16px; font-size: 14px">
+						  <a href="javascript:void(0)" value='id'>Sách mới </a> <br>
+						  <a href="javascript:void(0)" value='name'>Tên sách </a> <br>
+						  <a href="javascript:void(0)" value='hot'>Sách hot </a>
+						</div>
+					</div>
+					
+				</div>
+				<div class="row mb-20">
+					<div class="col-xs-12 mb-10" style="font-size: 16px; color: rgb(65, 140, 252);">
+						<i class="fa fa-filter"></i> Lọc
+					</div>
+					<div class="col-xs-12 mb-10">
+					Tìm kiếm sách
+					</div>
+					<div class="col-xs-12">
+						<input type="text" class="form-control" id="filterSearch" placeholder="Nhập tên sách">
+					</div>
+				</div>
+				<div class="row mb-20">
+					<div class="col-xs-12 mb-10">
+					Thể loại sách
+					</div>
+					<div class="col-xs-12">
+						<select id="filterType" class="form-control">
+							<option value="0" selected> Tất cả</option>
+						</select>
+					</div>
+				</div>
+				<div class="row mb-20">
+					<div class="col-xs-12 mb-10">
+						Trạng thái sách
+					</div>
+					<div class="col-xs-12">
+						<select id="filterStatus" class="form-control">
+							<option value="0" selected> Tất cả</option>
+							<option value="1"> Chưa mượn</option>
+							<option value="2"> Đã mượn</option>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<nav aria-label="...">
+						  <ul class="pagination"></ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-9 height-100 pt-10 pb-10" style="overflow: auto;">
+				<div class="row height-100" id="bookData">
+				</div>
+			</div>
+		</div>
+	</div>
+</html>
+<script type="text/javascript">
+
+	var filter = {
+		limit: 12,
+		offset: 0,
+		type: '',
+		sort_name: 'id',
+		sort_type: 'desc',
+		search: '',
+		status: 0
+	};
+
+	$(document).ready(function() {
+		
+		Request("/public/bookPage")
+			.then(function(response){
+				renderBookTemplate(response.books, response.book_count);
+
+				for(var j in response.book_types) {
+					$("#filterType").append(
+						'<option value="' + response.book_types[j].id + '">' + response.book_types[j].name + '</option>'
+					);
+				}	
+			});
+
+		// paging 
+		$(document).on('click', "ul.pagination li", function(e){
+			$(".pagination li").removeClass("active");
+			$(this).addClass("active");
+			var currentPage = parseInt($(this).attr('value'));
+			filter.offset = (currentPage * filter.limit);
+			getBookList(true);
+		});
+
+
+		// sort
+		// sort name
+		$('#sort a').click(function(e){
+			filter.sort_name = $(this).attr('value');
+			$('#sortTitle').html($(this).html());
+			$("#sort").collapse('hide');
+
+			getBookList();
+		});
+
+		// sort type
+		$("#sortIcon").click(function(e){
+			if($("#sortIcon").hasClass("fa-sort-amount-desc")){
+				$("#sortIcon").removeClass("fa-sort-amount-desc");
+				$("#sortIcon").addClass("fa-sort-amount-asc");
+				filter.sort_type = 'asc';
+			} else {
+				$("#sortIcon").addClass("fa-sort-amount-desc");
+				$("#sortIcon").removeClass("fa-sort-amount-asc");
+				filter.sort_type = 'desc';
+			}
+
+			getBookList();
+		});
+	});
+
+	// typing
+	var timeoutSearch;
+	$('#filterSearch').on("keyup", function(e){
+
+		if(timeoutSearch) clearTimeout(timeoutSearch);
+		timeoutSearch = setTimeout(function(){
+			filter.search = $('#filterSearch').val();
+			getBookList();
+		}, 500);
+	});
+
+	// filter type	
+	$('#filterType').change(function(e){
+		filter.type = parseInt($('#filterType').val());
+		getBookList();
+	});
+
+	// filter status	
+	$('#filterStatus').change(function(e){
+		filter.status = parseInt($('#filterStatus').val());
+		getBookList();
+	});
+
+	function getBookList(changePage) {
+
+		Request('/public/getBookList', filter)
+			.then(function(response){
+				$("#bookData").empty();
+				renderBookTemplate(response.books, response.book_count, changePage);
+			});
+	}
+
+	function renderBookTemplate(books, book_count, changePage) {
+		for(var i in books) {
+			$("#bookData").append(
+				'<div class="col-md-3 mb-10">' +
+					'<div class="book-data-main" title="' + books[i].name + (!books[i].current_quantity ? ' (Đã mượn)' : '') + '">' +
+						'<div class="book-data-image" style="background: url(\'' + books[i].image + '\');  background-size: contain; background-repeat: no-repeat; background-position: center;">' +
+						(!books[i].image ? '<i class="fa fa-file-image-o default-book"></i>' : '') + '</div>' + 
+						'<div class="book-data-title text-overflow" style="' + (!books[i].current_quantity ? 'color: red;' : '') + '">' + 
+						books[i].name + 
+						'</div>' +
+						'<div class="book-data-rate">' +
+							'<div class="width-30 display-inblock" title="Yêu thích">' +
+								'<i class="fa love"></i> ' +
+								books[i].love_time +
+							'</div>' +
+							'<div class="width-30 display-inblock" title="Ghét">' +
+								'<i class="fa fa-thumbs-o-down hate"></i> ' +
+								books[i].hate_time +
+							'</div>' +
+							'<div class="width-40 display-inblock" title="Bình luận">' +
+								'<i class="fa fa-commenting-o comment"></i> ' +
+								books[i].comment_time +
+							'</div>' +
+						'</div>' +
+					'<div>' + 
+				'</div>'
+			);
+		}
+
+		// process paging
+		if(!changePage) {
+			var count = book_count;
+			var pages = Math.floor(book_count/10) ? Math.floor(book_count/10) : 1;
+			$(".pagination").empty();
+
+			for(var k = 0; k < pages; k++ ) {
+				$(".pagination").append(
+					'<li value=' + k + '><a href="javascript:void(0)" >' + (k + 1) + '</a></li>'
+				);
+			}
+
+			$(".pagination li").first().addClass('active');
+		}
+	}
+
+</script>

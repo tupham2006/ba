@@ -5,8 +5,6 @@ const CONST = require('../../const.js');
 module.exports = {
 	tableName: "book",
 	schema: true,
-	autoCreatedAt: false,
-	autoUpdatedAt: false,
 	attributes: {
 		id: { type: "integer", primaryKey: true, autoIncrement: true },
 		name: { type: "string", size: 100, maxLength: 100, required: true, defaultsTo: '' },
@@ -14,6 +12,9 @@ module.exports = {
 		type_id: { type: "integer", required: true, defaultsTo: 0 },
 		type_name: { type: "string", required: true, maxLength: 50, defaultsTo: "Loại chung" },
 		hot: { type: "integer", defaultsTo: 0 }, // 1: hot book
+		comment_time: { type: "integer", defaultsTo: 0 }, // 1: hot book
+		love_time: { type: "integer", defaultsTo: 0 }, // 1: hot book
+		hate_time: { type: "integer", defaultsTo: 0 }, // 1: hot book
 		borrow_time: { type: "integer", defaultsTo: 0 },
 		author: { type: "string", size:100, maxLength: 100, defaultsTo: "" },
 		intro: { type: "string", size:10000, maxLength: 10000, defaultsTo: "" },
@@ -21,6 +22,8 @@ module.exports = {
 		inventory_quantity: { type: 'integer', defaultsTo: 0 }, // book quantity in inventory
 		current_quantity: { type: 'integer', defaultsTo: 1}, // current quantity, 0: not ready borrow
 		note: { type: "string", size:10000, maxLength: 10000, defaultsTo: "" },
+		createdAt: {type: "datetime", columnName: "created_at" },
+    updatedAt: {type: "datetime", columnName: "updated_at" }
 	},
 
 	getBookList: function (condition) {
@@ -33,20 +36,21 @@ module.exports = {
 		});
 	},
 
-	// countBook: function(search){
-	// 	var condition = {};
+	countBook: function(search){
+		var condition = {};
 
-	// 	if(search.where.name) condition.name =  search.where.name;
-	// 	if(search.where.type_id) condition.type_id = search.where.type_id;
-
-	// 	return new Promise(function(resolve, reject){
-	// 		Book.count(condition)
-	// 			.exec(function(err, count){
-	// 				if(err) return reject(err);
-	// 				return resolve(count);
-	// 			});
-	// 	});
-	// },
+		if(search.where.name) condition.name =  search.where.name;
+		if(search.where.type_id) condition.type_id = search.where.type_id;
+		if(search.where.use_quantity) condition.use_quantity = search.where.use_quantity;
+		
+		return new Promise(function(resolve, reject){
+			Book.count(condition)
+				.exec(function(err, count){
+					if(err) return reject(err);
+					return resolve(count);
+				});
+		});
+	},
 
 	updateBook: function(id, data){
 		return new Promise(function(resolve, reject){

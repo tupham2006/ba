@@ -4,7 +4,6 @@ angular.module('ba',[
 	'daterangepicker',
 	"toastr",
 	"ui.bootstrap",
-	"angularjs-dropdown-multiselect",
 	"angularFileUpload",
 	"ngCookies",
 	"ui.mask",

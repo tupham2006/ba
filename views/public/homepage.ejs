@@ -35,8 +35,10 @@
 			line-height: 50px;
 			vertical-align: middle;
 			padding: 5px;
-			padding-left: 20px;
+			padding-left: 45px;
 			font-size: 20px;
+			margin-left: -30px;
+			width: calc(100% - 30px);
 		}
 
 		#home .title .title-art {
@@ -51,6 +53,11 @@
 			text-align: justify;
 		}
 
+		#home .section {
+			padding-left: 40px;
+			padding-right: 40px;
+		}
+
 		#fp-nav ul li:nth-child(1) a.active span, 
 		#fp-nav ul li:nth-child(1):hover a.active span, #fp-nav ul li a span, .fp-slidesNav ul li a span{
 		    background:#FFFFFF;
@@ -62,19 +69,27 @@
 
 		.image {
 			border-radius: 3px;
-			background: #FFF;
 			padding: 5px;
+			height: 100%;
+			width: 100%;
 		}
 
 		.image > .content {
 			text-indent: 0 !important;
 			overflow-y: hidden;
-			max-height: 300px;
+			height: 100%;
 			width: 100%;
+			padding: 10px;
 		}
 
-		.image img {
-			width: 100%;
+		.link-white, .link-white:hover, .link-white:visited, .link-white:active {
+			color: #FFFFFF;
+			text-decoration: underline;
+		}
+
+		.block-loading {
+			cursor: wait;
+			pointer-events: none;
 		}
 
 		@media(max-width: 767px) {
@@ -84,52 +99,46 @@
 			}
 
 			#home .title-icon {
-			border-radius: 50%;
-			width: 60px;
-			height: 60px;
-			line-height: 60px;
-			border: 2px solid #000;
-			display: inline-block;
-			float: left;
-			position: relative;
-			overflow: hidden;
+				border-radius: 50%;
+				width: 60px;
+				height: 60px;
+				line-height: 60px;
+				border: 2px solid #000;
+				display: inline-block;
+				float: left;
+				position: relative;
+				overflow: hidden;
+			}
 		}
-
-		}
-
 	</style>
 
 	<div id="home">
 		<div class="section">
-			<div class="container-fluid">
-				<div class="row" id="bookMain">
-					<div class="col-xs-12 col-md-8">
+			<div class="container-fluid height-100">
+				<div class="row height-100" id="bookMain">
+					<div class="col-xs-12 col-md-6">
 						<div class="title mb-10">
-							<div class="title-icon">
+							<div class="title-icon" style="background: rgb(47, 161, 37); border: 3px solid #0f8206;">
 								<i class="glyphicon glyphicon-book"></i>
 							</div>
-							<div class="title-content">
-								Đắc nhân tâm
-							</div>				
+							<div class="title-content" id="bookName" style="background: linear-gradient(to right, #0f8206 , rgb(47, 161, 37));"></div>				
 						</div>
-						<div class="content">
-								Đắc nhân tâm có tên tiếng Anh là How to win friends and Influence people. Đây là cái tên được Victor O. Schwab, một nhà viết quảng cáo nổi tiếng, đặt cho quyển sách viết về 30 nguyên tắc vàng trong đối nhân xử thế của Dale Carnegie. Và cũng từ đó, cái tên Đắc nhân tâm và Dale Carnegie đã được lưu truyền rộng rãi trên toàn cầu. Tại Việt Nam, Đắc nhân tâm đã tồn tại được hơn nửa thế kỷ thế nhưng tầm ảnh hưởng của nó vẫn tiếp tục lan rộng và làm thay đổi cuộc đời của rất nhiều người.Trong quyển sách Developing Management Skills, có đoạn tác giả Kim S. Cameron viết rằng “Mặc dù tất cả mọi thứ trong môi trường sống của chúng ta đã và đang thay đổi, vẫn có một vài thứ đã được giữ lại, và tiếp tục duy trì, tương đối ổn định. Với những sự thay đổi nhỏ và sự khác biệt về phong cách, những gì đã không thay đổi trong hàng ngàn năm qua là các kỹ năng cơ bản nằm ở trung tâm của sự hiệu quả, sự hài lòng, sự phát triển mối quan hệ giữa con người. Tự do, chân giá trị, lòng tin, tình yêu, và trung thực trong các mối quan hệ luôn luôn là một trong những mục tiêu của con người, và những nguyên tắc này cũng sẽ mang lại kết quả tương tự nhau dù là thế kỉ XI hay thế kỉ XXI”. Rõ ràng mọi thứ có thể thay đổi theo thời gian nhưng những giá trị sống của con người thì gần như vẫn vậy. Đó cũng là lí do tại sao những nguyên tắc trong Đắc nhân tâm vẫn còn lưu giữ được giá trị của mình cho đến tận ngày nay. Quyển sách bao gồm 30 nguyên tắc được phân chia thành 4 phần cơ bản:
-						</div>
+						<div class="content" id="bookContent"></div>
+						<div class="title-art pull-right"><i id="bookArt"></i></div>
 					</div>
-					<div class="col-xs-12 col-md-4">
+					<div class="col-xs-12 col-md-6 height-100">
 				    <div class="image">
-				    	<div class="content">
-				    		<img src="uploads/book/book_6_2018-02-01T17:22:04.501Z.jpg">
+				    	<div class="content" id="bookImage">
 				    	</div>
 				    </div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="section">
+		<!-- <div class="section">
 			<div class="container-fluid">
 				<div class="row" id="actionMain">
-					<div class="col-xs-12 col-md-4">
+					<div class="col-xs-12 col-md-4 height-100">
 				    <div class="image">
 				    	<div class="content">
 				    		<img src="uploads/event/test.jpg">
@@ -156,9 +165,9 @@
 			</div>
 		</div>
 		<div class="section">
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-xs-12 col-md-8">
+			<div class="container-fluid height-100">
+				<div class="row height-100">
+					<div class="col-xs-12 col-md-6">
 						<div class="title mb-10">
 							<div class="title-icon">
 								<i class="fa fa-pencil-square-o" style="font-size: 50px; top: 15px; left: 5px;"></i>
@@ -174,25 +183,24 @@
 								Tình hình là tớ đọc xong quyển này rồi. Cơ mà thấy nhiều đứa chưa ghi hay chưa được ghi nên là lúc nào t về các bạn ghi vào nhé. Nhớ các bạn lắm
 						</div>
 					</div>
-					<div class="col-xs-12 col-md-4">
+					<div class="col-xs-12 col-md-6 height-100">
 				    <div class="image">
-				    	<div class="content">
-				    		<img src="uploads/event/test3.jpg">
+				    	<div class="content" style='background: url("uploads/event/test3.jpg"); background-size: contain, background-repeat: no-repeat; background-position: center'>
 				    	</div>
 				    </div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 		<div class="section">
 			<div class="container-fluid height-100">
 				<div class="row height-100">
 					<div class="col-xs-12 col-md-10 col-md-offset-1">
 						<div class="title mb-10">
-							<div class="title-icon">
+							<div class="title-icon" style="background: rgb(65, 140, 252); border: 3px solid #2a66c1;">
 								<i class="fa fa-info-circle" style="font-size: 50px; top: 15px; left: 5px;"></i>
 							</div>
-							<div class="title-content">
+							<div class="title-content" style="background: linear-gradient(to right, #2a66c1 , rgb(65, 140, 252)">
 								Giới thiệu
 							</div>				
 						</div>
@@ -210,3 +218,46 @@
 		</div>
 	</div>
 </html>
+<script type="text/javascript" src="/publics/jquery.fullpage.min.js"></script>
+<script type="text/javascript">
+		$(document).ready(function() {
+	
+	// scroll page
+	var device = $( window ).width();
+	if(device >= "768") {
+		$('#home').fullpage({
+			paddingTop: "110px",
+			paddingBottom: "50px",
+			sectionsColor : ['rgb(47, 161, 37)', 'rgb(65, 140, 252)', '#d94e4e', 'rgb(162, 84, 163)'],
+			navigation: true,
+			navigationPosition: 'right',
+		});
+	}
+
+	Request('/public/homepage')
+		.then(function(response){
+			// for book
+			if(response.data.book){
+				var bookContent = "";
+				if(response.data.book.intro.length > 1000) {
+					bookContent = response.data.book.intro.slice(0, 1000) + "... <a href='#' class='link-white'>Xem thêm</a>";
+				} else {
+					bookContent = response.data.book.intro;
+				}
+
+				$("#bookContent").html(bookContent);
+				$("#bookName").html(response.data.book.name);
+				$("#bookImage").css({
+					"background": "url(" + response.data.book.image + ")",
+					"background-size": "contain",
+					"background-repeat": "no-repeat",
+					"background-position": "center"
+				});
+
+				if(response.data.book.author) {
+					$("#bookArt").html("Tác giả: " + response.data.book.author);
+				}
+			}
+		});
+});
+	</script>

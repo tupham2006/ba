@@ -35,7 +35,14 @@ module.exports.routes = {
   '/': {
     view: 'public/homepage',
     locals: {
-      layout: 'public/index'
+      layout: 'index'
+    }
+  },
+
+  '/sach': {
+    view: 'public/book',
+    locals: {
+      layout: 'index'
     }
   },
 
@@ -197,15 +204,26 @@ module.exports.routes = {
     controller: "MediaController",
     action: "uploadImage"
   },
-  
+
   /*=====================================
   =            Public routes            =
   =====================================*/
   
-  'post /getUserListPublic': {
+  'post /public/homepage': {
     controller: "PublicController",
-    action: "getUserList"
+    action: "getHomepage"
   },
+
+  'post /public/bookPage': {
+    controller: "PublicController",
+    action: "getBookPage"
+  },  
+
+  'post /public/getBookList': {
+    controller: "PublicController",
+    action: "getBookList"
+  },  
+
 
   /*=====================================
   =            Position routes            =
