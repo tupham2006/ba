@@ -39,6 +39,10 @@
 			vertical-align: middle;
 		}
 
+		.book-data-rate {
+			cursor: pointer;
+		}
+
 		.book-data-rate .love:before {
 			content: "\f08a"
 		}
@@ -71,6 +75,27 @@
 			width: 100%;	
 			font-size: 100px;
 			color: #CCC;
+		}
+
+		#modalBookHeader .book-avatar {
+			width: 30%;
+			height: 150px;
+			float: left;
+		}
+
+		#modalBookHeader .book-info {
+			width: 70%;
+			float: left;
+		}
+
+		#modalBookHeader .book-info .name {
+			font-size: 20px;
+
+		}
+
+		#modalBookBody {
+			min-height: 300px;
+			width: 100%;
 		}
 
 	</style>
@@ -137,9 +162,57 @@
 			</div>
 		</div>
 	</div>
+	<!-- Modal -->
+			<div class="modal fade" id="bookModal" tabindex="-1" role="dialog">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-body">
+			      	<div id="modalBookHeader" class="mb-20">
+				      	<div class="book-avatar"></div>
+				      	<div class="book-info">
+				      		<div class="name"></div>	
+				      		<div class="type">Thể loại: <span></span></div>	
+				      		<div class="author">Tác giả: <span></div>	
+				      		<div class="borrow_time">Lượt mượn: <span></span></div>	
+				      		<div class="book-data-rate" style="text-align: left;">
+				      			Đánh giá: 
+										<div class="width-10 display-inblock" title="Yêu thích">
+											<i class="fa love"></i> <span id="modalBookLove"></span>
+										</div>
+										<div class="width-10 display-inblock" title="Ghét">
+											<i class="fa fa-thumbs-o-down hate"></i> <span id="modalBookHate"></span>
+										</div>
+									</div>
+				      	</div>
+				      	<div class="clear"></div>
+			      	</div>
+			      	 <!-- Tab panes -->
+			      	  <ul class="nav nav-tabs mb-10" role="tablist">
+    							<li role="presentation" class="width-50 active" id="clickToIntro"><a href="#modalBookIntro" aria-controls="modalBookIntro" role="tab" data-toggle="tab">Giới thiệu sách</a></li>
+    							<li role="presentation" class="width-50" id="clickToComment">
+    								<a href="#modalBookComment" aria-controls="modalBookComment" role="tab" data-toggle="tab">
+    									<span class="count-comment"></span> Bình luận
+    								</a>
+    							</li>
+    						</ul>
+							  <div class="tab-content" id="modalBookBody">
+							    <div role="tabpanel" class="tab-pane active" id='modalBookIntro'>
+							    </div>
+							    <div role="tabpanel" class="tab-pane" id="modalBookComment">
+							    	<div class="cmt-box">
+							    	</div>
+							    	<div class="cmt">
+							    	</div>
+							    </div>
+							  </div>
+			      </div>
+			    </div>
+			  </div>
+			</div>
 </html>
-<script type="text/javascript">
 
+<script type="text/javascript">
+	var bookList = []; 
 	var filter = {
 		limit: 12,
 		offset: 0,
@@ -152,8 +225,13 @@
 
 	$(document).ready(function() {
 		
+		$("#bookModal").modal({
+			show: false
+		});
+
 		Request("/public/bookPage")
 			.then(function(response){
+				bookList = response.books;
 				renderBookTemplate(response.books, response.book_count);
 
 				for(var j in response.book_types) {
@@ -164,7 +242,7 @@
 			});
 
 		// paging 
-		$(document).on('click', "ul.pagination li", function(e){
+		$('ul.pagination').on('click', "li", function(e){
 			$(".pagination li").removeClass("active");
 			$(this).addClass("active");
 			var currentPage = parseInt($(this).attr('value'));
@@ -226,6 +304,8 @@
 
 		Request('/public/getBookList', filter)
 			.then(function(response){
+				bookList = response.books;
+
 				$("#bookData").empty();
 				renderBookTemplate(response.books, response.book_count, changePage);
 			});
@@ -235,7 +315,7 @@
 		for(var i in books) {
 			$("#bookData").append(
 				'<div class="col-md-3 mb-10">' +
-					'<div class="book-data-main" title="' + books[i].name + (!books[i].current_quantity ? ' (Đã mượn)' : '') + '">' +
+					'<div class="book-data-main" book_id="' + books[i].id + '" title="' + books[i].name + (!books[i].current_quantity ? ' (Đã mượn)' : '') + '">' +
 						'<div class="book-data-image" style="background: url(\'' + books[i].image + '\');  background-size: contain; background-repeat: no-repeat; background-position: center;">' +
 						(!books[i].image ? '<i class="fa fa-file-image-o default-book"></i>' : '') + '</div>' + 
 						'<div class="book-data-title text-overflow" style="' + (!books[i].current_quantity ? 'color: red;' : '') + '">' + 
@@ -275,5 +355,59 @@
 			$(".pagination li").first().addClass('active');
 		}
 	}
+
+	$('#bookData').on("click", ".book-data-main" , function(event) {
+
+		$("#clickToIntro").tab('show');
+		$("#modalBookBody .active").removeClass('active');
+		$("#modalBookIntro").addClass('active');
+
+		var bookId = parseInt($(this).attr('book_id'));
+		var bookInfo = {};
+			
+		for(var i in bookList) {
+			if(bookList[i].id == bookId){
+				bookInfo = bookList[i];
+			}
+		}
+		
+		// title left
+		$("#modalBookHeader .book-avatar").css({
+			"background": "url(" + bookInfo.image + ")",
+			"background-size": "contain",
+			"background-repeat": "no-repeat",
+			"background-position": "center"
+		});
+
+		// title right
+		// info
+		$("#modalBookHeader .book-info .name").html(bookInfo.name);
+		$("#modalBookHeader .book-info .type span").html(bookInfo.type_name);
+		$("#modalBookHeader .book-info .author span").html(bookInfo.author);
+		$("#modalBookHeader .book-info .borrow_time span").html(bookInfo.borrow_time);
+		
+		// rating
+		if(!bookInfo.intro) {
+			bookInfo.intro = "Nội dung đang được cập nhật!";
+		}
+
+		$("#modalBookIntro").html(bookInfo.intro);
+		$("#modalBookLove").html(bookInfo.love_time);
+		$("#modalBookHate").html(bookInfo.hate_time);
+		$("#clickToComment .count-comment").html(bookInfo.comment_time);
+
+		// show modal
+		$("#bookModal").modal('show');
+	});
+
+	$("#clickToComment").click(function () {
+		$('#modalBookComment .cmt-box').html('<textarea type="text" class="form-control" rows="1" id="modalBookCommentEnter" placeholder="Bạn nghĩ gì về cuốn sách này"></textarea>');
+	});
+
+	$("#modalBookComment .cmt-box").on("keypress","#modalBookCommentEnter", function(e) {
+    if( !e.shiftKey && e.which == 13) {
+      $("#clickToComment").trigger('click');
+    }
+	});
 
 </script>

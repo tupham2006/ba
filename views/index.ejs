@@ -146,19 +146,23 @@
       <div id="navbar" class="collapse navbar-collapse m-0">
           <ul class="nav navbar-nav navbar-right">
             <li class="button active" id="buttonHome">
-               <div ui-sref="borrow"><a href="/"> TRANG CHỦ </a></div>
+               <div><a href="/"> TRANG CHỦ </a></div>
             </li>
             <li class="button" id="buttonBook">
-               <div ui-sref="borrow"><a href="/sach"> SÁCH </a></div>
+               <div><a href="/sach"> SÁCH </a></div>
+            </li>
+            <li class="button" style="display: none;" id="isLoginFB">
+              <div><a href="javascript:void(0)"> 
+               	ĐĂNG XUẤT
+              </a></div>
+            </li>
+            <li class="button" style="display: none;" id="isLogoutFB">
+              <div><a href="javascript:void(0)"> 
+               	ĐĂNG NHẬP
+              </a></div>
             </li>
             <!-- <li class="button">
-               <div ui-sref="borrow"><a href="#"> SỰ KIỆN </a></div>
-            </li>
-            <li class="button">
                <div ui-sref="borrow"><a href="#"> THÀNH VIÊN </a></div>
-            </li>
-            <li class="button">
-               <div ui-sref="borrow"><a href="#"> ĐĂNG NHẬP </a></div>
             </li> -->
           </ul>
       </div><!--/.nav-collapse -->
@@ -167,9 +171,40 @@
 	<script type="text/javascript" src="/libs/jquery/jquery-3.2.1.js"></script>
 	<script type="text/javascript" src="/libs/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="publics/toastr.js"></script>
+	<script type="text/javascript" src="publics/sdk.js"></script>
 	<script type="text/javascript">
-
 		var isSending;
+		var isLoginFB;
+
+		// facebook init
+	  (function(d, s, id){
+	    var js, fjs = d.getElementsByTagName(s)[0];
+	    if (d.getElementById(id)) {return;}
+	    js = d.createElement(s); js.id = id;
+	    js.src = "publics/sdk.js";
+	    fjs.parentNode.insertBefore(js, fjs);
+	  }(document, 'script', 'facebook-jssdk'));
+
+	  window.fbAsyncInit = function() {
+		  FB.init({
+		    appId            : '349916058748508',
+		    autoLogAppEvents : true,
+		    xfbml            : true,
+		    version          : 'v2.12'
+		  });
+	  };
+
+	  window.fbAsyncInit();
+
+	  FB.getLoginStatus(function(response) {
+		  if (response.status === 'connected') {
+	      isLoginFB = true;
+		  	$("#isLoginFB").show();
+		  } else {
+	      $("#isLogoutFB").show();
+		  }
+		});
+
 		$(document).ready(function() {
 
 		  // direct page
@@ -280,6 +315,33 @@
 				isSending = false;
 			}
 		}
+
+		$("#isLogoutFB").click(function(e){
+			FB.login(function(res){
+				if(res.status === "connected") {
+					isLoginFB = true;
+					toastr.success("Đăng nhập thành công");
+		  		$("#isLoginFB").show();
+		  		$("#isLogoutFB").hide();
+				} else {
+					toastr.error("Đăng nhập thất bại");
+				}
+			});
+		});
+
+		$("#isLoginFB").click(function(e){
+			FB.logout(function(res){
+				if(res.status !== "connected") {
+					isLoginFB = false;
+					toastr.success("Đăng xuất thành công");
+		  		$("#isLoginFB").hide();
+		  		$("#isLogoutFB").show();
+				} else {
+					toastr.error("Đăng xuất thất bại");
+				}
+			});
+		});
+
 	</script>
 	<div id="body">
 		<%- body %>

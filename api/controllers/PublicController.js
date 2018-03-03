@@ -71,7 +71,8 @@ module.exports = {
 									comment_time: books[i].comment_time,
 									love_time: books[i].love_time,
 									hate_time: books[i].hate_time,
-									type_name: books[i].type_name
+									type_name: books[i].type_name,
+									borrow_time: books[i].borrow_time
 								});
 							}
 						}
@@ -150,7 +151,8 @@ module.exports = {
 							comment_time: books[i].comment_time,
 							love_time: books[i].love_time,
 							hate_time: books[i].hate_time,
-							type_name: books[i].type_name
+							type_name: books[i].type_name,
+							borrow_time: books[i].borrow_time
 						});
 					}
 				}
