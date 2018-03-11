@@ -199,7 +199,7 @@
 							    <div role="tabpanel" class="tab-pane active" id='modalBookIntro'>
 							    </div>
 							    <div role="tabpanel" class="tab-pane" id="modalBookComment">
-							    	<div class="cmt-box">
+							    	<div class="cmt-box text-center">
 							    	</div>
 							    	<div class="cmt">
 							    	</div>
@@ -323,15 +323,15 @@
 						'</div>' +
 						'<div class="book-data-rate">' +
 							'<div class="width-30 display-inblock" title="Yêu thích">' +
-								'<i class="fa love"></i> ' +
+								'<i class="fa love" value="1" book_id=' + books[i].id + '></i> ' +
 								books[i].love_time +
 							'</div>' +
 							'<div class="width-30 display-inblock" title="Ghét">' +
-								'<i class="fa fa-thumbs-o-down hate"></i> ' +
+								'<i class="fa fa-thumbs-o-down hate" value="1" book_id=' + books[i].id + '></i> ' +
 								books[i].hate_time +
 							'</div>' +
 							'<div class="width-40 display-inblock" title="Bình luận">' +
-								'<i class="fa fa-commenting-o comment"></i> ' +
+								'<i class="fa fa-commenting-o comment" book_id=' + books[i].id + '></i> ' +
 								books[i].comment_time +
 							'</div>' +
 						'</div>' +
@@ -401,7 +401,13 @@
 	});
 
 	$("#clickToComment").click(function () {
-		$('#modalBookComment .cmt-box').html('<textarea type="text" class="form-control" rows="1" id="modalBookCommentEnter" placeholder="Bạn nghĩ gì về cuốn sách này"></textarea>');
+		var content = "Vui lòng đăng nhập để bình luận";
+
+		if(isLoginFB) {
+			content = '<textarea type="text" class="form-control" rows="1" id="modalBookCommentEnter" placeholder="Bạn nghĩ gì về cuốn sách này"></textarea>';
+		}
+
+		$('#modalBookComment .cmt-box').html(content);
 	});
 
 	$("#modalBookComment .cmt-box").on("keypress","#modalBookCommentEnter", function(e) {
@@ -409,5 +415,28 @@
       $("#clickToComment").trigger('click');
     }
 	});
+
+	// when love or hate
+	$('#bookData').on('click', '.book-data-rate .love, .book-data-rate .hate', function(e){
+		e.stopPropagation();
+
+		var rateType = parseInt($(this).attr("value"));
+		var bookId = parseInt($(this).attr("book_id"));
+
+		var token = "";
+		FB.getLoginStatus(function(response) {
+			console.log("response", response);
+			if(response.status === "connected") {
+				
+				token = response.authResponse.accessToken;
+				Request("/public/ratingBook", { rate_type: rateType, book_id: bookId, access_token: token })
+					.then(function(res){
+						console.log(res)
+					})
+			} else {
+				toastr.error("Vui lòng đăng nhập để tiếp tục!")
+			}
+		});
+	})
 
 </script>

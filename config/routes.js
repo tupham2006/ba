@@ -224,6 +224,10 @@ module.exports.routes = {
     action: "getBookList"
   },  
 
+  'post /public/ratingBook': {
+    controller: "PublicController",
+    action: "ratingBook"
+  },  
 
   /*=====================================
   =            Position routes            =
@@ -282,6 +286,13 @@ module.exports.routes = {
   'post /report/borrowTime': {
     controller: "ReportController",
     action: "reportBorrowTime"
-  }
-  
+  },
+
+  /*=============================================
+  =                    Socket                   =
+  =============================================*/
+  'get /connectSocket': {
+    controller: "SocketController",
+    action: "connectSocket"
+  }    
 };

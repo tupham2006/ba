@@ -1,13 +1,12 @@
 angular.module('ba').controller("BookCtrl",[
 	"$scope",
   "Book", 
-  "$rootScope", 
-  "toastr",
+  "$rootScope",
   "Dialog",
   "$uibModal",
   "BookType",
   "Request",
-  function($scope, Book, $rootScope, toastr, Dialog, $uibModal, BookType, Request){
+  function($scope, Book, $rootScope, Dialog, $uibModal, BookType, Request){
 
 		$rootScope.activePage = "book";
 		$scope.bookList = [];

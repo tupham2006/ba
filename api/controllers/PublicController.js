@@ -1,3 +1,5 @@
+var FB = require('fb');
+
 // created at 25/10/2017
 module.exports = {
 	getHomepage: function (req, res) {
@@ -170,5 +172,96 @@ module.exports = {
 		.catch(function(err){
 			return Service.catch(req, res, err, "getBookList");
 		});
+	},
+
+	ratingBook: function(req, res) {
+		var accessToken = req.param("access_token");
+		var rateType = parseInt(req.param("rate_type"));
+		var bookId = parseInt(req.param("book_id"));
+
+		var userId = 0;
+		accessToken = "EAAEZBPy5iBlwBAEgzQoIBJe4DnD59mqSZCA7UZAcuY10md8ZBDIaLRYbAS8e5coeeO3jUYTUWfg8y2B8KEopZAoHYVQHHVgZCEb5p08lNRYKBfnDOzUrOeMuvW7GYAe27KUgXyGH606uR0c3o9WWLQPcnqKMrXpXIHYHjMlIlwfSCtrGfHr7RDJA2Yrg5kReDV9V6GYCTWewZDZD";
+		
+		if(!(rateType <= 1)) {
+			return Service.catch(req, res, { message: "Vui lòng nhập loại rating" }, "ratingBook");
+		}
+		
+		if(!bookId){
+			return Service.catch(req, res, { message: "Vui lòng nhập ID sách" }, "ratingBook");
+		}
+
+		if(!accessToken) {
+			return Service.catch(req, res, { message: "Vui lòng đăng nhập để tiếp tục" }, "ratingBook");
+		}
+
+		// check login facebook
+		FB.api('/me', 'GET', {access_token: accessToken}, function (fb_res) {
+			console.log("fb_res", fb_res);
+		  if(!fb_res || fb_res.error) {
+				return Service.catch(req, res, { message: "Vui lòng đăng nhập để tiếp tục" }, "ratingBook");
+		 
+		  } else {
+		  	userId = fb_res.id;
+
+		  	if(!userId) {
+					return Service.catch(req, res, { message: "Vui lòng đăng nhập để tiếp tục" }, "ratingBook");
+				}
+
+				// Query
+		  	BookRating.findOne({
+					fb_id: userId,
+					book_id: bookId
+				}).then(function(bookResult){
+					// No record, create new 
+					if(!bookResult) {
+						BookRating.create({
+							fb_id: userId,
+							book_id: bookId,
+							type: rateType
+						}).then(function(result){
+							sails.sockets.broadcast('BAManager', { message: "Facebook " + userId + " just like" });
+							return res.json({});
+
+						}).catch(function(e){
+							return Service.catch(req, res, e, "ratingBook");
+						});
+
+					// has record
+					} else {
+						if(bookResult.type == rateType)	{ // unrate
+							BookRating.destroy({
+								fb_id: userId,
+								book_id: bookId,
+							}).then(function(result){
+								sails.sockets.broadcast('BAManager', { message: "Facebook " + userId + " just like" });
+								return res.json({});
+
+							}).catch(function(e){
+								return Service.catch(req, res, e, "ratingBook");
+							});
+
+						} else { // change rate
+							BookRating.update({
+								fb_id: userId,
+								book_id: bookId,
+							}, { type: rateType }).then(function(result){
+								console.log(sails.sockets)
+								sails.sockets.broadcast('BAManager', { message: "Facebook " + userId + " just like" });
+								return res.json({});
+
+							}).catch(function(e){
+								return Service.catch(req, res, e, "ratingBook");
+							});
+						}
+					}			
+
+				})
+				.catch(function(e){
+					return Service.catch(req, res, e, "ratingBook");
+				});
+		  }
+		});
+		
+		
 	}
 };

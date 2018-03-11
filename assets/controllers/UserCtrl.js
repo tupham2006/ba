@@ -3,12 +3,11 @@ angular.module('ba')
 		"$scope",
 	  "User", 
 	  "$rootScope", 
-	  "toastr",
 	  "Dialog",
 	  "Request",
 	  "$timeout",
 	  "$cookies",
-	  function($scope, User, $rootScope, toastr, Dialog, Request, $timeout, $cookies){
+	  function($scope, User, $rootScope, Dialog, Request, $timeout, $cookies){
 	  $rootScope.activePage = 'profile';
 	  $rootScope.userInfo = angular.copy($rootScope.user);
 	  var questionList = angular.copy(CONST.PROFILE_QUESTION);

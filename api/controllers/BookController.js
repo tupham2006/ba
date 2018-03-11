@@ -63,6 +63,7 @@ module.exports = {
 	// },
 
 	getAllBookList: function(req, res){
+		console.log(req.isSocket);
 		var condition = {
 			where: {}, 
 			sort: "name ASC" 

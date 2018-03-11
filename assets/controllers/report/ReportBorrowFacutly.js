@@ -3,9 +3,8 @@ angular.module('ba')
 		"$scope",
 	  "$rootScope", 
 	  "toastr",
-	  "Dialog",
 	  "Report",
 	  "$uibModal",
-	  function($scope, $rootScope, toastr, Dialog, Report, $uibModal){
+	  function($scope, $rootScope, Dialog, Report, $uibModal){
 	  	
 	  }]);

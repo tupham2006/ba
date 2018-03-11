@@ -2,6 +2,7 @@ DROP TRIGGER IF EXISTS `after_borrow_create`;
 DROP TRIGGER IF EXISTS `after_borrow_book_create`;
 DROP TRIGGER IF EXISTS `after_borrow_book_delete`;
 DROP TRIGGER IF EXISTS `after_book_rating_create`;
+DROP TRIGGER IF EXISTS `after_book_rating_update`;
 DROP TRIGGER IF EXISTS `after_book_rating_delete`;
 DROP TRIGGER IF EXISTS `after_book_comment_create`;
 DROP TRIGGER IF EXISTS `after_book_comment_update`;
@@ -60,6 +61,19 @@ BEGIN
 		UPDATE book SET love_time = love_time + 1 WHERE id = NEW.book_id;
 	ELSEIF(NEW.type = 0) THEN
 		UPDATE book SET hate_time = hate_time + 1 WHERE id = NEW.book_id;
+	END IF;
+END
+$$
+
+DELIMITER $$
+CREATE TRIGGER `after_book_rating_update`
+	AFTER UPDATE ON book_rating
+	FOR EACH ROW
+BEGIN
+	IF(OLD.type = 0 AND NEW.type = 1) THEN
+		UPDATE book SET love_time = love_time + 1, hate_time = hate_time - 1  WHERE id = NEW.book_id;
+	ELSEIF(OLD.type = 1 AND NEW.type = 0) THEN
+		UPDATE book SET hate_time = hate_time + 1, love_time = love_time - 1 WHERE id = NEW.book_id;
 	END IF;
 END
 $$

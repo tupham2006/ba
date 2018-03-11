@@ -3,13 +3,12 @@ angular.module('ba')
 		"$scope",
 	  "Borrow", 
 	  "$rootScope", 
-	  "toastr",
 	  "Dialog",
 	  "$uibModal",
 	  "Book",
 	  "Reader",
 	  "$timeout",
-	  function($scope, Borrow, $rootScope, toastr, Dialog, $uibModal, Book, Reader, $timeout){
+	  function($scope, Borrow, $rootScope, Dialog, $uibModal, Book, Reader, $timeout){
 	  	$rootScope.activePage = 'borrow';
 
 	  	$scope.borrowList = [];

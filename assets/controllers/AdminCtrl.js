@@ -3,13 +3,12 @@ angular.module('ba')
 		"$scope",
 	  "Admin", 
 	  "$rootScope", 
-	  "toastr",
 	  "Dialog",
 	  "Position",
 	  "Department",
 	  "Deposit",
 	  "$uibModal",
-	  function($scope, Admin, $rootScope, toastr, Dialog, Position, Department, Deposit, $uibModal){
+	  function($scope, Admin, $rootScope, Dialog, Position, Department, Deposit, $uibModal){
 
 		$scope.filter = {
 			typing: "",

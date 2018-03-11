@@ -1,0 +1,97 @@
+<div id="dashboard">
+	<div class="row height-100">
+		<div class="col-md-8 height-100">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="top1main" style="background: #50af00; cursor: pointer;" ui-sref="borrow">
+						<i class="glyphicon glyphicon-star background-icon"></i>
+						<div class="title">
+							Mượn sách
+						</div>
+						<div class="content">
+								1200 <span class="font-16"> lượt</span>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="top1main" style="background: #ff7b00; cursor: pointer;" ui-sref="book">
+						<i class="glyphicon glyphicon-book background-icon" style="font-size: 120px; top: 10px;"></i>
+						<div class="title">
+							Sách
+						</div>
+						<div class="content">
+							<div class="number">
+								120 <span class="font-16"> quyển </span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="top1main" style="background: #c336bc; cursor: pointer;" ui-sref="reader">
+						<i class="fa fa-user background-icon"></i>
+						<div class="title">
+							Bạn đọc
+						</div>
+						<div class="content">
+							<div class="number">
+								520 <span class="font-16"> bạn </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div  style="height:calc(100% - 112px);">
+				<div class="row height-50 chart-main"> 
+					<div class="col-md-8 height-100">
+						<div class="report-borrow-chart">
+							<canvas id="bar" class="chart chart-bar" chart-data="borrowTime" chart-labels="borrowDate" chart-series="series" chart-options="options" ></canvas>
+						</div>
+					</div>
+					<div class="col-md-4 height-100">
+						<b class="text-blue">Lượt mưọn tháng này</b><br>
+						Lượt mượn: 50 <br>
+						Sách mượn: 70 <br>
+						Đã trả: 23 <br>
+						Mượn nhiều nhất: Nguyễn Khánh Linh<br>
+					</div>
+				</div>
+				<div class="row height-50 chart-main">
+					<div class="col-md-8 height-100">
+						<div class="report-borrow-chart">
+							<canvas id="pie" class="chart chart-pie" chart-data="borrowTime" chart-labels="borrowDate" chart-series="series" chart-options="options" ></canvas>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<b class="text-blue">Bạn đọc</b><br>
+						Số lượng: 520 người<br>
+						Mới: 70 người <br>
+						Mượn nhiều nhất: Phạm Văn An
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4" id="side">
+			<div class="sidebar">
+				
+			</div>
+			<div class="help">
+				<div>
+					<div> Video hướng dẫn </div>
+					<div><a href="#"> BAManager [v0.1] | Hướng dẫn tạo lượt mượn sách </a></div>
+					<div><a href="#"> BAManager [v0.1] | Hướng dẫn thay đổi thông tin cá nhân </a></div>
+					<div><a href="#"> Xem thêm ...</a> </div>
+				</div>
+				<div>
+					<div>Liên hệ</div>
+					<div>Số điện thoại: 01634254440</div>
+					<div>FB: <a href="https://www.facebook.com/phambaotuszx" target="_blank">Phạm Bảo Tú</a></div>
+				</div>
+			</div>
+			<div class="footer">
+				<div>Website: <a href="#" target="_blank">http://clbsachhumg.tk</a></div>
+				<div>Đang Online: 12</div>
+				<div>BAManager Beta - Phiên bản 0.1</div>
+			</div>
+		</div>
+	</div>
+</div>

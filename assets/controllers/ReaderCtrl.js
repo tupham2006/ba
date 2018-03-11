@@ -2,11 +2,10 @@ angular.module('ba')
 	.controller("ReaderCtrl",[
 		"$scope",
 	  "$rootScope", 
-	  "toastr",
 	  "Dialog",
 	  "Reader",
 	  "$uibModal",
-	  function($scope, $rootScope, toastr, Dialog, Reader, $uibModal){
+	  function($scope, $rootScope, Dialog, Reader, $uibModal){
 		
 		$rootScope.activePage = "reader";
 		$scope.filter = {

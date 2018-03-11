@@ -2,7 +2,6 @@
 angular.module('ba',[
 	'ui.router',
 	'daterangepicker',
-	"toastr",
 	"ui.bootstrap",
 	"angularFileUpload",
 	"ngCookies",
@@ -23,7 +22,7 @@ angular.module('ba',[
 	$stateProvider
 		.state("dashboard",{
 			url: "/",
-			templateUrl: "/templates/auth/dashboard.html",
+			templateUrl: "/templates/dashboard/dashboard.html",
 			controller: "DashboardCtrl"
 		})
 
@@ -81,6 +80,7 @@ angular.module('ba',[
 
 	  // chart
 	  ChartJsProvider.setOptions({
+	  	chartColors:  ['#0078ff', '#FF8A80'],
 	  	layout: {
 				padding: "10"
 			},
@@ -88,8 +88,7 @@ angular.module('ba',[
       	display: true,
       	position: "bottom"
       },
-      
-			maintainAspectRatio: false
+			maintainAspectRatio: false,
 	  });
 
 }])

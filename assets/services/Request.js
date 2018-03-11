@@ -1,11 +1,13 @@
+var isOnline = true;
+
 function request($http, $cookies, $rootScope, FileUploader, $q, blockUI){
 
 	var token = $cookies.get('token');
 	var user = $cookies.get('user');
-	window.debugMode = true;
+	window.debugMode = false;
 
 	if(!token || !user){
-	CONST.clearCookie();
+		CONST.clearCookie();
 	}
 
 	try{
@@ -22,6 +24,7 @@ function request($http, $cookies, $rootScope, FileUploader, $q, blockUI){
 
     post: function(url, data){
     	blockUI.start();
+    	if(!data) data = {};
     	var option = {
     		method: "POST",
     		url: url,
@@ -34,47 +37,56 @@ function request($http, $cookies, $rootScope, FileUploader, $q, blockUI){
     	}
 
 	    return new Promise(function(resolve, reject){
-	    	$http(option)
-	    		.then(function(res){
+	    	if(io.socket && isOnline) {
+	    		option.data.clientId = $rootScope.user ? $rootScope.user.id : 0;
+	    		
+	    		io.socket.request(option, function(res){
+	    			if(window.debugMode){
+  						console.log(option.method + " " + option.url, res);
+  					}	
+	    			resolve(res);
+	    			blockUI.stop();
+	    		});
 
-	    			setTimeout(function () {
-    					
+	    	} else {
+		    	$http(option)
+		    		.then(function(res){
     					if(window.debugMode){
     						console.log(option.method + " " + option.url, res);
     					}	
 
 		    			resolve(res.data);
 		    			blockUI.stop();
-	    			}, 100);
-	    		}, function(err){
-		    		blockUI.stop();
-	    			if(err && err.status == -1) {
-	    				reject({
-	    					message: "Mất kết nối. Vui lòng thử lại!"
-	    				});
-	    			}
+		    		}, function(err){
+			    		blockUI.stop();
+		    			if(err && err.status == -1) {
+		    				reject({
+		    					message: "Mất kết nối. Vui lòng thử lại!"
+		    				});
+		    			}
 
-	    			if(err && err.status == 403){
-	    				CONST.clearCookie();
-	    			}
+		    			if(err && err.status == 403){
+		    				CONST.clearCookie();
+		    			}
 
-	    			reject(err.message);
-	    		})
+		    			reject(err.message);
+		    		})
 
-	    		.catch(function(err){
-	    			blockUI.stop();
-	    			if(err && err.status == -1) {
-	    				reject({
-	    					message: "Mất kết nối. Vui lòng thử lại!"
-	    				});
-	    			}
+		    		.catch(function(err){
+		    			blockUI.stop();
+		    			if(err && err.status == -1) {
+		    				reject({
+		    					message: "Mất kết nối. Vui lòng thử lại!"
+		    				});
+		    			}
 
-	    			if(err && err.status == 403){
-	    				CONST.clearCookie();
-	    			}
+		    			if(err && err.status == 403){
+		    				CONST.clearCookie();
+		    			}
 
-	    			reject(err.message);
-	    		});
+		    			reject(err.message);
+		    		});
+	    	}
 	    });
     },
 
@@ -95,6 +107,57 @@ function request($http, $cookies, $rootScope, FileUploader, $q, blockUI){
     	return newFile;
     }
 	};
+}
+
+// socket event
+io.socket.on("connect", function () {
+	isOnline = true;
+	connectSocket();
+});
+
+io.socket.on("disconnect", function () {
+	toastr.error("Mất kết nối từ mấy chủ!");
+	isOnline = false;
+});
+
+// when connection error
+io.socket.on('error', function(){
+	toastr.error("Kết nối thất bại!");
+  isOnline = false;
+});
+
+io.socket.on('message', function(res){
+	CONST.notification(res);
+});
+
+// when browser trying to connect to server
+io.socket.on('reconnecting', function(){
+  isOnline = false;
+});
+
+// when reconnected
+io.socket.on('reconnect', function(){
+  connectSocket('reconnect');
+});
+
+function connectSocket(type) {
+	if(!io.socket) return;
+
+	var option = {
+		method: "get",
+		headers: {
+      'authorization': 'Bearer ' + CONST.getCookie("token")
+    },
+    url: "/connectSocket"
+	};
+
+	io.socket.request(option, function(res, jwres){
+
+		if(type == "reconnect") {
+			toastr.success("Kết nối thành công!");
+		}
+		isOnline = true;
+	});
 }
 
 angular.module('ba').factory('Request', ['$http','$cookies', "$rootScope", "FileUploader", "$q", "blockUI", request]);

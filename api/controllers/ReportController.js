@@ -1,8 +1,8 @@
 const CONST = require('../../const.js');
 module.exports = {
 	reportBorrowTime: function (req, res) {
-		var startDate = new Date(req.param("start_date")) ? new Date(req.param("start_date")).toISOString() : undefined;
-		var endDate = new Date(req.param("end_date")) ? new Date(req.param("end_date")).toISOString() : undefined;
+		var startDate = new Date(req.param("start_date")) != "Invalid Date" ? new Date(req.param("start_date")).toISOString() : undefined;
+		var endDate = new Date(req.param("end_date")) != "Invalid Date" ? new Date(req.param("end_date")).toISOString() : undefined;
 		var limit = parseInt(req.param("limit")) ? parseInt(req.param("limit")) : 10;
 		var offset = parseInt(req.param("offset")) > 0 ? parseInt(req.param("limit")) : 0;
 

@@ -2,11 +2,10 @@ angular.module('ba')
 	.controller("ReportBorrowTimeCtrl",[
 		"$scope",
 	  "$rootScope", 
-	  "toastr",
 	  "Dialog",
 	  "Report",
 	  "$uibModal",
-	  function($scope, $rootScope, toastr, Dialog, Report, $uibModal){
+	  function($scope, $rootScope, Dialog, Report, $uibModal){
 			
 			$scope.page = {
 				mode: "BORROW_TIME"
@@ -87,7 +86,7 @@ angular.module('ba')
 				elements: { 
 					line: {
 						fill: false
-					}
+					},
 				},
 				scales: {
 	      	yAxes: [{
