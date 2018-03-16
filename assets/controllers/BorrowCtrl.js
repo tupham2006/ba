@@ -205,7 +205,7 @@ angular.module('ba')
 		    		note: "",
 		    		reader_name: "",
 		    		reader_mobile: "",
-		    		facutly:"CHUA_PHAN_KHOA",
+		    		facutly_id: 1,
 		    		course: moment().get('years') - 1956
 		    	};
     		}
@@ -287,7 +287,7 @@ angular.module('ba')
 	    		book: $scope.borrowInfo.book,
 	    		status: $scope.borrowInfo.status,
 	    		user_id: $scope.user.id,
-	    		facutly: $scope.borrowInfo.facutly,
+	    		facutly_id: $scope.borrowInfo.facutly_id,
 	    		course: $scope.borrowInfo.course
 	    	};
 
@@ -351,7 +351,7 @@ angular.module('ba')
     				if(res){
     					$scope.borrowInfo.reader_id = res.id;
     					$scope.borrowInfo.reader_name = res.name;
-    					$scope.borrowInfo.facutly = res.facutly;
+    					$scope.borrowInfo.facutly_id = res.facutly_id;
     					$scope.borrowInfo.course = res.course;
     					$scope.existReader = true;
     				} else {

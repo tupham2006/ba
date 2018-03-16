@@ -9,7 +9,7 @@ module.exports = {
 	autoUpdatedAt: false,
 	attributes: {
 		id: { type: "integer", primaryKey: true, autoIncrement: true },
-		name: { type: "string", size: 100, maxLength: 100, required: true, defaultsTo: '' },
+		name: { type: "string", size: 100, maxLength: 100, required: true },
 		actived: { type: "integer", defaultsTo: 1},
 	},
 

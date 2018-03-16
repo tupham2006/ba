@@ -12,7 +12,10 @@ function Store(){
 		borrowBookTable,
 		bookTable,
 		bookTypeTable,
-		depositTable
+		depositTable,
+		facutlyTable,
+		positionTable,
+		departmentTable
 	;
 
 	function Table(){
@@ -67,6 +70,9 @@ function Store(){
 	if(!bookTable) bookTable = new Table().newTable;
 	if(!bookTypeTable) bookTypeTable = new Table().newTable;
 	if(!depositTable) depositTable = new Table().newTable;
+	if(!facutlyTable) facutlyTable = new Table().newTable;
+	if(!positionTable) positionTable = new Table().newTable;
+	if(!departmentTable) departmentTable = new Table().newTable;
 
 	// special
 	if(!borrowBookTable.delete_by_borrow){
@@ -90,7 +96,10 @@ function Store(){
 		borrowBookTable: borrowBookTable,
 		bookTable: bookTable,
 		bookTypeTable: bookTypeTable,
-		depositTable: depositTable
+		depositTable: depositTable,
+		facutlyTable: facutlyTable,
+		positionTable: positionTable,
+		departmentTable: departmentTable
 	};
 
 	// export store to debug

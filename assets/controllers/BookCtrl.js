@@ -14,7 +14,7 @@ angular.module('ba').controller("BookCtrl",[
 
   	$scope.filter = {
   		typing: "",
-  		type_id: 0,
+  		type_id: "",
   		limit: 10,
   		skip: 0,
   		currentPage: 1,

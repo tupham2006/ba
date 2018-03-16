@@ -35,7 +35,7 @@ module.exports = {
 			book: req.param("book"),
 			borrow_date: new Date(req.param("borrow_date")).toISOString(),
 			status: 0,
-			facutly: req.param("facutly") ? req.param("facutly") : "CHUA_PHAN_KHOA",
+			facutly_id: req.param("facutly_id") ? req.param("facutly_id") : 1,
 			course: parseInt(req.param("course")) ? parseInt(req.param("course")) : moment().get('years') - 1956
 		};
 		

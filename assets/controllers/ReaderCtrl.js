@@ -51,7 +51,7 @@ angular.module('ba')
 				$scope.readerInfo = {
 					name: "",
 					mobile: "",
-					facutly: "CHUA_PHAN_KHOA",
+					facutly_id: 1,
 					course: moment().get('years') - 1956,
 					gender: 1,
 					facebook_id: "",

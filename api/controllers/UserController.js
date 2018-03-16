@@ -17,7 +17,8 @@ module.exports = {
 		
 		var condition = {
 			deleted: CONST.DELETED.NO,
-	  	account: account
+	  		account: account,
+	  		actived: CONST.ACTIVED.YES
 		};
 
 	  User.findOne(condition)
@@ -146,30 +147,16 @@ module.exports = {
 			mobile = mobile.toString().replace(/ /g, "");
 			if(mobile) data.mobile = mobile;
 
-		var facutly = req.param("facutly");
-			if(facutly) data.facutly = facutly;
+		var facutly_id = parseInt(req.param("facutly_id"));
+			if(facutly_id) data.facutly_id = facutly_id;
 
 
 		var position_id = parseInt(req.param("position_id"));
-		var position_name = req.param("position_name");
-			if(position_name && position_id){
-			 data.position_id = position_id;	
-			 data.position_name = position_name;	
-			}
+
 
 		var department_id = parseInt(req.param("department_id"));
-		var department_name = req.param("department_name");
-			if(department_name && department_id){
-			 data.department_id = department_id;	
-			 data.department_name = department_name;	
-			}
 
 		var deposit_id = parseInt(req.param("deposit_id"));
-		var deposit_name = req.param("deposit_name");
-			if(deposit_name && deposit_id){
-			 data.deposit_id = deposit_id;	
-			 data.deposit_name = deposit_name;	
-			}
 
 		var gender = parseInt(req.param("gender"));
 			if(!isNaN(gender)) data.gender = gender;
@@ -212,7 +199,7 @@ module.exports = {
 					// update reader after update user
 					Reader.update({is_user: qUpdate[0].id}, {
 						name: qUpdate[0].name,
-						facutly: qUpdate[0].facutly,
+						facutly_id: qUpdate[0].facutly_id,
 						course: qUpdate[0].course,
 						gender: qUpdate[0].gender,
 						mobile: qUpdate[0].mobile

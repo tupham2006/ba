@@ -1,8 +1,8 @@
 angular.module('ba').factory('Department', Department);
 
-Department.$inject = ['$rootScope', 'Request', '$q'];
+Department.$inject = ['Store', 'Request', '$q'];
 
-function Department($rootScope, Request, $q){
+function Department(Store, Request, $q){
 
 	var service = {
 		getDepartmentList: getDepartmentList,
@@ -13,17 +13,19 @@ function Department($rootScope, Request, $q){
 
 	function getDepartmentList(params){
 		var df = $q.defer();
-		// if(departmentList.length){
-		// 	df.resolve(departmentList);
+		depositList = Store.departmentTable.list;
 
-		// } else {
+		if(departmentList.length){
+			df.resolve(getDepartmentListStore(params));
+
+		} else {
 			Request.post("/department/getList", params)
 				.then(function(res){
 
 					if(!res.error){
 						departmentList = res.departments;
-
-						df.resolve(departmentList);
+						Store.departmentTable.list = res.departments;
+						df.resolve(getDepartmentListStore(params));
 					} else {
 						df.reject(res.message);
 					}
@@ -32,27 +34,48 @@ function Department($rootScope, Request, $q){
 				.catch(function(err){
 					df.reject(err.message);
 				});
-		// }
+		}
 		return df.promise;
 	}
+
+	function getDepartmentListStore(param){
+
+		if(!param) param = {};
+		var actived = param.actived >= 0 ? param.actived : 1;
+		var data = angular.copy(departmentList);
+
+		var filterList = [];
+
+		// start filter
+		for(var i in data){
+
+			// filter typing
+			if(actived){
+				if(data[i].actived != actived) data[i].remove = true;
+			}
+			
+			// push to list
+			if(!data[i].remove){
+				filterList.push(data[i]);
+			}			
+		}
+
+		return filterList;
+	}
+
 
 	function saveDepartment(params){
 		var df = $q.defer();
 		Request.post("/department/save", params)
 			.then(function(res){
 
-				if(res && !res.error){
-					// if(Array.isArray(res.data) && res.data.length){ // update
-					// 	for(var i in departmentList)	{
-					// 		if(departmentList[i].id == res.data[0].id){
-					// 			departmentList[i] = res.data[0];
-					// 		}
-					// 	}
-					// } else { // create new
-					// 	departmentList.unshift(res.data);
-					// }
-					
-					df.resolve();
+				if(res && !res.error && res.data){
+					if(params.id && res.data.length > 0) {
+						Store.departmentTable.update = res.data[0];
+					} else {
+						Store.departmentTable.create = res.data;
+					}
+						df.resolve();
 				} else {
 					df.reject(res.message);
 				}

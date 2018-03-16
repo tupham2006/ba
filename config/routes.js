@@ -248,12 +248,21 @@ module.exports.routes = {
   },
 
   /*=====================================
-  =            Department routes         =
+  =            Deposit routes         =
   =====================================*/
   
   'post /deposit/getList': {
     controller: "DepositController",
     action: "getDepositList"
+  },
+
+  /*=====================================
+  =            Facutly routes         =
+  =====================================*/
+  
+  'post /facutly/getList': {
+    controller: "FacutlyController",
+    action: "getFacutlyList"
   },
 
   /*=====================================

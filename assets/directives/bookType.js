@@ -8,7 +8,7 @@ angular.module('ba').directive('bookTypeSelect', [
 				ngModel:"=",
 				editMode:"="
 			},
-			template: '<select class="form-control" ng-change="bookTypeChange()" ng-model="ngModel" convert-to-number><option value="0" ng-hide="editMode">Tất cả</option><option ng-repeat="bookType in bookTypeList track by $index" value={{bookType.id}}>{{bookType.name}}</option></select>',
+			template: '<select class="form-control" ng-change="bookTypeChange()" ng-model="ngModel" convert-to-number><option value="" ng-hide="editMode">Tất cả</option><option value="0">Chưa phân loại</option><option ng-repeat="bookType in bookTypeList track by $index" value={{bookType.id}}>{{bookType.name}}</option></select>',
 			link: function(scope, attr, ele, ctrl){
 
 

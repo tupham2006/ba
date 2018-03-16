@@ -8,7 +8,7 @@
 		</div>
 		<div class="row">
 			<div class="label-control col-xs-4">Chức vụ:</div>
-			<div class="label-control col-xs-8">{{userInfo.position_name}} (Ban {{userInfo.department_name}})</div>
+			<div class="label-control col-xs-8"> <position-html ng-model="userInfo.position_id"></position-html> ( Ban <department-html ng-model="userInfo.department_id"></department-html>)</div>
 		</div>
 		<div class="row">
 			<div class="label-control col-xs-4">Liên hệ:</div>
@@ -31,7 +31,7 @@
 		</div>
 		<div class="row">
 			<div class="label-control col-xs-4">Khoa:</div>
-			<div class="label-control col-xs-8">{{facutlyList[userInfo.facutly]}} - K{{userInfo.course}}</div>
+			<div class="label-control col-xs-8"><facutly-html ng-model="userInfo.facutly_id"></facutly-html> - K{{userInfo.course}}</div>
 		</div>
 </div>
 <div class="modal-footer">

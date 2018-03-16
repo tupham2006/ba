@@ -8,7 +8,7 @@ module.exports = {
 	attributes: {
 		id: { type: "integer", primaryKey: true, autoIncrement: true },
 		name: { type: "string", size: 100, maxLength: 100, required: true, defaultsTo: '' },
-		image: { type: "string", size: 200, maxLength: 200, defaultsTo: '' },
+		image: { type: "string", size: 200, maxLength: 200, defaultsTo: null },
 		type_id: { type: "integer", required: true, defaultsTo: 0 },
 		type_name: { type: "string", required: true, maxLength: 50, defaultsTo: "Loại chung" },
 		hot: { type: "integer", defaultsTo: 0 }, // 1: hot book
@@ -23,7 +23,7 @@ module.exports = {
 		current_quantity: { type: 'integer', defaultsTo: 1}, // current quantity, 0: not ready borrow
 		note: { type: "string", size:10000, maxLength: 10000, defaultsTo: "" },
 		createdAt: {type: "datetime", columnName: "created_at" },
-    updatedAt: {type: "datetime", columnName: "updated_at" }
+    	updatedAt: {type: "datetime", columnName: "updated_at" }
 	},
 
 	getBookList: function (condition) {

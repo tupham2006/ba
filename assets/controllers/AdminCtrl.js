@@ -8,14 +8,15 @@ angular.module('ba')
 	  "Department",
 	  "Deposit",
 	  "$uibModal",
-	  function($scope, Admin, $rootScope, Dialog, Position, Department, Deposit, $uibModal){
+	  "Facutly",
+	  function($scope, Admin, $rootScope, Dialog, Position, Department, Deposit, $uibModal, Facutly){
 
 		$scope.filter = {
 			typing: "",
 			limit: 10,
 			skip: 0,
-			department_id: 0,
-			position_id: 0,
+			department_id: "",
+			position_id: "",
 			actived: 1
 		};
 
@@ -24,7 +25,7 @@ angular.module('ba')
 		$scope.positionList = [];
 		$scope.departmentList = [];
 		$scope.depositList = [];
-		$scope.facutlyList = CONST.FACUTLY;
+		$scope.facutlyList = [];
 
 		$scope.changePage = function(){
 	  	$scope.filter.skip = $scope.filter.limit * ($scope.filter.currentPage -1);
@@ -80,6 +81,20 @@ angular.module('ba')
 			});
 		};
 
+		var getFacutlyList = function() {
+			return new Promise(function(resolve, reject){
+				Facutly.getFacutlyList({ actived: 0 })
+					.then(function(deposits){
+						$scope.facutlyList = $scope.facutlyList;
+						return resolve();
+					})
+
+					.catch(function(e){
+						return reject(e);
+					});
+			});
+		};
+
 		$scope.getUserList = function(){
 			
 			$rootScope.activePage = "admin";
@@ -101,6 +116,10 @@ angular.module('ba')
 
 				.then(function(){
 					return getDepositList();
+				})
+
+				.then(function(){
+					return getFacutlyList();
 				})
 
 				.catch(function(err){
@@ -140,6 +159,12 @@ angular.module('ba')
 
 							.catch(function(err){
 								toastr.error(err);
+							});
+					} else {
+						Admin.getUserList($scope.filter)
+							.then(function(res){
+								$scope.userList = res.user;
+								$scope.userCount = res.count;
 							});
 					}
 				});

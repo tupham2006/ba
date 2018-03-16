@@ -8,7 +8,7 @@ module.exports = {
 		id: { type: "integer", primaryKey: true, autoIncrement: true },
 		user_id: { type: "integer", required: true, defaultsTo: 0 },
 		reader_id: { type: "integer", required: true, defaultsTo: 0 },
-		reader_name: { type: "string", required: true, defaultsTo: '' },
+		reader_name: { type: "string", required: true, defaultsTo: null },
 		reader_mobile: { type: "string", maxLength: 11, required: true, defaultsTo: '0' },
 		status: { type: "integer", required: true, defaultsTo: 1 }, // 0: lended, 1: borrowing
 		borrow_date: { type: "datetime", required: true, defaultsTo: null },
@@ -18,7 +18,7 @@ module.exports = {
 		deposit_name: { type: "string", maxLength: 50, defaultsTo: '' },
 		deleted: { type: "integer", defaultsTo: 0 },
 		createdAt: {type: "datetime", columnName: "created_at" },
-    updatedAt: {type: "datetime", columnName: "updated_at" }
+   	updatedAt: {type: "datetime", columnName: "updated_at" }
 	},
 	/**
 	 * Get all data borrow to cache to service
@@ -102,7 +102,7 @@ module.exports = {
 			var readerData = {
 				mobile: data.reader_mobile,
 				name: data.reader_name,
-				facutly: data.facutly,
+				facutly_id: data.facutly_id,
 				course: data.course
 			};
 
@@ -115,7 +115,7 @@ module.exports = {
 							
 							data.reader_mobile = readerById.mobile;
 							data.reader_name = readerById.name;
-							data.facutly = readerById.facutly;
+							data.facutly_id = readerById.facutly_id;
 							data.course = readerById.course;
 							return resolve(readerById);
 
@@ -321,7 +321,7 @@ module.exports = {
 			var value = [condition.start_date, condition.end_date];
 
 			// value select
-			sql.push("COUNT(*) AS times, facutly ");
+			sql.push("COUNT(*) AS times, facutly_id ");
 
 			// table select
 			sql.push("FROM borrow ");
@@ -335,7 +335,7 @@ module.exports = {
 			sql.push("AND borrow_date <= ? ");
 
 			// group
-			sql.push("GROUP BY reader.facutly ");
+			sql.push("GROUP BY reader.facutly_id ");
 
 			var queryStatement = sql.join("");
 

@@ -8,7 +8,6 @@ angular.module('ba').controller("DashboardCtrl", [
 		};
 
 		$rootScope.activePage = "dashboard";
-		$scope.facutly = angular.copy(CONST.FACUTLY);
 		
 		// report borrow time
 			$scope.borrowTimeList = [];

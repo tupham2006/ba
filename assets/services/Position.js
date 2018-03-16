@@ -1,27 +1,32 @@
 angular.module('ba').factory('Position', Position);
 
-Position.$inject = ['$rootScope', 'Request', '$q'];
+Position.$inject = ['Store', 'Request', '$q'];
 
-function Position($rootScope, Request, $q){
+function Position(Store, Request, $q){
 
 	var service = {
 		getPositionList: getPositionList,
 		savePosition: savePosition
 	};
 
-	// var positionList = [];
+	var positionList = [];
 
 	function getPositionList(params){
 		var df = $q.defer();
-		// if(positionList.length){
-		// 	df.resolve(positionList);
 
-		// } else {
+		positionList = Store.positionTable.list;
+
+		if(positionList.length){
+			df.resolve(getPositionListStore(params));
+
+		} else {
 			Request.post("/position/getList", params)
 				.then(function(res){
 
 					if(!res.error){
 						positionList = res.positions;
+						Store.positionTable.list = res.positions;
+						df.resolve(getPositionListStore(params));
 
 						df.resolve(positionList);
 					} else {
@@ -32,8 +37,33 @@ function Position($rootScope, Request, $q){
 				.catch(function(err){
 					df.reject(err.message);
 				});
-		// }
+		}
 		return df.promise;
+	}
+
+	function getPositionListStore(param){
+
+		if(!param) param = {};
+		var actived = param.actived >= 0 ? param.actived : 1;
+		var data = angular.copy(positionList);
+
+		var filterList = [];
+
+		// start filter
+		for(var i in data){
+
+			// filter typing
+			if(actived){
+				if(data[i].actived != actived) data[i].remove = true;
+			}
+			
+			// push to list
+			if(!data[i].remove){
+				filterList.push(data[i]);
+			}			
+		}
+
+		return filterList;
 	}
 
 	function savePosition(params){
@@ -41,19 +71,13 @@ function Position($rootScope, Request, $q){
 		Request.post("/position/save", params)
 			.then(function(res){
 
-				if(res && !res.error){
-					// if(Array.isArray(res.data) && res.data.length){ // update
-					// 	for(var i in positionList)	{
-
-					// 		if(positionList[i].id == res.data[0].id){
-					// 			positionList[i] = res.data[0];
-					// 		}
-					// 	}
-					// } else { // create new
-					// 	positionList.unshift(res.data);
-					// }
-
-					df.resolve();
+				if(res && !res.error && res.data){
+					if(params.id && res.data.length > 0) {
+						Store.positionTable.update = res.data[0];
+					} else {
+						Store.positionTable.create = res.data;
+					}
+						df.resolve();
 				} else {
 					df.reject(res.message);
 				}

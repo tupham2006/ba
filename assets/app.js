@@ -16,8 +16,11 @@ angular.module('ba',[
 	'$locationProvider', 
 	'uiMask.ConfigProvider', 
 	"blockUIConfig",
-	"ChartJsProvider", 
-	function ($stateProvider, $locationProvider, uiMaskConfigProvider, blockUIConfig, ChartJsProvider) {
+	"ChartJsProvider",
+	"$urlRouterProvider", 
+	function ($stateProvider, $locationProvider, uiMaskConfigProvider, blockUIConfig, ChartJsProvider, $urlRouterProvider) {
+	
+	$urlRouterProvider.otherwise('/');
 
 	$stateProvider
 		.state("dashboard",{

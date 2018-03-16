@@ -1,5 +1,5 @@
 module.exports= {
-	tableName: "deposit",
+	tableName: "facutly",
 	schema: true,
 	autoCreatedAt: false,
 	autoUpdatedAt: false,

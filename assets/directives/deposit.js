@@ -8,7 +8,7 @@ angular.module('ba').directive('depositSelect', [
 				ngModel:"=",
 				editMode: "="
 			},
-			template: '<select ng-change="depositChange()" class="form-control" ng-model="ngModel" convert-to-number><option value="0" ng-hide="editMode">Tẩt cả loại đặt cọc</option><option ng-repeat="deposit in depositList track by $index" value={{deposit.id}}>{{deposit.name}}</option></select>',
+			template: '<select ng-change="depositChange()" class="form-control" ng-model="ngModel" convert-to-number><option value="" ng-hide="editMode">Tẩt cả loại đặt cọc</option><option ng-repeat="deposit in depositList track by $index" value={{deposit.id}}>{{deposit.name}}</option></select>',
 			link: function(scope, attr, ele, ctrl){
 				scope.depositList = [];
 				Deposit.getDepositList()

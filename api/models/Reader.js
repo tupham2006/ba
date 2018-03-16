@@ -6,10 +6,9 @@ module.exports = {
     id: { type: "integer", primaryKey: true, autoIncrement: true },
     mobile : { type: "string", size:11, required: true, unique: true, minLength: 10, maxLength: 11, defaultsTo: ''},
     name : { type: "string", size: 50, required: true, maxLength: 50, defaultsTo: ''},
-    facutly: {type: 'string', defaultsTo: "CHUA_PHAN_KHOA" },
+    facutly_id: {type: 'integer', defaultsTo: 0 },
     is_user: { type: 'integer', defaultsTo: 0 },
     borrow_time: {type: 'integer', defaultsTo: 0 },
-    facebook_id: {type: 'string', defaultsTo: "" },
     course: {type: 'integer', defaultsTo: 0 },
     gender : { type: "integer", max: 2, defaultsTo: 0}, // 0: unknown, 1: male, 2: female
     actived : { type: "integer", defaultsTo: 1 }, // user is active in club 

@@ -69,7 +69,6 @@ function Deposit(Store, Request, $q){
 		var df = $q.defer();
 		Request.post("/deposit/save", params)
 			.then(function(res){
-				console.log("res", res);
 
 				if(res && !res.error && res.data){
 					if(params.id && res.data.length > 0) {

@@ -62,19 +62,6 @@ CONST.clearCookie = function(){
   window.location.href = "/login";
 };
 
-CONST.FACUTLY = {
-  "CHUA_PHAN_KHOA": 'Chưa phân khoa',
-  "CO_DIEN": 'Cơ - Điện',
-  "CNTT": 'Công nghệ thông tin',
-  "DAU_KHI": 'Dầu khí',
-  "TRAC_DIA": 'Trắc địa',
-  "KINH_TE": 'Kinh tế',
-  "XAY_DUNG": 'Xây dựng',
-  "MOI_TRUONG": 'Môi trường',
-  "MO": 'Mỏ',
-  "DIA_CHAT": 'Địa chất'
-};
-
 CONST.ROLE = [
   "Chưa có quyền",
   "Thành viên",

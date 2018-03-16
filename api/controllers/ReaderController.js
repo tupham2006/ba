@@ -5,7 +5,7 @@ module.exports = {
 			var typing = req.param('typing') ? req.param('typing') : "";
 			var skip = parseInt(req.param('skip')) ? parseInt(req.param('skip')) : 0;
 			var limit = parseInt(req.param('limit')) ? parseInt(req.param('limit')) : 10;
-			var facutly = req.param('facutly');
+			var facutly_id = req.param('facutly_id');
 
 			// var conditions = {
 			// 	where: {
@@ -67,7 +67,7 @@ module.exports = {
 	createReader: function(req, res){
 
 		// Get data from client
-		var facutly = (req.param("facutly") ? req.param("facutly") : "").toString().trim();
+		var facutly_id = parseInt(req.param("facutly_id"));
 		var course = parseInt(req.param("course"));
 		var gender = parseInt(req.param("gender"));
 		var note = (req.param("note") ? req.param("note") : "").toString().trim();
@@ -86,7 +86,7 @@ module.exports = {
 		};
 
 		// if has param, add to data object to create new
-		if(facutly) data.facutly = facutly;
+		if(facutly_id) data.facutly_id = facutly_id;
 		if(course) data.course = course;
 		if([0,1,2].includes(gender)) data.gender  = gender;
 		if(note) data.note = note;
@@ -107,7 +107,7 @@ module.exports = {
 
 		// Get data from client
 		var id = parseInt(req.param("id"));
-		var facutly = (req.param("facutly") ? req.param("facutly") : "").toString().trim();
+		var facutly_id = parseInt(req.param("facutly_id"));
 		var course = parseInt(req.param("course"));
 		var gender = parseInt(req.param("gender"));
 		var note = (req.param("note") ? req.param("note") : "").toString().trim();
@@ -127,7 +127,7 @@ module.exports = {
 		};
 
 		// if has param, add to data object to create new
-		if(facutly) data.facutly = facutly;
+		if(facutly_id) data.facutly_id = facutly_id;
 		if(course) data.course = course;
 		if([0,1,2].includes(gender)) data.gender  = gender;
 		if(note) data.note = note;

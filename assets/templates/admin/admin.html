@@ -46,9 +46,13 @@
 							<td class="text-center hidden-xs"> <avatar ng-model="user.image" av-size="40" av-type="'user'"></avatar> </td>
 							<td class="text-center"> {{ user.name }} </td>
 							<td class="text-center hidden-xs"> {{ user.account }} </td>
-							<td class="text-center hidden-xs"> {{ user.department_name }} </td>
-							<td class="text-center hidden-xs"> {{ user.position_name }} </td>
-							<td class="text-center hidden-xs"> {{ user.mobile }} </td>
+							<td class="text-center hidden-xs">
+								<department-html ng-model="user.department_id"></department-html>
+							</td>
+							<td class="text-center hidden-xs"> 
+								<position-html ng-model="user.position_id"></position-html>
+							</td>
+							<td class="text-center hidden-xs"> {{ user.mobile | tel }} </td>
 							<td class="text-center">
 								<select class="form-control" ng-model="user.role" ng-change="setUserRole(user.id, user.role)" convert-to-number>
 									<option ng-repeat="role in roleList track by $index" value="{{$index}}" >
@@ -61,7 +65,9 @@
 							</td>
 						</tr>
 					</table>
-					
+					<div ng-if="!userList.length" class="max-height text-center p-10" style="border: 1px solid #a2cfff">
+							Không có dữ liệu nào trong bảng
+					</div>
 				</div>
 			</div>
 		</uib-tab>
