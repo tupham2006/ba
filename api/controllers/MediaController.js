@@ -6,19 +6,20 @@ module.exports = {
 	uploadImage : function (req, res) {
 		var self = this;
 		var userId = req.session.user.id;
-		var now = new Date().toISOString();
+
 		// handle file name
-		var fileName = userId + "_" + now;
+		var fileName = userId + "_" + new Date().getTime();
 		var fileType = 'general';
 
+			console.log("req.body.type", req.body.type);
 		switch(req.body.type){
 			case "user": 
-				fileName = "user_" + userId + "_" + now + ".jpg";
+				fileName = "user_" + userId + "_" + new Date().getTime() + ".jpg";
 				fileType = "user";
 				break;
 
 			case "book":
-				fileName = "book_" + userId + "_" + now +".jpg";
+				fileName = "book_" + userId + "_" + new Date().getTime() +".jpg";
 				fileType = "book";
 				break;
 		}
@@ -30,7 +31,7 @@ module.exports = {
 				dirname: PATH.resolve(sails.config.appPath, "assets/uploads/" + fileType),
 				saveAs: fileName
 			}, function whenDone(err, uploadFile){
-
+				
 				if(err || !uploadFile || uploadFile.length == 0 ){
 					return res.json({
 						error: CONST.ERROR.FAILED_UPLOAD,

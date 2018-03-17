@@ -69,7 +69,7 @@ angular.module('ba')
 
 		var getDepositList = function(){
 			return new Promise(function(resolve, reject){
-				Deposit.getDepositList({ actived: 0 })
+				Deposit.getDepositList()
 					.then(function(deposits){
 						$scope.depositList = deposits;
 						return resolve();
@@ -83,7 +83,7 @@ angular.module('ba')
 
 		var getFacutlyList = function() {
 			return new Promise(function(resolve, reject){
-				Facutly.getFacutlyList({ actived: 0 })
+				Facutly.getFacutlyList()
 					.then(function(deposits){
 						$scope.facutlyList = $scope.facutlyList;
 						return resolve();

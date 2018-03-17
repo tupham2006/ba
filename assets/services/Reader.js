@@ -53,10 +53,10 @@ function Reader(Request, $q, $rootScope, Store){
 	function getReaderListStore(params){
 
 		if(!params) params = {};
-		var actived = params.actived >= 0 ? params.actived : 1;
+		var actived = params.actived;
 		var skip = params.skip ? params.skip : 0;
 		var limit = params.limit ? params.limit : 10;
-		var facutly = params.facutly ? params.facutly : "";
+		var facutly_id = params.facutly_id;
 		var typing = params.typing ? params.typing : "";
 		var filterList = [];
 		var returnList = [];
@@ -78,8 +78,8 @@ function Reader(Request, $q, $rootScope, Store){
 				}			 
 			}
 			
-			if(!data[i].remove && facutly){
-				if(facutly != data[i].facutly) data[i].remove = true;
+			if(!data[i].remove && parseInt(facutly_id) >= 0){
+				if(facutly_id != data[i].facutly_id) data[i].remove = true;
 			}
 
 			// filter by active

@@ -15,7 +15,7 @@
 					</select>
 				</div>
 				<div class="col-xs-12 col-md-2 mb-10">
-					<facutly-select ng-model="filter.facutly" ng-change="getReaderList()"></facutly-select>
+					<facutly-select ng-model="filter.facutly_id" ng-change="getReaderList()"></facutly-select>
 				</div>
 				<div class="col-xs-12 col-md-3 mb-10">
 				<span class="pull-right count">Tổng số: {{ readerCount }}</span>
@@ -58,7 +58,7 @@
 						</td>
 						<td> {{ reader.mobile | tel }} </td>
 						<td class="hidden-xs"> <span>{{ reader.borrow_time }}</span> </td>
-						<td class="hidden-xs"> <span> {{ facutlyList[reader.facutly] }} </span> </td>
+						<td class="hidden-xs"> <span> <facutly-html ng-model="reader.facutly_id"></facutly-html> </span> </td>
 						<td class="hidden-xs"><gender-html ng-model="reader.gender"></gender-html></td>
 						<td class="hidden-xs"> <span>{{ reader.note }}</span> </td>
 						<td class="text-center">
@@ -67,6 +67,9 @@
 					</tr>
 				</tbody>
 			</table>
+			<div ng-if="!readerList.length" class="max-height text-center p-10" style="border: 1px solid #a2cfff">
+				Không có dữ liệu nào trong bảng
+			</div>
 		</div>
 	</div>
 </div>

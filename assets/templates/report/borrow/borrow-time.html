@@ -25,6 +25,9 @@
 				</tr>
 			</tbody>
 		</table>
+		<div ng-if="!borrowTimeList.length" class="max-height text-center p-10" style="border: 1px solid #a2cfff">
+			Không có dữ liệu nào trong bảng
+		</div>
 		<div class="mt-10">
 			<ul uib-pagination class="m-0 pull-right" total-items="borrowTimeList.length" force-ellipses="true" items-per-page="filter.limit" ng-model="filter.currentPage" direction-links="false" ng-change="changePage()"></ul>
 		</div>

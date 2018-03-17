@@ -11,7 +11,9 @@ angular.module('ba').directive('positionSelect', [
 			template: '<select ng-change="positionChange()" class="form-control" ng-model="ngModel" convert-to-number><option value="" ng-hide="editMode">Tẩt cả các chức vụ</option><option value="0">Chưa có chức vụ</option><option ng-repeat="position in positionList track by $index" value={{position.id}}>{{position.name}}</option></select>',
 			link: function(scope, attr, ele, ctrl){
 				scope.positionList = [];
-				Position.getPositionList()
+				Position.getPositionList({
+					actived: 1
+				})
 					.then(function(positions){
 						scope.positionList = positions;
 					});
@@ -35,7 +37,9 @@ angular.module('ba').directive('positionHtml', [
 			link: function(scope, attr, ele, ctrl){
 				scope.positionList = [];
 
-				Position.getPositionList()
+				Position.getPositionList({
+					actived: 1
+				})
 					.then(function(positions){
 						scope.positionList = positions;
 					});

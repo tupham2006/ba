@@ -4,14 +4,16 @@ angular.module('ba')
 	  "$rootScope", 
 	  "Dialog",
 	  "Report",
+	  "Facutly",
 	  "$uibModal",
-	  function($scope, $rootScope, Dialog, Report, $uibModal){
+	  "$q",
+	  function($scope, $rootScope, Dialog, Report, Facutly, $uibModal, $q){
 			
 			$scope.page = {
 				mode: "BORROW_TIME"
 			};
 
-			$scope.facutly = angular.copy(CONST.FACUTLY);
+			$scope.facutly = [];
 
 			$scope.filter = {
 				date: {
@@ -113,6 +115,22 @@ angular.module('ba')
 			$scope.borrowCourse = [];
 			$scope.borrowCourseLabels = [];
 
+			$scope.getFacutlyList = function() {
+				var defer = $q.defer();
+
+				Facutly.getFacutlyList()
+					.then(function(res){
+						console.log("res", res);
+						$scope.facutly = res;
+						defer.resolve();
+					})
+					.catch(function(err){
+						defer.reject(err);
+					});
+
+				return defer.promise;
+			};
+
 			$scope.reportBorrowTime = function(){
 				var param = {
 					start_date: new Date($scope.filter.date.startDate).toISOString(),
@@ -188,9 +206,7 @@ angular.module('ba')
 								$scope.borrowCourseList[i].percent = Math.round(result.course[i].times * 100 * 10 / courseTotal) / 10;
 								$scope.borrowCourseLabels.push("K." + $scope.borrowCourseList[i].course + "(" + $scope.borrowCourseList[i].percent + "%)");
 							}
-
 						}
-
 					})
 
 					.catch(function(err){
@@ -218,6 +234,16 @@ angular.module('ba')
 				}
 			};
 
-			$scope.reportBorrowTime();
+			$scope.init = function(){
+				$scope.getFacutlyList()
+					.then(function(){
+						$scope.reportBorrowTime();
+					})
+					.catch(function(err){
+						toastr.error(err);
+					});
+			};
+
+			$scope.init();
 		}
 	]);

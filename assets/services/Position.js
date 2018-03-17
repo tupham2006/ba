@@ -42,9 +42,10 @@ function Position(Store, Request, $q){
 	}
 
 	function getPositionListStore(param){
+		console.log("param", param);
 
 		if(!param) param = {};
-		var actived = param.actived >= 0 ? param.actived : 1;
+		var actived = param.actived;
 		var data = angular.copy(positionList);
 
 		var filterList = [];
@@ -53,7 +54,7 @@ function Position(Store, Request, $q){
 		for(var i in data){
 
 			// filter typing
-			if(actived){
+			if(parseInt(actived) >= 0){
 				if(data[i].actived != actived) data[i].remove = true;
 			}
 			
