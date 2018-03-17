@@ -22,6 +22,7 @@ angular.module('ba')
 				},
 				limit: 10,
   			skip: 0,
+  			view: "DATE"
 			};
 
 			$scope.dateOption = {
@@ -136,7 +137,8 @@ angular.module('ba')
 					start_date: new Date($scope.filter.date.startDate).toISOString(),
 					end_date: new Date($scope.filter.date.endDate).toISOString(),
 					skip: $scope.filter.skip,
-					limit: $scope.filter.limit
+					limit: $scope.filter.limit,
+					view: $scope.filter.view
 				};
 
 				Report.reportBorrowTime(param)

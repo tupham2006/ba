@@ -11,7 +11,6 @@ module.exports = {
 		var fileName = userId + "_" + new Date().getTime();
 		var fileType = 'general';
 
-			console.log("req.body.type", req.body.type);
 		switch(req.body.type){
 			case "user": 
 				fileName = "user_" + userId + "_" + new Date().getTime() + ".jpg";

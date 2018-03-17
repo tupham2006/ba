@@ -289,15 +289,16 @@ module.exports = {
 			sql.push("AND borrow_date <= ? ");
 
 			// group
-			sql.push("GROUP BY DATE(borrow_date) ");
+			sql.push("GROUP BY " + condition.view + "(borrow_date) ");
 
 			// order
-			sql.push("ORDER BY borrow_date DESC ");
+			sql.push("ORDER BY borrow_date ASC ");
 
 			// limit
 			sql.push("LIMIT ? OFFSET ? ");
 
 			var queryStatement = sql.join("");
+			console.log("queryStatement", queryStatement);
 
 			Borrow.query(queryStatement, value, function(err, result){
 				if(err) return reject(err);

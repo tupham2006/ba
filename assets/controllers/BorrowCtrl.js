@@ -19,7 +19,7 @@ angular.module('ba')
 		  		endDate: moment().set({'hour': 23, 'minute': 59, 'second': 59, 'millisecond': 999})
 	  		},
 	  		typing: "",
-	  		type: 1,
+	  		type: "",
 	  		limit: 50,
 	  		skip: 0
 	  	};
@@ -81,7 +81,7 @@ angular.module('ba')
 	    $scope.bookList  = [];
 	    $scope.bookTypeList = [];
 	    $scope.bookFilter = {
-	    	type_id: 0,
+	    	type_id: "",
 	    	search: '',
 	    	actived: 1,
 	    	limit: 50,
@@ -162,6 +162,7 @@ angular.module('ba')
     	$scope.payDate = {
     		date: moment()
     	};
+
     	$scope.borrowDateOption = {
 	    	singleDatePicker: true,
 	    	eventHandlers: {
@@ -182,7 +183,8 @@ angular.module('ba')
 
 	    $scope.showBorrowDetail = function(id){
 	    	$scope.existReader = false;
-	    	$rootScope._error = {};
+	    	$scope.borrowInfo = {};
+
     		for(var i in $scope.borrowList){
     			if($scope.borrowList[i].id == id){
     				$scope.borrowInfo = angular.copy($scope.borrowList[i]);
@@ -196,7 +198,7 @@ angular.module('ba')
     			}
     		}
 
-    		if(!id){
+    		if(!id || !Object.getOwnPropertyNames($scope.borrowInfo)){
 	    		$scope.borrowInfo = {
 		    		borrow_date: moment(),
 		    		status: 1,
@@ -205,31 +207,20 @@ angular.module('ba')
 		    		note: "",
 		    		reader_name: "",
 		    		reader_mobile: "",
-		    		facutly_id: 1,
+		    		facutly_id: 0,
 		    		course: moment().get('years') - 1956
 		    	};
     		}
 
-
 	    	$scope.borrowDate.date = angular.copy(moment($scope.borrowInfo.borrow_date));
+    		$scope.borrowDateOption.startDate = angular.copy(moment($scope.borrowInfo.borrow_date));
 
 	    	if($scope.borrowInfo.pay_date){
 	    		$scope.payDate.date = moment(angular.copy($scope.borrowInfo.pay_date));
+	    		$scope.payDateOption = moment(angular.copy($scope.borrowInfo.pay_date));
 	    		$scope.calBorrowTime();
 	    	}
 	    	
-	    };
-
-	    /*
-	    		option min max date by borrow and pay date
-	     */
-	    $scope.rerenderDateOption = function(){
-	    	$scope.payDateOption.minDate = moment($scope.borrowDate.date);
-	    	if($scope.borrowInfo.status){ // when borrow
-	    		$scope.borrowDateOption.maxDate = undefined;
-	    	} else {
-	    		$scope.borrowDateOption.maxDate = moment($scope.payDate.date);
-	    	}
 	    };
 
 	    $scope.addBookToBorrow = function(id, name, currentQuantity){

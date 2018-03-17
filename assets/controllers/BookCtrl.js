@@ -28,7 +28,6 @@ angular.module('ba').controller("BookCtrl",[
 
 	  // handle upload
 	  $scope.image.onSuccessItem = function(item, response){
-	  	console.log("item, response", item, response);
 	  	if(response && !response.error){
 	  		$scope.bookInfo.image = response.fileUrl;
 	  	} else {

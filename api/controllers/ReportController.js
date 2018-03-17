@@ -5,12 +5,13 @@ module.exports = {
 		var endDate = new Date(req.param("end_date")) != "Invalid Date" ? new Date(req.param("end_date")).toISOString() : undefined;
 		var limit = parseInt(req.param("limit")) ? parseInt(req.param("limit")) : 10;
 		var offset = parseInt(req.param("offset")) > 0 ? parseInt(req.param("limit")) : 0;
-
+		var view = ["DATE", "WEEK", "MONTH"].indexOf(req.param('view')) > -1 ? req.param('view') : "DATE";
 		var condition = {
 			start_date: startDate,
 			end_date: endDate,
 			limit: limit,
-			offset: offset
+			offset: offset,
+			view: view
 		};
 
 		Borrow.reportBorrowTime(condition)
