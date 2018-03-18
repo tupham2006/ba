@@ -41,6 +41,16 @@ module.exports = {
 		});
 	}, 
 
+	countBorrow: function(condition){
+		return new Promise(function(resolve, reject){
+			Borrow.count(condition)
+				.exec(function(err, result){
+					if(err) return reject(err);
+					return resolve(result);
+				});
+		});
+	},
+
 	createBorrow: function(data){
 		return new Promise(function(resolve, reject){
 

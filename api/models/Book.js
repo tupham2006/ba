@@ -38,10 +38,11 @@ module.exports = {
 
 	countBook: function(search){
 		var condition = {};
-
-		if(search.where.name) condition.name =  search.where.name;
-		if(search.where.type_id) condition.type_id = search.where.type_id;
-		if(search.where.use_quantity) condition.use_quantity = search.where.use_quantity;
+		if(search && search.where) {
+			if(search.where.name) condition.name =  search.where.name;
+			if(search.where.type_id) condition.type_id = search.where.type_id;
+			if(search.where.use_quantity) condition.use_quantity = search.where.use_quantity;
+		}
 		
 		return new Promise(function(resolve, reject){
 			Book.count(condition)

@@ -229,7 +229,6 @@ angular.module('ba')
 							$scope.borrowReader = [[]];
 
 							$scope.borrowReaderList = result.reader;
-							console.log("$scope.borrowReaderList", $scope.borrowReaderList);
 
 							for(var i in result.reader){
 								$scope.borrowReader[0].push(result.reader[i].times);

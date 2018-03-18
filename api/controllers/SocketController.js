@@ -17,8 +17,8 @@ module.exports = {
       	if(err) {
       		return Service.catch(req, res, err, "connectSocket");
       	} else {
-      		return res.json({});
       		console.log("User " + req.session.user.id + " Online");
+          return res.json({});
       	}
       });
 	},

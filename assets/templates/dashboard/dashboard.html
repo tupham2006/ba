@@ -9,7 +9,7 @@
 							Mượn sách
 						</div>
 						<div class="content">
-								1200 <span class="font-16"> lượt</span>
+								{{ headerData.borrow_count }} <span class="font-16"> lượt</span>
 						</div>
 					</div>
 				</div>
@@ -21,7 +21,7 @@
 						</div>
 						<div class="content">
 							<div class="number">
-								120 <span class="font-16"> quyển </span>
+								{{ headerData.book_count }} <span class="font-16"> quyển </span>
 							</div>
 						</div>
 					</div>
@@ -34,7 +34,7 @@
 						</div>
 						<div class="content">
 							<div class="number">
-								520 <span class="font-16"> bạn </span>
+								{{ headerData.reader_count }} <span class="font-16"> bạn </span>
 							</div>
 						</div>
 					</div>
@@ -44,15 +44,14 @@
 				<div class="row height-50 chart-main"> 
 					<div class="col-md-8 height-100">
 						<div class="report-borrow-chart">
-							<canvas id="bar" class="chart chart-bar" chart-data="borrowTime" chart-labels="borrowDate" chart-series="series" chart-options="options" ></canvas>
+							<canvas id="bar" class="chart chart-bar" chart-data="borrow.data" chart-labels="borrow.title" chart-series="borrow.series" chart-options="options" ></canvas>
 						</div>
 					</div>
 					<div class="col-md-4 height-100">
 						<b class="text-blue">Lượt mưọn tháng này</b><br>
-						Lượt mượn: 50 <br>
-						Sách mượn: 70 <br>
-						Đã trả: 23 <br>
-						Mượn nhiều nhất: Nguyễn Khánh Linh<br>
+						Lượt mượn: {{ borrow.total }} <br>
+						Sách mượn: {{borrow.borrow_book_count}} <br>
+						Mượn nhiều nhất: {{borrow.max_borrow_reader.reader_name}} ({{ borrow.max_borrow_reader.times }} lượt)<br>
 					</div>
 				</div>
 				<div class="row height-50 chart-main">

@@ -8,7 +8,7 @@ module.exports = {
 				});
 			})
 
-			.catch(function(err){
+			.catch(function(e){
 				return Service.catch(req, res, e, "getFacutlyList");
 			});
 	}

@@ -290,7 +290,7 @@ module.exports.routes = {
   },
 
   /*=====================================
-  =            Report register            =
+  =            Report register          =
   =====================================*/
   'post /report/borrowTime': {
     controller: "ReportController",
@@ -303,5 +303,13 @@ module.exports.routes = {
   'get /connectSocket': {
     controller: "SocketController",
     action: "connectSocket"
-  }    
+  },   
+
+  /*=============================================
+  =                    Dashboard                =
+  =============================================*/
+  'post /dashboard/getDashboard': {
+    controller: "DashboardController",
+    action: "getDashboard"
+  },
 };

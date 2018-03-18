@@ -27,6 +27,16 @@ module.exports = {
 		});
 	},
 
+	countBorrowBook: function(condition) {
+		return new Promise(function(resolve, reject){
+			BorrowBook.count(condition)
+				.exec(function(err, result){
+					if(err) return reject(err);
+					return resolve(result);
+				});
+		});
+	},
+
 	reportBorrowBook: function(condition){
 
 		return new Promise(function(resolve, reject){
