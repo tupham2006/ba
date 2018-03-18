@@ -298,7 +298,6 @@ module.exports = {
 			sql.push("LIMIT ? OFFSET ? ");
 
 			var queryStatement = sql.join("");
-			console.log("queryStatement", queryStatement);
 
 			Borrow.query(queryStatement, value, function(err, result){
 				if(err) return reject(err);
@@ -383,6 +382,51 @@ module.exports = {
 				if(err) return reject(err);
 				return resolve(result);				
 			});			
+		});
+	},
+
+	reportBorrowReader: function(condition) {
+		return new Promise(function(resolve, reject){
+			if(!condition.start_date) {
+				condition.start_date = "1970-01-01T00:00:00.000Z";
+			}
+
+			if(!condition.end_date) {
+				condition.end_date = new Date().toISOString();
+			}
+
+			if(!condition.limit) condition.limit = 10;
+			if(isNaN(condition.offset)) condition.offset = 0;
+
+			var sql = ["SELECT "];
+			var value = [condition.start_date, condition.end_date, condition.limit, condition.offset];
+
+			// value select
+			sql.push("COUNT(*) AS times, reader_name, reader_id, reader_mobile ");
+
+			// table select
+			sql.push("FROM borrow ");
+
+			// where
+			sql.push("WHERE deleted = 0 AND borrow_date >= ? ");
+
+			sql.push("AND borrow_date <= ? ");
+
+			// group
+			sql.push("GROUP BY reader_id ");
+
+			// order
+			sql.push("ORDER BY COUNT(*) DESC ");
+
+			// limit
+			sql.push("LIMIT ? OFFSET ? ");
+
+			var queryStatement = sql.join("");
+
+			Borrow.query(queryStatement, value, function(err, result){
+				if(err) return reject(err);
+				return resolve(result);				
+			});		
 		});
 	}
 };

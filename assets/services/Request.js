@@ -116,7 +116,7 @@ io.socket.on("connect", function () {
 });
 
 io.socket.on("disconnect", function () {
-	toastr.error("Mất kết nối từ mấy chủ!");
+	toastr.error("Mất kết nối từ máy chủ!");
 	isOnline = false;
 });
 

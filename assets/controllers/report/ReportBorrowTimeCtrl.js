@@ -82,9 +82,9 @@ angular.module('ba')
 
 			// report borrow time
 			$scope.borrowTimeList = [];
-			$scope.borrowTime = [[],[]];
+			$scope.borrowTime = [[]];
 			$scope.borrowDate = [];
-			$scope.series = ["Lượt mượn ", "Sách mượn" ];
+			$scope.series = ["Lượt mượn"];
 			$scope.options = {
 				elements: { 
 					line: {
@@ -121,7 +121,7 @@ angular.module('ba')
 
 				Facutly.getFacutlyList()
 					.then(function(res){
-						console.log("res", res);
+
 						$scope.facutly = res;
 						defer.resolve();
 					})
@@ -144,35 +144,31 @@ angular.module('ba')
 				Report.reportBorrowTime(param)
 					.then(function(result){
 
-						if(result && result.borrow && result.borrow.length && result.borrow_book && result.borrow_book.length) {
+						if(result && result.borrow) {
 							$scope.borrowDate = [];
-							$scope.borrowTime = [[],[]];
+							$scope.borrowTime = [[]];
 
 							$scope.borrowTimeList = result.borrow;
 							
 							for(var i in result.borrow) {
 								$scope.borrowTime[0].push(result.borrow[i].times);
-								$scope.borrowDate.push(moment(result.borrow[i].borrow_date).format("DD/MM"));
-							}
+								
+								if($scope.filter.view == "DATE") {
+								result.borrow[i].borrow_date = moment(result.borrow[i].borrow_date).format("DD/MM");
 
-							
-							for(var i in result.borrow_book) {
-								$scope.borrowTime[1].push(result.borrow_book[i].times);
-							}
-
-
-							// handle table
-							for(var j in $scope.borrowTimeList) {
-								for(var k in result.borrow_book) {
-									if(moment($scope.borrowTimeList[j].borrow_date).isSame(moment(result.borrow_book[k].borrow_date), "days")) {
-										$scope.borrowTimeList[j].borrow_book_times = result.borrow_book[k].times;
-									}
+								} else if($scope.filter.view == "WEEK"){
+									result.borrow[i].borrow_date = "Tuần " + moment(result.borrow[i].borrow_date).get("week");
+								
+								} else if ($scope.filter.view == "MONTH"){
+									result.borrow[i].borrow_date = "Tháng " + ( moment(result.borrow[i].borrow_date).get("month") + 1 );
 								}
+
+								$scope.borrowDate.push(result.borrow[i].borrow_date);
 							}
 						}
 
 						// facutly report
-						if(result && result.facutly && result.facutly.length){
+						if(result && result.facutly){
 							$scope.borrowFacutlyLabels = [];
 							$scope.borrowFacutly = [];
 
@@ -186,13 +182,29 @@ angular.module('ba')
 
 							for(var i in $scope.borrowFacutlyList){
 								$scope.borrowFacutlyList[i].percent = Math.round(result.facutly[i].times * 100 * 10 / total) / 10;
-								$scope.borrowFacutlyLabels.push($scope.facutly[$scope.borrowFacutlyList[i].facutly] + "(" + $scope.borrowFacutlyList[i].percent + "%)");
+								
+								if(!$scope.borrowFacutlyList[i].facutly_id) {
+									$scope.borrowFacutlyList[i].facutly_name = "Chưa phân khoa";
+									$scope.borrowFacutlyLabels.push("Chưa phân khoa" + "(" + $scope.borrowFacutlyList[i].percent + "%)");
+
+								} else {
+									for(var j in $scope.facutly) {
+
+										if($scope.facutly[j].id == $scope.borrowFacutlyList[i].facutly_id) {
+											$scope.borrowFacutlyList[i].facutly_name = $scope.facutly[j].name;
+											$scope.borrowFacutlyLabels.push($scope.facutly[j].name + "(" + $scope.borrowFacutlyList[i].percent + "%)");
+											break;
+										}
+									}
+								}
+
+								
 							}
 
 						}
 
-						// facutly course
-						if(result && result.course && result.course.length){
+						// course report
+						if(result && result.course){
 							$scope.borrowCourseLabels = [];
 							$scope.borrowCourse = [];
 
@@ -209,6 +221,24 @@ angular.module('ba')
 								$scope.borrowCourseLabels.push("K." + $scope.borrowCourseList[i].course + "(" + $scope.borrowCourseList[i].percent + "%)");
 							}
 						}
+
+						// reader report
+							console.log("result", result);
+						if(result && result.reader) {
+							$scope.borrowReaderLabels = [];
+							$scope.borrowReader = [[]];
+
+							$scope.borrowReaderList = result.reader;
+							console.log("$scope.borrowReaderList", $scope.borrowReaderList);
+
+							for(var i in result.reader){
+								$scope.borrowReader[0].push(result.reader[i].times);
+							}
+
+							for(var i in $scope.borrowReaderList){
+								$scope.borrowReaderLabels.push($scope.borrowReaderList[i].reader_name);
+							}
+						}
 					})
 
 					.catch(function(err){
@@ -217,23 +247,8 @@ angular.module('ba')
 
 			};
 
-			$scope.changePageMode = function(mode) {
-				switch(mode) {
-					case "BORROW_TIME": 
-							$scope.page.mode = "BORROW_TIME";
-					break;
-
-					case "BORROW_FACUTLY": 
-							$scope.page.mode = "BORROW_FACUTLY";
-					break;
-
-					case "BORROW_COURSE": 
-							$scope.page.mode = "BORROW_COURSE";
-					break;
-					
-					default: 
-							$scope.page.mode = "BORROW_TIME";
-				}
+			$scope.changePageMode = function(mode) { 
+				$scope.page.mode = mode;
 			};
 
 			$scope.init = function(){

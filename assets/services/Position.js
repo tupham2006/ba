@@ -42,8 +42,6 @@ function Position(Store, Request, $q){
 	}
 
 	function getPositionListStore(param){
-		console.log("param", param);
-
 		if(!param) param = {};
 		var actived = param.actived;
 		var data = angular.copy(positionList);

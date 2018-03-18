@@ -17,26 +17,30 @@ module.exports = {
 		Borrow.reportBorrowTime(condition)
 			.then(function(borrowResult){
 
-				// report borrow book
-				BorrowBook.reportBorrowBook(condition)
-					.then(function(borrowBookResult){
-
-						// report facutly
-						Borrow.reportBorrowFacutly(condition)
+				// report facutly
+				Borrow.reportBorrowFacutly(condition)
 							.then(function(facutlyResult){
 
 								// report course
 								Borrow.reportBorrowCourse(condition)
 									.then(function(courseResult){
 
-										return res.json({
-											data: {
-												borrow: borrowResult,
-												borrow_book: borrowBookResult,
-												facutly: facutlyResult,
-												course: courseResult
-											}
-										});
+										Borrow.reportBorrowReader(condition)
+											.then(function(readerResult){
+
+												return res.json({
+													data: {
+														borrow: borrowResult,
+														facutly: facutlyResult,
+														course: courseResult,
+														reader: readerResult
+													}
+												});
+
+											})
+											.catch(function(e){
+												return Service.catch(req, res, e, "reportBorrowReader");
+											});
 									})
 
 									.catch(function(e){
@@ -47,12 +51,6 @@ module.exports = {
 							.catch(function(e){
 								return Service.catch(req, res, e, "reportBorrowFacutly");
 							});
-					})
-
-					.catch(function(e){
-						return Service.catch(req, res, e, "reportBorrowBook");
-					});
-					
 			})
 
 			.catch(function(e){

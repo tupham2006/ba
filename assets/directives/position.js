@@ -37,9 +37,7 @@ angular.module('ba').directive('positionHtml', [
 			link: function(scope, attr, ele, ctrl){
 				scope.positionList = [];
 
-				Position.getPositionList({
-					actived: 1
-				})
+				Position.getPositionList()
 					.then(function(positions){
 						scope.positionList = positions;
 					});

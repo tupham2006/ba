@@ -1,0 +1,36 @@
+<div class="row" ng-show="page.mode == 'BORROW_READER'" style="height: calc(100% - 54px);">
+	<div class="col-xs-12 col-md-6" style="height: calc(100% - 54px);">
+		<div class="report-borrow-chart">
+			<canvas id="bar" class="chart chart-bar" chart-data="borrowReader" chart-labels="borrowReaderLabels" chart-series="series" chart-options="options"></canvas>
+		</div>
+	</div>
+	<div class="col-xs-12 col-md-6">
+		<table class="table table-bordered table-striped">
+			<thead>
+				<th>Tên</th>
+				<th>Số điện thoại</th>
+				<th>Lượt mượn</th>	
+			</thead>
+			<tbody>
+				<tr ng-repeat = "borrowReader in borrowReaderList track by $index">
+					<td> 
+						 	{{ borrowReader.reader_name }} 
+					</td>
+					<td> 
+						 	{{ borrowReader.reader_mobile }} 
+					</td>
+					<td class="text-right">
+						{{ borrowReader.times }}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div ng-if="!borrowReaderList.length" class="max-height text-center p-10" style="border: 1px solid #a2cfff">
+			Không có dữ liệu nào trong bảng
+		</div>
+		<div class="mt-10">
+			<ul uib-pagination class="m-0 pull-right" total-items="borrowReaderList.length" force-ellipses="true" items-per-page="filter.limit" ng-model="filter.currentPage" direction-links="false" ng-change="changePage()"></ul>
+		</div>
+	</div>
+	</div>
+</div>
