@@ -98,36 +98,4 @@ angular.module('ba',[
 .run(["$rootScope", function($rootScope){
 	$rootScope._error = {};
 	window.$rootScope = $rootScope; // for debug
-	$rootScope._validate = function(type, data){
-		
-		switch(type){
-	    case "name":
-	      data = (data ? data : "").toString().replace(/ /g, "");
-	      if(!data.length){
-	        $rootScope._error.name = true;
-	      } else {
-	        if($rootScope._error.name) delete $rootScope._error.name;
-	      }
-	      break;
-
-	    case "mobile":
-	      data = (data ? data : "").toString();
-	    
-	      if(/[^0-9]/g.test(data) || data.length < 10 || data.length > 11){
-	        $rootScope._error.mobile = true;
-	      } else {
-	        if($rootScope._error.mobile) delete $rootScope._error.mobile;
-	      }
-	      break;
-	    case "array":
-	      data = data.toString();
-	    
-	      if(!data || !data.length){
-	        $rootScope._error.array = true;
-	      } else {
-	        if($rootScope._error.array) delete $rootScope._error.array;
-	      }
-	      break;
-	  }
-	};
 }]);

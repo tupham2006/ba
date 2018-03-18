@@ -43,53 +43,52 @@
 			<div  style="height:calc(100% - 112px);">
 				<div class="row height-50 chart-main"> 
 					<div class="col-md-8 height-100">
-						<div class="report-borrow-chart">
+						<div class="report-borrow-chart" style="height: 100%">
 							<canvas id="bar" class="chart chart-bar" chart-data="borrow.data" chart-labels="borrow.title" chart-series="borrow.series" chart-options="options" ></canvas>
 						</div>
 					</div>
 					<div class="col-md-4 height-100">
-						<b class="text-blue">Lượt mưọn tháng này</b><br>
-						Lượt mượn: {{ borrow.total }} <br>
-						Sách mượn: {{borrow.borrow_book_count}} <br>
-						Mượn nhiều nhất: {{borrow.max_borrow_reader.reader_name}} ({{ borrow.max_borrow_reader.times }} lượt)<br>
+						<b class="text-blue">Tháng này</b><br>
+						Lượt mượn: <b>{{ borrow.total }}</b> <br>
+						Sách mượn: <b>{{borrow.borrow_book_count}}</b> <br>
+						Mượn nhiều nhất: <b>{{borrow.max_borrow_reader.reader_name}} ({{ borrow.max_borrow_reader.times }} lượt)</b><br>
 					</div>
 				</div>
-				<div class="row height-50 chart-main">
-					<div class="col-md-8 height-100">
-						<div class="report-borrow-chart">
-							<canvas id="pie" class="chart chart-pie" chart-data="borrowTime" chart-labels="borrowDate" chart-series="series" chart-options="options" ></canvas>
+				<div class="row height-50 chart-main pull-left" style="width: calc(50% - 5px); margin-right: 5px">
+					<div class="col-md-12 height-100">
+						<b class="text-blue" style="position: absolute; top: 0">Bạn đọc</b>
+						<div class="report-borrow-chart" style="height: 100%">
+							<canvas id="pie" class="chart chart-pie" chart-data="reader.data" chart-labels="reader.title"  chart-options=" { cutoutPercentage: 0 }" ></canvas>
 						</div>
 					</div>
-					<div class="col-md-4">
-						<b class="text-blue">Bạn đọc</b><br>
-						Số lượng: 520 người<br>
-						Mới: 70 người <br>
-						Mượn nhiều nhất: Phạm Văn An
+				</div>
+				<div class="row height-50 chart-main pull-left"  style="width: calc(50% - 5px); margin-left: 5px">
+					<div class="col-md-12 height-100">
+						<b class="text-blue" style="position: absolute; top: 0">Sách</b>
+						<div class="report-borrow-chart" style="height: 100%">
+							<canvas id="pie" class="chart chart-pie" chart-data="book.data" chart-labels="book.title"  chart-options=" { cutoutPercentage: 0 }" ></canvas>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="col-md-4" id="side">
 			<div class="sidebar">
-				
-			</div>
-			<div class="help">
-				<div>
-					<div> Video hướng dẫn </div>
-					<div><a href="#"> BAManager [v0.1] | Hướng dẫn tạo lượt mượn sách </a></div>
-					<div><a href="#"> BAManager [v0.1] | Hướng dẫn thay đổi thông tin cá nhân </a></div>
-					<div><a href="#"> Xem thêm ...</a> </div>
+				<div class="action" ui-sref="profile">
+					<div class="icon">
+						<i style="font-size: 60px" class="fa fa-user-circle-o"></i><br>
+					</div>
+					<span class="title"> Thông tin cá nhân </span>
 				</div>
-				<div>
-					<div>Liên hệ</div>
-					<div>Số điện thoại: 01634254440</div>
-					<div>FB: <a href="https://www.facebook.com/phambaotuszx" target="_blank">Phạm Bảo Tú</a></div>
+				<div class="action">
+					<div class="icon">
+						<i style="font-size: 70px" class="fa fa-question-circle-o"></i><br>
+					</div>
+					<span class="title"> Trợ giúp </span>
 				</div>
-			</div>
-			<div class="footer">
-				<div>Website: <a href="#" target="_blank">http://clbsachhumg.tk</a></div>
-				<div>Đang Online: 12</div>
-				<div>BAManager Beta - Phiên bản 0.1</div>
+				<div class="footer">
+					<div>BAManager Beta - Phiên bản 0.1</div>
+				</div>		
 			</div>
 		</div>
 	</div>

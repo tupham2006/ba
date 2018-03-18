@@ -1,3 +1,4 @@
+var moment = require('moment');
 module.exports = {
 	connectSocket: function (req, res) {
 		 if (!req.isSocket) {
@@ -17,7 +18,7 @@ module.exports = {
       	if(err) {
       		return Service.catch(req, res, err, "connectSocket");
       	} else {
-      		console.log("User " + req.session.user.id + " Online");
+      		console.log(moment().add(7, "hour").format("HH:mm DD/MM/YYYY") + " - " + (req.session.user.name || "Unknown") + " Online");
           return res.json({});
       	}
       });

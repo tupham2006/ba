@@ -69,6 +69,22 @@ module.exports = {
 				});
 		})
 		.then(function(){
+			return Reader.reportReaderFacutly()
+				.then(function(readerFacutlyResult){
+					returnData.reader = {
+						data: readerFacutlyResult
+					};
+				});
+		})
+		.then(function(){
+			return Book.reportBookType()
+				.then(function(bookTypeResult){
+					returnData.book = {
+						data: bookTypeResult
+					};
+				});
+		})
+		.then(function(){
 			return res.json({
 				data: returnData
 			});

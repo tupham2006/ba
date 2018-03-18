@@ -47,7 +47,7 @@ module.exports = {
         delete userResult.updated_at;
         
         return res.json({
-          token: JWT.issue({ id: userResult.id, role: userResult.role }), // create token
+          token: JWT.issue({ id: userResult.id, role: userResult.role, name: userResult.name }), // create token
           user: userResult
       	});
         

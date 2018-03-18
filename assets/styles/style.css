@@ -678,27 +678,45 @@ button {
 	height: 100%;
 }
 
-#dashboard #side .footer {
-	background-color: #FFF;
-	border: 1px solid #ddd;
-	width: 100%;
-	padding: 10px;
-	margin-top: 10px;
-  border: 1px solid #ddd;
-}
-
-#dashboard #side .help {
-	background-color: #FFF;
-	margin-top: 10px;
-	padding: 10px;
-  border: 1px solid #ddd;
-}
-
 #dashboard #side .sidebar {
-	height: calc(100% - 284px);
-	width: 100%;
-	background-color: #FFF;
-  border: 1px solid #ddd;
+	position: relative;
+	padding: 10px;
+	background-color: #FFF; 
+	height: 100%;
+}
+
+#dashboard #side .sidebar .action {
+	width: 50%;
+	height: 120px;
+	display: inline-block;
+	float: left;
+	text-align: center;
+	padding: 10px;
+	color: #4da1ff;
+}
+
+#dashboard #side .sidebar .action:hover {
+	border: 1px solid #a2ceff;
+	cursor: pointer;
+}
+
+#dashboard #side .sidebar .action .icon {
+	line-height: 80px;
+	height: 80px;
+}
+
+#dashboard #side .sidebar .action .icon i {
+	vertical-align: middle;
+}
+
+#dashboard #side .sidebar .action .title {
+}
+
+#dashboard #side .footer {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	color: #8c8c8c;
 }
 
 #dashboard .chart-main {

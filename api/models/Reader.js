@@ -132,4 +132,30 @@ module.exports = {
         });
     });
   },
+
+  reportReaderFacutly: function(condition) {
+    return new Promise(function(resolve, reject){
+
+      var sql = ["SELECT "];
+
+      // value select
+      sql.push("COUNT(*) AS times, facutly_id ");
+
+      // table select
+      sql.push("FROM reader ");
+
+      // where
+      sql.push("WHERE actived = 1 ");
+
+      // group
+      sql.push("GROUP BY facutly_id ");
+
+      var queryStatement = sql.join("");
+
+      Borrow.query(queryStatement, function(err, result){
+        if(err) return reject(err);
+        return resolve(result);       
+      });   
+    });
+  }
 };

@@ -109,5 +109,31 @@ module.exports = {
 					});				
 			});
 		});
+	},
+
+	reportBookType: function(condition) {
+		return new Promise(function(resolve, reject){
+
+      var sql = ["SELECT "];
+
+      // value select
+      sql.push("COUNT(*) AS times, type_name ");
+
+      // table select
+      sql.push("FROM book ");
+
+      // where
+      sql.push("WHERE use_quantity > 0 OR inventory_quantity > 0 ");
+
+      // group
+      sql.push("GROUP BY type_id ");
+
+      var queryStatement = sql.join("");
+
+      Borrow.query(queryStatement, function(err, result){
+        if(err) return reject(err);
+        return resolve(result);       
+      });   
+    });
 	}
 };
