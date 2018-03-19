@@ -29,6 +29,11 @@ angular.module('ba',[
 			controller: "DashboardCtrl"
 		})
 
+		.state("help",{
+			url: "/help",
+			templateUrl: "/templates/dashboard/help.html",
+		})
+
 		.state("admin",{
 			url: "/admin",
 			templateUrl: "/templates/admin/admin.html",
