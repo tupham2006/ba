@@ -29,15 +29,15 @@
     -->
 
     <!--STYLES-->
-    <link rel="stylesheet" href="/libs/angular-block-ui/angular-block-ui.min.css?v=1521374862803">
-    <link rel="stylesheet" href="/libs/bootstrap/css/bootstrap.css?v=1521374862803">
-    <link rel="stylesheet" href="/libs/dateranger/daterangepicker.css?v=1521374862803">
-    <link rel="stylesheet" href="/libs/toastr/toastr.css?v=1521374862803">
-    <link rel="stylesheet" href="/styles/const.css?v=1521374862803">
-    <link rel="stylesheet" href="/styles/font-awesome.css?v=1521374862803">
-    <link rel="stylesheet" href="/styles/importer.css?v=1521374862803">
-    <link rel="stylesheet" href="/styles/style.css?v=1521374862803">
-    <link rel="stylesheet" href="/styles/theme.css?v=1521374862803">
+    <link rel="stylesheet" href="/libs/angular-block-ui/angular-block-ui.min.css?v=1521567758010">
+    <link rel="stylesheet" href="/libs/bootstrap/css/bootstrap.css?v=1521567758010">
+    <link rel="stylesheet" href="/libs/dateranger/daterangepicker.css?v=1521567758010">
+    <link rel="stylesheet" href="/libs/toastr/toastr.css?v=1521567758010">
+    <link rel="stylesheet" href="/styles/const.css?v=1521567758010">
+    <link rel="stylesheet" href="/styles/font-awesome.css?v=1521567758010">
+    <link rel="stylesheet" href="/styles/importer.css?v=1521567758010">
+    <link rel="stylesheet" href="/styles/style.css?v=1521567758010">
+    <link rel="stylesheet" href="/styles/theme.css?v=1521567758010">
     <!--STYLES END-->
   </head>
 
@@ -59,28 +59,28 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse m-0">
             <ul class="nav navbar-nav">
-                <li ng-class="{'menu-active' : activePage == 'dashboard'}"  class="desktop-display button text-bold">
-                 <div ui-sref="dashboard">
+                <li ui-sref="dashboard" ng-class="{'menu-active' : activePage == 'dashboard'}"  class="desktop-display button text-bold">
+                 <div>
                     BAManager
                  </div>
                     <!-- <a class="logo" href="javascript:void(0)" ui-sref="report.borrowTime"></a> -->
                 </li>
-                <li ng-if="user.role > 1" ng-class="{'menu-active' : activePage == 'borrow'}" class="button">
-                    <div ui-sref="borrow"><i class="glyphicon glyphicon-star"></i> Mượn sách </div>
+                <li ui-sref="borrow" ng-if="user.role > 1" ng-class="{'menu-active' : activePage == 'borrow'}" class="button">
+                    <div><i class="glyphicon glyphicon-star"></i> Mượn sách </div>
                 </li>
-                <li ng-if="user.role > 1" ng-class="{'menu-active' : activePage == 'book'}" class="button">
-                    <div ui-sref="book" ><i class="glyphicon glyphicon-book"></i> Sách</div>
+                <li ui-sref="book"  ng-if="user.role > 1" ng-class="{'menu-active' : activePage == 'book'}" class="button">
+                    <div><i class="glyphicon glyphicon-book"></i> Sách</div>
                 </li>
-                <li ng-if="user.role > 1" ng-class="{'menu-active' : activePage == 'reader'}" class="button">
-                    <div ui-sref="reader" ><i class="fa fa-user"></i> Bạn đọc</div>
+                <li  ui-sref="reader" ng-if="user.role > 1" ng-class="{'menu-active' : activePage == 'reader'}" class="button">
+                    <div><i class="fa fa-user"></i> Bạn đọc</div>
                 </li>
                 <li class="dropdown">
                     <div class="button dropdown-toggle" ng-class="{'menu-active' : activePage == 'report'}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-pie-chart"></i> Thống kê <span class="caret"></span>
                     </div>
                     <ul class="dropdown-menu">
-                        <li>
-                            <a href="javascript:void(0)" ui-sref="report.borrow"> Mượn trả sách</a>
+                        <li ui-sref="report.borrow">
+                            <a href="javascript:void(0)"> Mượn trả sách</a>
                         </li>
                     </ul>
                 </li>
@@ -126,7 +126,7 @@
               stringfile before they're served.
     -->
     <!--TEMPLATES-->
-    <script type="text/javascript" src="/jst.js?v=1521374862803"></script>
+    <script type="text/javascript" src="/jst.js?v=1521567758010"></script>
     <!--TEMPLATES END-->
 
 
@@ -153,67 +153,67 @@
 
     -->
     <!--SCRIPTS-->
-    <script src="/js/dependencies/sails.io.js?v=1521374862803"></script>
-    <script src="/libs/angular/angular.min.js?v=1521374862803"></script>
-    <script src="/libs/jquery/jquery-3.2.1.js?v=1521374862803"></script>
-    <script src="/libs/moment/moment.min.js?v=1521374862803"></script>
-    <script src="/libs/angular-block-ui/angular-block-ui.min.js?v=1521374862803"></script>
-    <script src="/libs/angular-char-js/Chart.min.js?v=1521374862803"></script>
-    <script src="/libs/angular-char-js/module-angular-chart.min.js?v=1521374862803"></script>
-    <script src="/libs/angular-cookies/angular-cookies.min.js?v=1521374862803"></script>
-    <script src="/libs/angular-input-mask/mask.min.js?v=1521374862803"></script>
-    <script src="/libs/angular-ui-bootstrap/ui-bootstrap-tpls-2.5.0.min.js?v=1521374862803"></script>
-    <script src="/libs/angular-ui-routes/angular-ui-routes.js?v=1521374862803"></script>
-    <script src="/libs/bootstrap/js/bootstrap.min.js?v=1521374862803"></script>
-    <script src="/libs/dateranger/angular-daterangepicker.js?v=1521374862803"></script>
-    <script src="/libs/dateranger/daterangepicker.js?v=1521374862803"></script>
-    <script src="/libs/jquery-input-mask/jquery.inputmask.bundle.js?v=1521374862803"></script>
-    <script src="/libs/toastr/toastr.js?v=1521374862803"></script>
-    <script src="/libs/upload-file/angular-file-upload.min.js?v=1521374862803"></script>
-    <script src="/app.js?v=1521374862803"></script>
-    <script src="/const.js?v=1521374862803"></script>
-    <script src="/jst.js?v=1521374862803"></script>
-    <script src="/services/Admin.js?v=1521374862803"></script>
-    <script src="/services/Book.js?v=1521374862803"></script>
-    <script src="/services/BookType.js?v=1521374862803"></script>
-    <script src="/services/Borrow.js?v=1521374862803"></script>
-    <script src="/services/BorrowBook.js?v=1521374862803"></script>
-    <script src="/services/Dashboard.js?v=1521374862803"></script>
-    <script src="/services/Department.js?v=1521374862803"></script>
-    <script src="/services/Deposit.js?v=1521374862803"></script>
-    <script src="/services/Dialog.js?v=1521374862803"></script>
-    <script src="/services/Facutly.js?v=1521374862803"></script>
-    <script src="/services/Position.js?v=1521374862803"></script>
-    <script src="/services/Push.js?v=1521374862803"></script>
-    <script src="/services/Reader.js?v=1521374862803"></script>
-    <script src="/services/Report.js?v=1521374862803"></script>
-    <script src="/services/Request.js?v=1521374862803"></script>
-    <script src="/services/Store.js?v=1521374862803"></script>
-    <script src="/services/User.js?v=1521374862803"></script>
-    <script src="/directives/avatar.js?v=1521374862803"></script>
-    <script src="/directives/bookImg.js?v=1521374862803"></script>
-    <script src="/directives/bookSearch.js?v=1521374862803"></script>
-    <script src="/directives/bookType.js?v=1521374862803"></script>
-    <script src="/directives/convertToNumber.js?v=1521374862803"></script>
-    <script src="/directives/department.js?v=1521374862803"></script>
-    <script src="/directives/deposit.js?v=1521374862803"></script>
-    <script src="/directives/facutly.js?v=1521374862803"></script>
-    <script src="/directives/gender.js?v=1521374862803"></script>
-    <script src="/directives/loadmore.js?v=1521374862803"></script>
-    <script src="/directives/mobileFormat.js?v=1521374862803"></script>
-    <script src="/directives/position.js?v=1521374862803"></script>
-    <script src="/filters/dayInWeek.js?v=1521374862803"></script>
-    <script src="/filters/numberDay.js?v=1521374862803"></script>
-    <script src="/filters/tel.js?v=1521374862803"></script>
-    <script src="/controllers/AdminCtrl.js?v=1521374862803"></script>
-    <script src="/controllers/BookCtrl.js?v=1521374862803"></script>
-    <script src="/controllers/BorrowCtrl.js?v=1521374862803"></script>
-    <script src="/controllers/DashboardCtrl.js?v=1521374862803"></script>
-    <script src="/controllers/DialogCtrl.js?v=1521374862803"></script>
-    <script src="/controllers/ReaderCtrl.js?v=1521374862803"></script>
-    <script src="/controllers/UserCtrl.js?v=1521374862803"></script>
-    <script src="/controllers/report/ReportBorrowCtrl.js?v=1521374862803"></script>
-    <script src="/controllers/report/ReportBorrowTimeCtrl.js?v=1521374862803"></script>
+    <script src="/js/dependencies/sails.io.js?v=1521567758010"></script>
+    <script src="/libs/angular/angular.min.js?v=1521567758010"></script>
+    <script src="/libs/jquery/jquery-3.2.1.js?v=1521567758010"></script>
+    <script src="/libs/moment/moment.min.js?v=1521567758010"></script>
+    <script src="/libs/angular-block-ui/angular-block-ui.min.js?v=1521567758010"></script>
+    <script src="/libs/angular-char-js/Chart.min.js?v=1521567758010"></script>
+    <script src="/libs/angular-char-js/module-angular-chart.min.js?v=1521567758010"></script>
+    <script src="/libs/angular-cookies/angular-cookies.min.js?v=1521567758010"></script>
+    <script src="/libs/angular-input-mask/mask.min.js?v=1521567758010"></script>
+    <script src="/libs/angular-ui-bootstrap/ui-bootstrap-tpls-2.5.0.min.js?v=1521567758010"></script>
+    <script src="/libs/angular-ui-routes/angular-ui-routes.js?v=1521567758010"></script>
+    <script src="/libs/bootstrap/js/bootstrap.min.js?v=1521567758010"></script>
+    <script src="/libs/dateranger/angular-daterangepicker.js?v=1521567758010"></script>
+    <script src="/libs/dateranger/daterangepicker.js?v=1521567758010"></script>
+    <script src="/libs/jquery-input-mask/jquery.inputmask.bundle.js?v=1521567758010"></script>
+    <script src="/libs/toastr/toastr.js?v=1521567758010"></script>
+    <script src="/libs/upload-file/angular-file-upload.min.js?v=1521567758010"></script>
+    <script src="/app.js?v=1521567758010"></script>
+    <script src="/const.js?v=1521567758010"></script>
+    <script src="/jst.js?v=1521567758010"></script>
+    <script src="/services/Admin.js?v=1521567758010"></script>
+    <script src="/services/Book.js?v=1521567758010"></script>
+    <script src="/services/BookType.js?v=1521567758010"></script>
+    <script src="/services/Borrow.js?v=1521567758010"></script>
+    <script src="/services/BorrowBook.js?v=1521567758010"></script>
+    <script src="/services/Dashboard.js?v=1521567758010"></script>
+    <script src="/services/Department.js?v=1521567758010"></script>
+    <script src="/services/Deposit.js?v=1521567758010"></script>
+    <script src="/services/Dialog.js?v=1521567758010"></script>
+    <script src="/services/Facutly.js?v=1521567758010"></script>
+    <script src="/services/Position.js?v=1521567758010"></script>
+    <script src="/services/Push.js?v=1521567758010"></script>
+    <script src="/services/Reader.js?v=1521567758010"></script>
+    <script src="/services/Report.js?v=1521567758010"></script>
+    <script src="/services/Request.js?v=1521567758010"></script>
+    <script src="/services/Store.js?v=1521567758010"></script>
+    <script src="/services/User.js?v=1521567758010"></script>
+    <script src="/directives/avatar.js?v=1521567758010"></script>
+    <script src="/directives/bookImg.js?v=1521567758010"></script>
+    <script src="/directives/bookSearch.js?v=1521567758010"></script>
+    <script src="/directives/bookType.js?v=1521567758010"></script>
+    <script src="/directives/convertToNumber.js?v=1521567758010"></script>
+    <script src="/directives/department.js?v=1521567758010"></script>
+    <script src="/directives/deposit.js?v=1521567758010"></script>
+    <script src="/directives/facutly.js?v=1521567758010"></script>
+    <script src="/directives/gender.js?v=1521567758010"></script>
+    <script src="/directives/loadmore.js?v=1521567758010"></script>
+    <script src="/directives/mobileFormat.js?v=1521567758010"></script>
+    <script src="/directives/position.js?v=1521567758010"></script>
+    <script src="/filters/dayInWeek.js?v=1521567758010"></script>
+    <script src="/filters/numberDay.js?v=1521567758010"></script>
+    <script src="/filters/tel.js?v=1521567758010"></script>
+    <script src="/controllers/AdminCtrl.js?v=1521567758010"></script>
+    <script src="/controllers/BookCtrl.js?v=1521567758010"></script>
+    <script src="/controllers/BorrowCtrl.js?v=1521567758010"></script>
+    <script src="/controllers/DashboardCtrl.js?v=1521567758010"></script>
+    <script src="/controllers/DialogCtrl.js?v=1521567758010"></script>
+    <script src="/controllers/ReaderCtrl.js?v=1521567758010"></script>
+    <script src="/controllers/UserCtrl.js?v=1521567758010"></script>
+    <script src="/controllers/report/ReportBorrowCtrl.js?v=1521567758010"></script>
+    <script src="/controllers/report/ReportBorrowTimeCtrl.js?v=1521567758010"></script>
     <!--SCRIPTS END-->
   </body>
 </html>

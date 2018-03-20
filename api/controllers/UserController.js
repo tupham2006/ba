@@ -115,17 +115,16 @@ module.exports = {
 	            error: CONST.ERROR.NO,
 	          });
 	        }
+	      })
+
+	      .catch(function(e){
+	      	return Service.catch(req, res, e, "register");
 	      });
 	    })
 		
-	  	// handle error
-	  	.catch(function(err){
-	  		console.log("AuthController :: register ::", err );
-	  		return res.json({
-	  			error: CONST.ERROR.YES,
-	  			message: err.message
-	  		});
-	  	});
+	  	.catch(function(e){
+      	return Service.catch(req, res, e, "register");
+      });
 	},
 
 	updateUserInfo: function(req, res){

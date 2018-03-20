@@ -4,8 +4,8 @@ module.exports= {
 	autoCreatedAt: false,
 	autoUpdatedAt: false,
 	attributes: {
-		id: { type: "integer", primaryKey: true, autoIncrement: true },
+		id: { type: "integer", primaryKey: true, autoIncrement: true, model:'user', },
 		name: { type: "string", maxLength: 100, required: true },
-		actived: { type: "integer", defaultsTo: 1}
+		actived: { type: "integer", defaultsTo: 1},
 	}
 };

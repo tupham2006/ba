@@ -8,7 +8,7 @@ angular.module('ba').directive('facutlySelect', [
 				ngModel:"=",
 				editMode:"="
 			},
-			template: '<select ng-change="facutlyChange()" class="form-control" ng-model="ngModel" convert-to-number><option value="" ng-hide="editMode">Tất cả các khoa</option><option value="0"> Chưa phân khoa </opion><option ng-repeat="facutly in facutlyList" value={{facutly.id}}>{{facutly.name}}</option></select>',
+			template: '<select ng-change="facutlyChange()" class="form-control" ng-model="ngModel" convert-to-number><option value="0" ng-hide="editMode">Tất cả các khoa</option><option ng-repeat="facutly in facutlyList" value={{facutly.id}}>{{facutly.name}}</option></select>',
 			link: function(scope, attr, ele, ctrl){
 				Facutly.getFacutlyList()
 					.then(function(facutlys){

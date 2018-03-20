@@ -13,7 +13,7 @@ angular.module('ba')
 			limit: 10,
 			skip: 0,
 			actived: 1,
-			facutly_id: ""
+			facutly_id: 0
 		};
 
 		$scope.facutlyList = CONST.FACUTLY;
@@ -51,10 +51,9 @@ angular.module('ba')
 				$scope.readerInfo = {
 					name: "",
 					mobile: "",
-					facutly_id: 0,
+					facutly_id: 1,
 					course: moment().get('years') - 1956,
 					gender: 1,
-					facebook_id: "",
 					note: "",
 					actived: 1
 				};

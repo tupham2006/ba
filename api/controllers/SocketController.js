@@ -22,9 +22,5 @@ module.exports = {
           return res.json({});
       	}
       });
-	},
-
-	syncData: function(req, res) {
-		
 	}
 };

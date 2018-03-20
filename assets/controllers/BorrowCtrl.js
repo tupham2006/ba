@@ -19,7 +19,6 @@ angular.module('ba')
 		  		endDate: moment().set({'hour': 23, 'minute': 59, 'second': 59, 'millisecond': 999})
 	  		},
 	  		typing: "",
-	  		type: "",
 	  		limit: 50,
 	  		skip: 0
 	  	};
@@ -81,7 +80,7 @@ angular.module('ba')
 	    $scope.bookList  = [];
 	    $scope.bookTypeList = [];
 	    $scope.bookFilter = {
-	    	type_id: "",
+	    	type_id: 0,
 	    	search: '',
 	    	actived: 1,
 	    	limit: 50,
@@ -207,7 +206,7 @@ angular.module('ba')
 		    		note: "",
 		    		reader_name: "",
 		    		reader_mobile: "",
-		    		facutly_id: 0,
+		    		facutly_id: 1,
 		    		course: moment().get('years') - 1956
 		    	};
     		}

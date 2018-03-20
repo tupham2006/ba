@@ -9,7 +9,7 @@ module.exports = {
 		id: { type: "integer", primaryKey: true, autoIncrement: true },
 		name: { type: "string", size: 100, maxLength: 100, required: true, defaultsTo: '' },
 		image: { type: "string", size: 200, maxLength: 200, defaultsTo: null },
-		type_id: { type: "integer", required: true, defaultsTo: 0 },
+		type_id: { type: "integer", required: true },
 		type_name: { type: "string", required: true, maxLength: 50, defaultsTo: "Loại chung" },
 		hot: { type: "integer", defaultsTo: 0 }, // 1: hot book
 		comment_time: { type: "integer", defaultsTo: 0 }, // 1: hot book
@@ -23,7 +23,7 @@ module.exports = {
 		current_quantity: { type: 'integer', defaultsTo: 1}, // current quantity, 0: not ready borrow
 		note: { type: "string", size:10000, maxLength: 10000, defaultsTo: "" },
 		createdAt: {type: "datetime", columnName: "created_at" },
-    	updatedAt: {type: "datetime", columnName: "updated_at" }
+    updatedAt: {type: "datetime", columnName: "updated_at" }
 	},
 
 	getBookList: function (condition) {
@@ -82,7 +82,8 @@ module.exports = {
 							return resolve(result[0]);
 						} else {
 							return reject({
-								message: "Cập nhật không thành công "});
+								message: "Cập nhật không thành công "
+							});
 						}
 					});				
 			});
@@ -135,5 +136,95 @@ module.exports = {
         return resolve(result);       
       });   
     });
-	}
+	},
+
+	getBookPublic: function(condition, limit, offset, sort_name, sort_type, accessToken) {
+		return new Promise(function(resolve, reject){
+			Book.getBookList({
+				where: condition,
+				limit: limit,
+				skip: offset,
+				sort: sort_name + ' ' + sort_type
+			}).then(function(books){
+				var bookList = [];
+
+				// get book count
+				Book.countBook({where: condition})
+					.then(function(count){
+
+						BookComment.find()
+							.then(function(commentResult){
+
+								// get rating facebook
+								if(accessToken) {
+									BookRating.getBookRatingByFbUser(accessToken)
+										.then(function(bookRatingResult){
+
+											if(books && books.length > 0) {
+												// filter data
+												for(var i in books) {
+													for(var j in commentResult) {
+														if(books[i].id == commentResult[j].book_id) {
+															
+														}
+														books.comment = 
+													}
+													bookList.push({
+														id: books[i].id,
+														name: books[i].name,
+														image: books[i].image,
+														hot: books[i].hot,
+														author: books[i].author,
+														intro: books[i].intro,
+														current_quantity: books[i].current_quantity,
+														comment_time: books[i].comment_time,
+														love_time: books[i].love_time,
+														hate_time: books[i].hate_time,
+														type_name: books[i].type_name,
+														borrow_time: books[i].borrow_time
+													});
+												}
+											}
+
+											if(bookRatingResult && bookRatingResult.length) {
+												for(var i in bookList) {
+													for(var j in bookRatingResult) {
+														if(bookList[i].id == bookRatingResult[j].book_id) {
+															bookList[i].is_rating = bookRatingResult[j].type;
+														}
+													}
+
+												}
+											}
+
+											return resolve ({
+												book_count: count,
+												books: bookList
+											});
+										})
+										.catch(function(err){
+											return reject(err);
+										});
+								
+								} else {
+									return resolve ({
+										book_count: count,
+										books: bookList
+									});
+								}
+						})
+						.catch(function(err){
+							return reject(err);
+						});
+
+					})
+					.catch(function(err){
+						return reject(err);
+					});
+			})
+			.catch(function(err){
+				return reject(err);
+			});
+		});
+	},
 };

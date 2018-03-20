@@ -175,6 +175,8 @@
 	<script type="text/javascript">
 		var isSending;
 		var isLoginFB;
+		var accessToken = "";
+		var pageUrl = window.location.href;
 
 		// facebook init
 	  (function(d, s, id){
@@ -196,14 +198,16 @@
 
 	  window.fbAsyncInit();
 
-	  FB.getLoginStatus(function(response) {
-		  if (response.status === 'connected') {
-	      isLoginFB = true;
-		  	$("#isLoginFB").show();
-		  } else {
-	      $("#isLogoutFB").show();
-		  }
-		});
+	  // check login fb
+    checkLoginFacebook()
+      .then(function (isLoginFB) {
+
+      	if(isLoginFB) {
+      		$("#isLoginFB").show();
+      	} else {
+          $("#isLogoutFB").show();
+      	}
+      });
 
 		$(document).ready(function() {
 
@@ -316,11 +320,41 @@
 			}
 		}
 
+		function checkLoginFacebook() {
+
+			return new Promise(function (resolve, reject) {
+				//after 10 second
+				var connectFbTimeout = setTimeout(function(){
+						return resolve();
+				}, 7000);
+
+				FB.getLoginStatus(function(response) {
+
+					clearTimeout(connectFbTimeout);
+
+          if(response.status == "connected"){
+          	accessToken = response.authResponse.accessToken;
+			      return resolve(response.authResponse.accessToken);
+
+				  } else {
+			      return resolve();
+				  }
+				});
+			});
+		}
+
 		$("#isLogoutFB").click(function(e){
-			FB.login(function(res){
-				if(res.status === "connected") {
+			FB.login(function(response){
+				if(response.status === "connected") {
+					accessToken = response.authResponse.accessToken;
+
 					isLoginFB = true;
 					toastr.success("Đăng nhập thành công");
+		  		
+		  		if(window.location.pathname == "/sach") {
+		  			window.location.reload();
+		  		}
+		  		
 		  		$("#isLoginFB").show();
 		  		$("#isLogoutFB").hide();
 				} else {
@@ -330,8 +364,10 @@
 		});
 
 		$("#isLoginFB").click(function(e){
-			FB.logout(function(res){
-				if(res.status !== "connected") {
+			FB.logout(function(response){
+				if(response.status !== "connected") {
+
+					accessToken = "";
 					isLoginFB = false;
 					toastr.success("Đăng xuất thành công");
 		  		$("#isLoginFB").hide();

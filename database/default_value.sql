@@ -1,0 +1,18 @@
+INSERT INTO `position` VALUES ('1', 'Chưa có chức vụ', '1');
+INSERT INTO `facutly` VALUES ('1', 'Chưa phân khoa', '1');
+INSERT INTO `facutly` VALUES ('2', 'Cơ điện', '1');
+INSERT INTO `facutly` VALUES ('3', 'Công nghệ thông tin ', '1');
+INSERT INTO `facutly` VALUES ('4', 'Dầu khí', '1');
+INSERT INTO `facutly` VALUES ('5', 'Trắc địa', '1');
+INSERT INTO `facutly` VALUES ('6', 'Kinh tế', '1');
+INSERT INTO `facutly` VALUES ('7', 'Xây dựng ', '1');
+INSERT INTO `facutly` VALUES ('8', 'Môi trường', '1');
+INSERT INTO `facutly` VALUES ('9', 'Mỏ', '1');
+INSERT INTO `facutly` VALUES ('10', 'Địa chất', '1');
+INSERT INTO `deposit` VALUES ('1', 'Thẻ sinh viên', '1');
+INSERT INTO `deposit` VALUES ('2', 'Chứng minh thư', '1');
+INSERT INTO `deposit` VALUES ('3', 'Tiền mặt', '1');
+INSERT INTO `department` VALUES ('1', 'Chưa phân ban', '1');
+INSERT INTO `book_type` VALUES ('1', 'Chưa phân loại', '1');
+INSERT INTO `user` VALUES ('1', 'admins', '99999999999', '$2a$15$qB37wP12HcBj.MZmb1mowuzqgZsBifP1XHWqUHxVpUIas2FTXQ0YS', 'Admin', '3', '1', '1', '', '1', '0', '', '', '0', '1', '1', '2000', '1', '0', '', '2018-03-20 12:50:22', '2018-03-20 12:50:22');
+DROP TRIGGER IF EXISTS `after_book_comment_create`;

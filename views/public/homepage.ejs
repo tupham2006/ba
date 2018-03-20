@@ -220,7 +220,7 @@
 </html>
 <script type="text/javascript" src="/publics/jquery.fullpage.min.js"></script>
 <script type="text/javascript">
-		$(document).ready(function() {
+	$(document).ready(function() {
 	
 	// scroll page
 	var device = $( window ).width();
@@ -239,7 +239,7 @@
 			// for book
 			if(response.data.book){
 				var bookContent = "";
-				if(response.data.book.intro.length > 1000) {
+				if(response && response.data && response.data.book && response.data.book.intro && response.data.book.intro.length > 1000) {
 					bookContent = response.data.book.intro.slice(0, 1000) + "... <a href='#' class='link-white'>Xem thêm</a>";
 				} else {
 					bookContent = response.data.book.intro;

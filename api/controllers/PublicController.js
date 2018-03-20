@@ -1,12 +1,11 @@
-var FB = require('fb');
-
 // created at 25/10/2017
 module.exports = {
 	getHomepage: function (req, res) {
 		var returnData = {};
+		var accessToken = req.param("access_token");
 
 		// get lastest book
-		Book.find({
+		return Book.find({
 			where: {
 				intro: {
 					"!": ""
@@ -17,13 +16,9 @@ module.exports = {
 			skip: 0
 		})
 		.then(function(bookResult){
-			if(!bookResult || !bookResult.length){
-				bookResult = null;
-			} else {
-				returnData.book = bookResult[0];
-			}
+			returnData.book = bookResult;
 		})
-		.then(function(result){
+		.then(function(){
 			return res.json({
 				data: returnData
 			});
@@ -31,72 +26,29 @@ module.exports = {
 		.catch(function(e){
 			return Service.catch(req, res, e, "getBorrowBookList");
 		});
-		// get lastest event
-		// get lastest blog
-		// get club info
 	},
 
 	getBookPage: function(req, res) {
+		var limit = 12;
+		var offset = 0;
+		var sort_name = "name";
+		var sort_type = "ASC";
+		var accessToken = req.param('access_token');
 
 		BookType.getBookTypeList({
 			actived: 1
 		})
 			.then(function(bookTypes){
-				Book.getBookList({
-					where: {
-						use_quantity: {
-							">": 0
-						}
-					},
-					limit: 12,
-					skip: 0,
-					sort: "name ASC"
-				}).then(function(books){
 
-					Book.countBook({
-						where: {
-							use_quantity: {
-								">": 0
-							}
-						}
-					}).then(function(count){
-						
-						var bookList = [];
-						if(books && books.length > 0) {
-							// filter data
-							for(var i in books) {
-								bookList.push({
-									id: books[i].id,
-									name: books[i].name,
-									image: books[i].image,
-									hot: books[i].hot,
-									author: books[i].author,
-									intro: books[i].intro,
-									current_quantity: books[i].current_quantity,
-									comment_time: books[i].comment_time,
-									love_time: books[i].love_time,
-									hate_time: books[i].hate_time,
-									type_name: books[i].type_name,
-									borrow_time: books[i].borrow_time
-								});
-							}
-						}
+				Book.getBookPublic({use_quantity: {">": 0}}, limit, offset, sort_name, sort_type, accessToken)
+					.then(function(bookResult){
+						bookResult.book_types = bookTypes;
 
-						return res.json({
-							book_types: bookTypes,
-							book_count: count,
-							books: bookList
-						});
-						
+						return res.json(bookResult);
 					})
 					.catch(function(e){
 						return Service.catch(req, res, e, "getBookList");
 					});
-				})
-				.catch(function(e){
-					return Service.catch(req, res, e, "getBookList");
-				});
-				
 			})
 
 		.catch(function(e){
@@ -112,6 +64,7 @@ module.exports = {
 		var search = (req.param('search') ? req.param('search') : "").trim();
 		var status = parseInt(req.param('status')) ? parseInt(req.param('status')) : 0;
 		var typeId = parseInt(req.param('type')) ? parseInt(req.param('type')) : 0;
+		var accessToken = req.param('access_token');
 
 		var condition = {
 				use_quantity: {
@@ -132,58 +85,21 @@ module.exports = {
 		 }
 		}
 
-		Book.getBookList({
-			where: condition,
-			limit: limit,
-			skip: offset,
-			sort: sort_name + ' ' + sort_type
-		}).then(function(books){
-
-			Book.countBook({where: condition}).then(function(count){
-				
-				var bookList = [];
-				if(books && books.length > 0) {
-					// filter data
-					for(var i in books) {
-						bookList.push({
-							id: books[i].id,
-							name: books[i].name,
-							image: books[i].image,
-							hot: books[i].hot,
-							author: books[i].author,
-							intro: books[i].intro,
-							current_quantity: books[i].current_quantity,
-							comment_time: books[i].comment_time,
-							love_time: books[i].love_time,
-							hate_time: books[i].hate_time,
-							type_name: books[i].type_name,
-							borrow_time: books[i].borrow_time
-						});
-					}
-				}
-
-				return res.json({
-					book_count: count,
-					books: bookList
-				});
-				
+		Book.getBookPublic(condition, limit, offset, sort_name, sort_type, accessToken)
+			.then(function(bookResult){
+				return res.json(bookResult);
 			})
-			.catch(function(err){
-				return Service.catch(req, res, err, "getBookList");
+			.catch(function(e){
+				return Service.catch(req, res, e, "getBookList");
 			});
-		})
-		.catch(function(err){
-			return Service.catch(req, res, err, "getBookList");
-		});
 	},
 
 	ratingBook: function(req, res) {
 		var accessToken = req.param("access_token");
 		var rateType = parseInt(req.param("rate_type"));
 		var bookId = parseInt(req.param("book_id"));
-
+		var returnData = {};
 		var userId = 0;
-		accessToken = "EAAEZBPy5iBlwBAEgzQoIBJe4DnD59mqSZCA7UZAcuY10md8ZBDIaLRYbAS8e5coeeO3jUYTUWfg8y2B8KEopZAoHYVQHHVgZCEb5p08lNRYKBfnDOzUrOeMuvW7GYAe27KUgXyGH606uR0c3o9WWLQPcnqKMrXpXIHYHjMlIlwfSCtrGfHr7RDJA2Yrg5kReDV9V6GYCTWewZDZD";
 		
 		if(!(rateType <= 1)) {
 			return Service.catch(req, res, { message: "Vui lòng nhập loại rating" }, "ratingBook");
@@ -198,73 +114,109 @@ module.exports = {
 		}
 
 		// check login facebook
-		FB.api('/me', 'GET', {access_token: accessToken}, function (fb_res) {
-			console.log("fb_res", fb_res);
-		  if(!fb_res || fb_res.error) {
-				return Service.catch(req, res, { message: "Vui lòng đăng nhập để tiếp tục" }, "ratingBook");
-		 
-		  } else {
-		  	userId = fb_res.id;
+		FbUser.getFbUser(accessToken)
+			.then(function(fb_res){
 
-		  	if(!userId) {
+			  if(!fb_res) {
 					return Service.catch(req, res, { message: "Vui lòng đăng nhập để tiếp tục" }, "ratingBook");
-				}
-
-				// Query
-		  	BookRating.findOne({
-					fb_id: userId,
-					book_id: bookId
-				}).then(function(bookResult){
-					// No record, create new 
-					if(!bookResult) {
-						BookRating.create({
+			 
+			  } else {
+			  	userId = fb_res.id;
+			  	Book.findOne({
+			  		id: bookId
+			  	}).then(function(bookData){
+			  		if(!bookData || !Object.getOwnPropertyNames(bookData)) {
+			  			return Service.catch(req, res, {message: "Sách không tồn tại"}, "ratingBook");
+			  		}
+						// Query
+				  	BookRating.findOne({
 							fb_id: userId,
-							book_id: bookId,
-							type: rateType
-						}).then(function(result){
-							sails.sockets.broadcast('BAManager', { message: "Facebook " + userId + " just like" });
-							return res.json({});
+							book_id: bookId
+						}).then(function(bookResult){
+							// No record, create new 
+							if(!bookResult) {
+								BookRating.create({
+									fb_id: userId,
+									book_id: bookId,
+									type: rateType
+								}).then(function(result){
+									
+									if(rateType == 1) {
+										bookData.love_time += 1;
+									} else if (!rateType) {
+										bookData.hate_time += 1;
+									}
 
-						}).catch(function(e){
+									// sails.sockets.broadcast('BAManager', { message: "Facebook " + userId + " just like" });
+									bookData.is_rating = rateType;
+									
+									return res.json({
+										book: bookData
+									});
+
+								}).catch(function(e){
+									return Service.catch(req, res, e, "ratingBook");
+								});
+
+							// has record
+							} else {
+								if(bookResult.type == rateType)	{ // unrate
+									BookRating.destroy({
+										fb_id: userId,
+										book_id: bookId,
+									}).then(function(result){
+										if(result && result.length) {
+											if(rateType == 1) {
+												bookData.love_time -= 1;
+
+											} else if (!rateType) {
+												bookData.hate_time -= 1;
+											}
+										}
+
+										// sails.sockets.broadcast('BAManager', { message: "Facebook " + userId + " just like" });
+										return res.json({
+											book: bookData,
+											action: "unrate"
+										});
+
+									}).catch(function(e){
+										return Service.catch(req, res, e, "ratingBook");
+									});
+
+								} else { // change rate
+									BookRating.update({
+										fb_id: userId,
+										book_id: bookId,
+									}, { type: rateType }).then(function(result){
+
+										if(rateType == 1) {
+											bookData.love_time += 1;
+											bookData.hate_time -= 1;
+
+										} else if (!result[0].type) {
+											bookData.love_time -= 1;
+											bookData.hate_time += 1;
+										}
+										// sails.sockets.broadcast('BAManager', { message: "Facebook " + userId + " just like" });
+										
+										bookData.is_rating = rateType;
+										return res.json({
+											book: bookData,
+										});
+
+									}).catch(function(e){
+										return Service.catch(req, res, e, "ratingBook");
+									});
+								}
+							}			
+
+						})
+						.catch(function(e){
 							return Service.catch(req, res, e, "ratingBook");
 						});
-
-					// has record
-					} else {
-						if(bookResult.type == rateType)	{ // unrate
-							BookRating.destroy({
-								fb_id: userId,
-								book_id: bookId,
-							}).then(function(result){
-								sails.sockets.broadcast('BAManager', { message: "Facebook " + userId + " just like" });
-								return res.json({});
-
-							}).catch(function(e){
-								return Service.catch(req, res, e, "ratingBook");
-							});
-
-						} else { // change rate
-							BookRating.update({
-								fb_id: userId,
-								book_id: bookId,
-							}, { type: rateType }).then(function(result){
-								console.log(sails.sockets)
-								sails.sockets.broadcast('BAManager', { message: "Facebook " + userId + " just like" });
-								return res.json({});
-
-							}).catch(function(e){
-								return Service.catch(req, res, e, "ratingBook");
-							});
-						}
-					}			
-
-				})
-				.catch(function(e){
-					return Service.catch(req, res, e, "ratingBook");
-				});
-		  }
-		});
-		
-		
+			  	});
+			  }
+			});	
 	}
 };
