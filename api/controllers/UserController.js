@@ -18,7 +18,10 @@ module.exports = {
 		var condition = {
 			deleted: CONST.DELETED.NO,
 	  		account: account,
-	  		actived: CONST.ACTIVED.YES
+	  		actived: CONST.ACTIVED.YES,
+	  		role: {
+	  			">": 0
+	  		}
 		};
 
 	  User.findOne(condition)

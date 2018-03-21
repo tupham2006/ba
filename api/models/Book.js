@@ -163,12 +163,15 @@ module.exports = {
 											if(books && books.length > 0) {
 												// filter data
 												for(var i in books) {
-													for(var j in commentResult) {
-														if(books[i].id == commentResult[j].book_id) {
-															
-														}
-														books.comment = 
-													}
+														books.comment = [];
+                            if(commentResult && commentResult.length) {
+                              for(var j in commentResult) {
+                                if(books[i].id == commentResult[j].book_id) {
+                                  books.comment.push(commentResult[j]);
+                                }
+    													}
+                            }
+
 													bookList.push({
 														id: books[i].id,
 														name: books[i].name,
@@ -181,7 +184,8 @@ module.exports = {
 														love_time: books[i].love_time,
 														hate_time: books[i].hate_time,
 														type_name: books[i].type_name,
-														borrow_time: books[i].borrow_time
+                            borrow_time: books[i].borrow_time,
+														comment: books[i].comment
 													});
 												}
 											}

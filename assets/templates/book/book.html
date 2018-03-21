@@ -36,11 +36,12 @@
 				<colgroup>
 			     <col class="width-20 hidden-xs">
 			     <col class="text-center width-15 hidden-xs">
-			     <col class="text-center width-15 hidden-xs">
-			     <col class="text-center width-30 hidden-xs">
+			     <col class="text-center width-13 hidden-xs">
+			     <col class="text-center width-20 hidden-xs">
 			     <col class="text-center width-8 hidden-xs">
 			     <col class="text-center width-8 hidden-xs">
 			     <col class="text-center width-8 hidden-xs">
+			     <col class="text-center width-12 hidden-xs">
 			     <col class="text-center width-75 hidden-sm hidden-md hidden-lg">
 			     <col class="text-center width-25 hidden-sm hidden-md hidden-lg">
 			  </colgroup>
@@ -49,6 +50,7 @@
 					<th class="hidden-xs">Thể loại</th>	
 					<th class="hidden-xs">Tác giả</th>	
 					<th class="hidden-xs">Giới thiệu</th>	
+					<th class="hidden-xs">Hiện có</th>	
 					<th class="hidden-xs">Sử dụng</th>	
 					<th class="hidden-xs">Trong kho</th>	
 					<th></th>	
@@ -59,15 +61,17 @@
 						 	<div class="pull-left hidden-xs mr-5">
 								<book-img ng-model="book.image" av-size="40"></book-img>
 							</div>
-							<span class="ml-10 text-left" style="margin-top: 15px"> {{ book.name }}</span>
+							<span class="ml-10 text-left" style="margin-top: 10px"> {{ book.name }}</span>
 						</td>
 						<td class="text-center hidden-xs"> {{ book.type_name }} </td>
-						<td class="text-center hidden-xs" > <span>{{ book.author }}</span> </td>
+						<td class="hidden-xs"> <span> {{ book.author }} </span> </td>
 						<td class="hidden-xs"> <span> {{ book.intro }} </span> </td>
+						<td class="text-center hidden-xs" > <span>{{ book.current_quantity }}</span> </td>
 						<td class="text-center hidden-xs" > <span>{{ book.use_quantity }}</span> </td>
 						<td class="text-center hidden-xs" > <span>{{ book.inventory_quantity }}</span> </td>
 						<td class="text-center">
-							<button class="btn btn-blue" ng-click="openBookModal(book.id)" type="button">Sửa</button>
+							<button class="btn btn-blue" ng-click="openBookModal(book.id)" type="button"><i class="fa fa-pencil"></i></button>
+							<button class="btn btn-red" ng-click="deleteBook(book.id)" type="button"><i class="fa fa-trash"></i></button>
 						</td>
 					</tr>
 				</tbody>

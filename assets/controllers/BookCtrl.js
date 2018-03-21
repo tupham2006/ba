@@ -14,7 +14,7 @@ angular.module('ba').controller("BookCtrl",[
 
   	$scope.filter = {
   		typing: "",
-  		type_id: "0",
+  		type_id: 0,
   		limit: 10,
   		skip: 0,
   		currentPage: 1,
@@ -88,7 +88,17 @@ angular.module('ba').controller("BookCtrl",[
 		};
 
 		$scope.modalClose = function(){
-			 $scope.createBookModalInstance.close();
+      if($scope.createBookModalInstance ) {
+		    $scope.createBookModalInstance.close();
+      }
+		};
+
+		$scope.onSelectBook = function (id) {
+			for(var i in $scope.bookList){
+				if($scope.bookList[i].id == id){
+					$scope.bookInfo = angular.copy($scope.bookList[i]);
+				}
+			}
 		};
 
 		$scope.saveBook = function(){
@@ -124,6 +134,27 @@ angular.module('ba').controller("BookCtrl",[
 					toastr.error(err);
 				});
 		};
+
+    $scope.deleteBook = function (id) {
+      $scope.bookInfo = {};
+
+      for(var i in $scope.bookList){
+        if($scope.bookList[i].id == id){
+          $scope.bookInfo = angular.copy($scope.bookList[i]);
+        }
+      }
+
+      $scope.bookInfo.current_quantity = 0;
+      $scope.bookInfo.use_quantity = 0;
+      $scope.bookInfo.inventory_quantity = 0;
+
+      Dialog.confirmModal("Bạn có muốn xóa cuốn sách này không? Lưu ý: Sách sẽ không bị xóa hoàn toàn. Hành động này chỉ có tác dụng cập nhật số lượng sách về 0.")
+        .then(function (res) {
+          if(res) {
+            $scope.saveBook();
+          }
+        });
+    };
 
 		$scope.openBookType = function(){
 			$scope.bookTypeList = [];

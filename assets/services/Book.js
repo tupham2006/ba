@@ -83,7 +83,7 @@ function Book($rootScope, Request, $q, Store){
 			}
 
 			if(!data[i].remove) {
-				if(typeof type_id == "number" ){
+				if(type_id){
 					if(data[i].type_id != type_id) data[i].remove = true;
 				}
 			}

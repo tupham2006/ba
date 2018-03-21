@@ -10,7 +10,7 @@
 			<div class="label-control col-md-4 required-field">Tên sách</div>
 			<div class="col-md-8">
 				<input type="text" class="form-control" ng-change="checkExistBook()" name="bookName" ng-model="bookInfo.name" required>
-				<book-search ng-model="bookInfo.name" option = "{input: 'hide', status: 0 }" ></book-search>
+				<book-search ng-model="bookInfo.name" select-book="onSelectBook" option = "{input: 'hide', status: 0, hide_when_click: true }" ></book-search>
 				<span class="validation-error-label" ng-show="bookForm.bookName.$touched && bookForm.bookName.$invalid"> Bạn chưa nhập tên sách </span>
 			</div>
 		</div>
@@ -48,7 +48,7 @@
 		<div class="row mb-10">
 			<div class="label-control col-md-4">Giới thiệu</div>
 			<div class="col-md-8">
-				<textarea class="form-control" ng-model="bookInfo.intro" placeholder="Giới thiệu về cuốn sách, phần này sẽ xuất hiện ở phần review sách"></textarea>
+				<textarea class="form-control" ng-model="bookInfo.intro" placeholder="Giới thiệu về cuốn sách, phần này sẽ xuất hiện ở phần website"></textarea>
 			</div>
 		</div>
 		<div class="row mb-10">

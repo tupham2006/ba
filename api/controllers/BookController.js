@@ -4,64 +4,6 @@
 const CONST = require('../../const.js');
 module.exports = {
 
-	// getBookList: function (req, res) {
-	// 	var typing = req.param('typing') ? req.param('typing') : "";
-	// 	var typeId = parseInt(req.param('type_id')) ? parseInt(req.param('type_id')) : 0;
-	// 	var skip = parseInt(req.param('skip')) ? parseInt(req.param('skip')) : 0;
-	// 	var limit = parseInt(req.param('limit')) ? parseInt(req.param('limit')) : 10;
-	// 	var status = parseInt(req.param('status')); // status 0: Deleted book, status 1: exist book, status 2: using book
-
-	// 	// handle data
-	// 	typing = typing.trim();
-
-	// 	var search = {
-	// 		where: {},
-	// 		skip: skip,
-	// 		limit: limit,
-	// 		sort: "id desc"
-	// 	};
-
-	// 	if(typeId) search.where.type_id = typeId;
-
-	// 	if(typing) search.where.name = { "like": "%" + typing + "%" };
-
-	// 	switch(status){
-	// 		case 0: 
-	// 			search.where.use_quantity = 0;
-	// 			search.where.inventory_quantity = 0;
-	// 			break;
-	// 		case 1: 
-	// 			search.where.or = [
-	// 				{ use_quantity : {">": 0} },
-	// 				{ inventory_quantity : {">": 0} }
-	// 			];
-	// 			break;
-	// 		case 2:
-	// 			search.where.use_quantity = {">": 0};
-	// 	}
-
-
-	// 	Book.getBookList(search)
-	// 		.then(function(qBook){
-	// 			return qBook;
-	// 		})
-
-	// 		.then(function(qBook){
-	// 			return Book.countBook(search)
-	// 				.then(function(qCount){
-	// 					return res.json({
-	// 						book: qBook,
-	// 						count: qCount
-	// 					});
-	// 				});
-	// 		})
-
-	// 		.catch(function(err){
-	// 			console.log("BookController :: getBookList :: ", err);
-	// 			return res.json(CONST.CATCH);
-	// 		});
-	// },
-
 	getAllBookList: function(req, res){
 		var condition = {
 			where: {}, 

@@ -27,8 +27,8 @@ module.exports = {
 		};
 
 		if(actived <= CONST.ACTIVED.YES) search.where.actived = actived;
-		if(positionId >= 0) search.where.position_id = positionId;
-		if(departmentId >= 0) search.where.department_id = departmentId;
+		if(positionId) search.where.position_id = positionId;
+		if(departmentId) search.where.department_id = departmentId;
 
 		if(typing){
 			search.where.or = [

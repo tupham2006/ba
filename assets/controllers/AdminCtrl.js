@@ -15,8 +15,8 @@ angular.module('ba')
 			typing: "",
 			limit: 10,
 			skip: 0,
-			department_id: "0",
-			position_id: "0",
+			department_id: 0,
+			position_id: 0,
 			actived: 1
 		};
 
