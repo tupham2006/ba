@@ -207,6 +207,7 @@ angular.module('ba')
 		    		reader_name: "",
 		    		reader_mobile: "",
 		    		facutly_id: 1,
+		    		reader_gender: 0,
 		    		course: moment().get('years') - 1956
 		    	};
     		}
@@ -278,7 +279,8 @@ angular.module('ba')
 	    		status: $scope.borrowInfo.status,
 	    		user_id: $scope.user.id,
 	    		facutly_id: $scope.borrowInfo.facutly_id,
-	    		course: $scope.borrowInfo.course
+	    		course: $scope.borrowInfo.course,
+	    		reader_gender: $scope.borrowInfo.reader_gender
 	    	};
 
 	    	// when borrow now
@@ -342,6 +344,7 @@ angular.module('ba')
     					$scope.borrowInfo.reader_name = res.name;
     					$scope.borrowInfo.facutly_id = res.facutly_id;
     					$scope.borrowInfo.course = res.course;
+    					$scope.borrowInfo.reader_gender = res.gender;
     					$scope.existReader = true;
     				} else {
     					delete $scope.borrowInfo.reader_id;

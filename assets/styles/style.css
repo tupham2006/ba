@@ -267,14 +267,8 @@ button {
   font-weight: bold;
 }
 
-#borrowLeft .borrow-info .image {
-	width: 50px;
-	float: left;
-	margin-top: 15px;
-}
-
 #borrowLeft .borrow-info .content {
-	width: calc(100% - 50px);
+	width: 100%;
 	padding: 10px 0px 10px 10px;
 	float: left;
 }

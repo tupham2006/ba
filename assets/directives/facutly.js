@@ -6,9 +6,10 @@ angular.module('ba').directive('facutlySelect', [
 			require: "?ngModel",
 			scope: {
 				ngModel:"=",
-				editMode:"="
+				editMode:"=",
+				ngDisabled: '=?'
 			},
-			template: '<select ng-change="facutlyChange()" class="form-control" ng-model="ngModel" convert-to-number><option value="0" ng-hide="editMode">Tất cả các khoa</option><option ng-repeat="facutly in facutlyList" value={{facutly.id}}>{{facutly.name}}</option></select>',
+			template: '<select ng-class="{ \'disabled\' : ngDisabled}" ng-change="facutlyChange()" class="form-control" ng-model="ngModel" convert-to-number><option value="0" ng-hide="editMode">Tất cả các khoa</option><option ng-repeat="facutly in facutlyList" value={{facutly.id}}>{{facutly.name}}</option></select>',
 			link: function(scope, attr, ele, ctrl){
 				Facutly.getFacutlyList()
 					.then(function(facutlys){

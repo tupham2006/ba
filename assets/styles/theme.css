@@ -182,7 +182,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
-select::-ms-expand {	display: none; }
+/*select::-ms-expand {	display: none; }
 select{
     -webkit-appearance: none;
     appearance: none;
