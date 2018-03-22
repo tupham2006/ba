@@ -31,10 +31,10 @@
 			     <col class="width-15 hidden-xs">
 			     <col class="width-10 hidden-xs">
 			     <col class="text-center width-10 hidden-xs">
-			     <col class="text-center width-20 hidden-xs">
-			     <col class="text-center width-8 hidden-xs">
 			     <col class="text-center width-15 hidden-xs">
 			     <col class="text-center width-8 hidden-xs">
+			     <col class="text-center width-15 hidden-xs">
+			     <col class="text-center width-12 hidden-xs">
 			     <col class="text-center width-40 hidden-sm hidden-md hidden-lg">
 			     <col class="text-center width-35 hidden-sm hidden-md hidden-lg">
 			     <col class="text-center width-25 hidden-sm hidden-md hidden-lg">
@@ -42,10 +42,10 @@
 				<thead>
 					<th>Họ và tên</th>
 					<th>Số điện thoại</th>	
-					<th class="hidden-xs">Lượt mượn</th>				
 					<th class="hidden-xs">Khoa</th>	
 					<th class="hidden-xs">Giới tính</th>	
 					<th class="hidden-xs">Ghi chú</th>	
+					<th class="hidden-xs">Lượt mượn</th>				
 					<th></th>	
 				</thead>
 				<tbody>
@@ -57,12 +57,13 @@
 							</span> 
 						</td>
 						<td> {{ reader.mobile | tel }} </td>
-						<td class="hidden-xs"> <span>{{ reader.borrow_time }}</span> </td>
 						<td class="hidden-xs"> <span> <facutly-html ng-model="reader.facutly_id"></facutly-html> </span> </td>
 						<td class="hidden-xs"><gender-html ng-model="reader.gender"></gender-html></td>
 						<td class="hidden-xs"> <span>{{ reader.note }}</span> </td>
+						<td class="hidden-xs"> <span>{{ reader.borrow_time }}</span> </td>
 						<td class="text-center">
-							<button class="btn btn-blue" ng-click="openReaderModal(reader.id)" type="button">Sửa</button>
+							<button class="btn btn-blue" ng-click="openReaderModal(reader.id)" type="button"><i class="fa fa-pencil"></i></button>
+							<button class="btn btn-red" ng-click="deleteReader(reader.id)" type="button"><i class="fa fa-trash"></i></button>
 						</td>
 					</tr>
 				</tbody>

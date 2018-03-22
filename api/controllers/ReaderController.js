@@ -1,48 +1,20 @@
 const CONST = require('../../const.js');
 module.exports = {
 	getReaderList: function (req, res) {
-			var actived = parseInt(req.param('actived'));
-			var typing = req.param('typing') ? req.param('typing') : "";
-			var skip = parseInt(req.param('skip')) ? parseInt(req.param('skip')) : 0;
-			var limit = parseInt(req.param('limit')) ? parseInt(req.param('limit')) : 10;
-			var facutly_id = req.param('facutly_id');
+		Reader.getReaderList()
+			.then(function(qReader){
 
-			// var conditions = {
-			// 	where: {
-			// 		actived: CONST.ACTIVED.YES				
-			// 	},
-			// 	skip: skip,
-			// 	limit: limit,
-			// 	sort: "id desc"
-			// };
-
-			// if(facutly) conditions.where.facutly = facutly;
-
-			// if(actived == 0) conditions.where.actived = actived;
-
-			// if(typing){
-			// 	conditions.where.or = [
-			// 		{ name: {"like": "%" + typing + "%" } },
-			// 		{ mobile: {"like": "%" + typing + "%" } }
-			// 	];	
-			// } 
-
-			Reader.getReaderList()
-				.then(function(qReader){
-
-					Reader.countReader()
-						.then(function(qCount){
-							return res.json({
-								reader: qReader,
-								count: qCount
-							});
+				Reader.countReader()
+					.then(function(qCount){
+						return res.json({
+							reader: qReader,
+							count: qCount
 						});
-				})
+					});
+			})
 
-
-			.catch(function(err){
-				console.log("ReaderController :: getReaderList :: ", err);
-				return res.json(CONST.CATCH);
+			.catch(function(e){
+				return Service.catch(req, res, e, "getReaderList");
 			});
 	},
 
@@ -52,7 +24,7 @@ module.exports = {
 			return;
 		}
 		
-		Reader.getReaderInfo({ mobile : mobile })
+		Reader.getReaderInfo({ mobile : mobile, deleted: 0 })
 			.then(function(result){
 				return res.json({
 					reader: result
@@ -144,4 +116,30 @@ module.exports = {
 				return Service.catch(req, res, e, "updateReader");
 			});
 	},
+
+	deleteReader: function (req, res) {
+		// Get data from client
+		var id = parseInt(req.param("id"));
+
+		if(!id){
+			return Service.catch(req, res, {message: "Vui lòng nhập ID bạn đọc"}, "updateReader");
+		}
+
+		Reader.deleteReader(id)
+			.then(function(reader){ 
+				var returnData = {};
+
+				if(reader && reader.length) {
+					returnData = reader[0];
+				}
+
+				return res.json({
+					reader: returnData
+				});
+			})
+
+			.catch(function(e){
+				return Service.catch(req, res, e, "deleteReader");
+			});
+	}
 };

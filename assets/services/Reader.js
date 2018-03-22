@@ -7,7 +7,8 @@ function Reader(Request, $q, $rootScope, Store){
 	var service = {
 		getReaderList: getReaderList,
 		saveReader: saveReader,
-		getReaderByMobile: getReaderByMobile
+		getReaderByMobile: getReaderByMobile,
+		deleteReader: deleteReader
 	};
 
 	var readerList;
@@ -78,7 +79,7 @@ function Reader(Request, $q, $rootScope, Store){
 				}			 
 			}
 			
-			if(!data[i].remove && parseInt(facutly_id) >= 0){
+			if(!data[i].remove && facutly_id){
 				if(facutly_id != data[i].facutly_id) data[i].remove = true;
 			}
 
@@ -120,33 +121,6 @@ function Reader(Request, $q, $rootScope, Store){
 		df.resolve(readerInfo); 
 		return df.promise;
 	}
-
-	// function getReaderInfo(params){
-	// 	var df = $q.defer();
-	// 	if(readerList.length){
-	// 		for(var i in readerList){
-	// 			if(readerList[i].id == params.id){
-	// 				df.resolve(readerList[i]);
-	// 			}
-	// 		}
-	// 	} else {
-	// 		Request.post("/reader/getInfo", params)
-	// 			.then(function(res){
-
-	// 				if(res && !res.error && res.reader){
-	// 					df.resolve(res.reader);
-	// 				} else {
-	// 					df.reject(res.message);
-	// 				}
-	// 			})
-
-	// 			.catch(function(err){
-	// 				df.reject(err.message);
-	// 			});
-	// 	}
-
-	// 	return df.promise;
-	// }
 
 	/**
 	 * Save reader: update or create new
@@ -191,5 +165,23 @@ function Reader(Request, $q, $rootScope, Store){
 		return df.promise;
 	}
 
+	function deleteReader(params) {
+		var df = $q.defer();
+		Request.post("/reader/delete", params)
+			.then(function (res) {
+				if(res && res.reader && res.reader.id) {
+					Store.readerTable.delete = res.reader.id;
+					df.resolve();					
+				} else {
+					df.reject(res.message);	
+				}
+			})
+			
+			.catch(function(err){
+				df.reject(err.message);
+			});
+
+		return df.promise;
+	}
 	return service;
 }

@@ -289,6 +289,11 @@ module.exports.routes = {
     action: "updateReader"
   },
 
+  'post /reader/delete': {
+    controller: "ReaderController",
+    action: "deleteReader"
+  },
+
   /*=====================================
   =            Report register          =
   =====================================*/

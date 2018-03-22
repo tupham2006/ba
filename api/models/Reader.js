@@ -11,7 +11,8 @@ module.exports = {
     borrow_time: {type: 'integer', defaultsTo: 0 },
     course: {type: 'integer', defaultsTo: 0 },
     gender : { type: "integer", max: 2, defaultsTo: 0}, // 0: unknown, 1: male, 2: female
-    actived : { type: "integer", defaultsTo: 1 }, // user is active in club 
+    actived : { type: "integer", defaultsTo: 1 },
+    deleted : { type: "integer", defaultsTo: 0 }, 
     note: {type: 'string', size: 10000, maxLength: 10000, defaultsTo: '' },
     createdAt: {type: "datetime", columnName: "created_at" },
     updatedAt: {type: "datetime", columnName: "updated_at" }
@@ -19,7 +20,9 @@ module.exports = {
 
   getReaderList: function () {
     return new Promise(function(resolve, reject){
-      Reader.find()
+      Reader.find({
+        deleted: 0
+      })
         .exec(function(err, result){
           if(err) return reject(err);
           return resolve(result);
@@ -155,6 +158,16 @@ module.exports = {
         if(err) return reject(err);
         return resolve(result);       
       });   
+    });
+  },
+
+  deleteReader: function (id) {
+    return new Promise(function (resolve, reject) {
+      Reader.update({id: id}, {deleted: 1})
+        .exec(function (err, result) {
+          if(err ) return reject(err);
+          return resolve(result);
+        });
     });
   }
 };

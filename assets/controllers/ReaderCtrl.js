@@ -82,5 +82,20 @@ angular.module('ba')
 					toastr.error(e);
 				});
 		};
+
+		$scope.deleteReader = function (id) {
+			Dialog.confirmModal("Bạn có muốn xóa bạn đọc này không?")
+				.then(function (ok) {
+					if(ok) {
+						Reader.deleteReader({id : id})
+							.then(function() {
+								$scope.getReaderList();
+							})
+							.catch(function(e){
+								toastr.error(e);
+							});
+					}
+				});
+		}
 		
 	}]);

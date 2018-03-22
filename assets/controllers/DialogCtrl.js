@@ -8,6 +8,6 @@ angular.module('ba').controller("DialogCtrl", [
 		$scope.action = function(action){
 			$scope.action = action;
 			$uibModalInstance.close(action);
-		}
+		};
 	}
 ]);
