@@ -106,7 +106,8 @@ module.exports = {
 
 		return new Promise(function(resolve, reject){
 			var condition = {
-				mobile: data.reader_mobile
+				mobile: data.reader_mobile,
+				deleted: 0
 			};
 
 			var readerData = {
@@ -118,7 +119,7 @@ module.exports = {
 
 			// find reader by id
 			if(data.reader_id){
-				Reader.findOne({id: data.reader_id})
+				Reader.findOne({id: data.reader_id, deleted: 0})
 					.exec(function(err, readerById){
 						if(err) return reject(err);
 						if(readerById){ // update
@@ -340,7 +341,7 @@ module.exports = {
 			sql.push("INNER JOIN reader ON borrow.reader_id = reader.id ");
 
 			// where
-			sql.push("WHERE deleted = 0 AND borrow_date >= ? ");
+			sql.push("WHERE borrow.deleted = 0 AND borrow_date >= ? ");
 
 			sql.push("AND borrow_date <= ? ");
 
@@ -380,7 +381,7 @@ module.exports = {
 			sql.push("INNER JOIN reader ON borrow.reader_id = reader.id ");
 
 			// where
-			sql.push("WHERE deleted = 0 AND borrow_date >= ? ");
+			sql.push("WHERE borrow.deleted = 0 AND borrow_date >= ? ");
 
 			sql.push("AND borrow_date <= ? ");
 
@@ -418,7 +419,7 @@ module.exports = {
 			sql.push("FROM borrow ");
 
 			// where
-			sql.push("WHERE deleted = 0 AND borrow_date >= ? ");
+			sql.push("WHERE borrow.deleted = 0 AND borrow_date >= ? ");
 
 			sql.push("AND borrow_date <= ? ");
 

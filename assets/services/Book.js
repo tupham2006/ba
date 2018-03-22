@@ -64,7 +64,7 @@ function Book($rootScope, Request, $q, Store){
 		
 		var typing = param.typing ? param.typing : "";
 		var type_id = param.type_id;
-		var status = typeof param.status == "number" ? param.status : 2;
+		var status = param.status ? param.status : 2;
 		var skip = param.skip ? param.skip : 0;
 		var limit = param.limit ? param.limit : 10;
 

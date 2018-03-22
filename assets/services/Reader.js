@@ -8,7 +8,8 @@ function Reader(Request, $q, $rootScope, Store){
 		getReaderList: getReaderList,
 		saveReader: saveReader,
 		getReaderByMobile: getReaderByMobile,
-		deleteReader: deleteReader
+		deleteReader: deleteReader,
+		getReaderById: getReaderById
 	};
 
 	var readerList;
@@ -113,6 +114,21 @@ function Reader(Request, $q, $rootScope, Store){
 		var readerInfo;
 		for(var i in readerList){
 			if(readerList[i].mobile == param.mobile){
+				readerInfo = readerList[i];
+				break;
+			} 
+		}
+		
+		df.resolve(readerInfo); 
+		return df.promise;
+	}
+
+	function getReaderById(id){
+		var df = $q.defer();
+		var readerInfo;
+
+		for(var i in readerList){
+			if(readerList[i].id == id){
 				readerInfo = readerList[i];
 				break;
 			} 

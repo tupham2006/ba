@@ -96,6 +96,23 @@ angular.module('ba')
 							});
 					}
 				});
-		}
-		
+		};
+
+
+		$scope.openReaderInfo = function (id) {
+			$scope.readerInfoInstance = $uibModal.open({
+				size: "lg",
+				scope: $scope,
+				templateUrl: "/templates/modal/reader-info.html",
+				controller: "ReaderInfoCtrl",
+				resolve: {
+					reader_id: function(){
+						return id;
+					}
+				}
+			});
+
+			$scope.readerInfoInstance.result.then(function(){ }, function () {});
+		};
+
 	}]);

@@ -4,7 +4,7 @@ module.exports = {
 		Reader.getReaderList()
 			.then(function(qReader){
 
-				Reader.countReader()
+				Reader.countReader({deleted: 0})
 					.then(function(qCount){
 						return res.json({
 							reader: qReader,

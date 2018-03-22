@@ -89,9 +89,9 @@ angular.module('ba')
 
 	    $scope.borrowList = [];
 
-	    $scope.init = function(){
+	    $scope.init = function(res){
 	    	$scope.getBookList();
-	    	$scope.getBorrowList();
+	    	$scope.getBorrowList(res);
 	    	$scope.getReaderList();
 	    };
 
@@ -303,8 +303,7 @@ angular.module('ba')
 	    	Borrow.saveBorrow(params)
 	    		.then(function(res){
 	    			// res is borrow id
-	    			$scope.getBorrowList(res);
-	    			$scope.getBookList();
+	    			$scope.init(res);
 	    		})
 
 	    		.catch(function(e){
@@ -375,6 +374,22 @@ angular.module('ba')
 	    $scope.calBorrowTime = function(){
 		    $scope.borrowInfo.warning_borrow_time = Math.max(0, moment($scope.payDate.date).diff(moment($scope.borrowDate.date), "milliseconds"));
 	    };
+
+	    $scope.openReaderInfo = function (id) {
+			$scope.readerInfoInstance = $uibModal.open({
+				size: "lg",
+				scope: $scope,
+				templateUrl: "/templates/modal/reader-info.html",
+				controller: "ReaderInfoCtrl",
+				resolve: {
+					reader_id: function(){
+						return id;
+					}
+				}
+			});
+
+			$scope.readerInfoInstance.result.then(function(){ }, function () {});
+		};
 
 	    $scope.init();
 	  }]);

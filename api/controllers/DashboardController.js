@@ -26,7 +26,8 @@ module.exports = {
 		})
 		.then(function(){
 			return Reader.countReader({
-				actived: 1
+				actived: 1,
+				deleted: 0
 			})
 			.then(function(readerCount){
 				returnData.reader_count = readerCount;

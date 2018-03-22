@@ -20,7 +20,7 @@
 				</div>
 				<div class="clear"></div>
 				<div class="borrow-info" ng-click="showBorrowDetail(borrow.id)" ng-class="{'borrow-hightlight': borrow.is_selected, 'borrow-borrowed-status': !borrow.status }">
-					<div class="image">
+					<div class="image" ng-click='openReaderInfo(borrow.reader_id)'>
 						<avatar ng-model="reader.image" av-size="50" av-type="'user'" av-shape="50"></avatar>
 					</div>
 					<div class="content">
@@ -48,7 +48,7 @@
 		</div>
 	</div>
 </div>
-<div  id="borrowCenter" name="myForm">
+<div id="borrowCenter" name="myForm">
 	<div class="content">
 		<form name="borrowForm" ng-submit="saveBorrow()" novalidate>
 		<div class="row">
@@ -107,11 +107,11 @@
 						<label class="label-control col-md-4">Trạng thái</label>
 						<div class="col-xs-8">
 							<span class="mr-20">
-								<label class="cursor-pointer text-normal" for="status1">Đang mượn</label>
+								<label class="cursor-pointer text-normal" for="status1">Mượn</label>
 								<input type="radio" class="cursor-pointer" id="status1" ng-click="whenChangeStatus()" ng-model="borrowInfo.status" name="status" ng-value="1">
 							</span> 
 							<span>
-								<label class="cursor-pointer text-normal" for="status0">Đã trả</label> 
+								<label class="cursor-pointer text-normal" for="status0">Trả</label> 
 								<input type="radio" class="cursor-pointer" id="status0" ng-click="whenChangeStatus()" name="status" ng-model="borrowInfo.status" ng-value="0">
 							</span>
 						</div>

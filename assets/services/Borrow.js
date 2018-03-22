@@ -61,10 +61,12 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 	function getBorrowListStore	(param) {
 
 		var typing = (param.typing ? param.typing : "").toString().trim();
+		if(!param.date) param.date = {};
 		var startDate = param.date.startDate;
 		var endDate = param.date.endDate;
 		var skip = param.skip ? param.skip : 0;
 		var limit = param.limit ? param.limit : 10;
+		var reader_id = param.reader_id;
 
 		var data = angular.copy(borrowList);
 		var filterList = [];
@@ -74,8 +76,10 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 		for(var i in data){
 
 			// filter by date
-			if(new Date(data[i].borrow_date) < new Date(startDate) || new Date(data[i].borrow_date) > new Date(endDate)){
-				data[i].remove = true;
+			if(startDate || endDate) {
+				if(new Date(data[i].borrow_date) < new Date(startDate) || new Date(data[i].borrow_date) > new Date(endDate)){
+					data[i].remove = true;
+				}
 			}
 
 			// filter typing
@@ -87,6 +91,12 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 				 data[i].remove = true;
 				}
 			}
+
+			if(!data[i].remove && reader_id) {
+				if(data[i].reader_id != reader_id) {
+					data[i].remove = true;
+				}
+			} 
 
 			// push to list
 			if(!data[i].remove){

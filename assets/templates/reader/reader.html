@@ -50,7 +50,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat = "reader in readerList track by $index">
-						<td> 
+						<td ng-click="openReaderInfo(reader.id)"> 
 							<span>
 							 	{{ reader.name }} 
 								<text ng-show="reader.is_user">(CLB)</text>

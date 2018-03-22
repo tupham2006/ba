@@ -58,7 +58,7 @@ module.exports = {
     return new Promise(function(resolve, reject){
     
       // FInd exist mobile
-      Reader.findOne({mobile: data.mobile})
+      Reader.findOne({ mobile: data.mobile, deleted: 0 })
         .exec(function(err, reader){
           if(err) return reject(err);
 
@@ -88,7 +88,8 @@ module.exports = {
   updateReader: function(id, data){
 
     var condition = {
-      id: id
+      id: id,
+      deleted: 0
     };
 
     return new Promise(function(resolve, reject){
@@ -108,7 +109,8 @@ module.exports = {
             // Find exist mobile
             Reader.findOne({
               id: { "!": id }, 
-              mobile: data.mobile
+              mobile: data.mobile,
+              deleted: 0
              })
               .exec(function(err, reader){
 
@@ -147,7 +149,7 @@ module.exports = {
       sql.push("FROM reader ");
 
       // where
-      sql.push("WHERE actived = 1 ");
+      sql.push("WHERE actived = 1 AND deleted = 0 ");
 
       // group
       sql.push("GROUP BY facutly_id ");
