@@ -60,8 +60,6 @@ module.exports = {
 					data.reader_id = readerData.id;
 					data.reader_name = readerData.name;
 					data.reader_mobile = readerData.mobile;
-					data.facutly = readerData.facutly;
-					data.course = readerData.course;
 
 					// Find deposit
 					Deposit.findOne({id: data.deposit_id})
@@ -114,7 +112,8 @@ module.exports = {
 				mobile: data.reader_mobile,
 				name: data.reader_name,
 				facutly_id: data.facutly_id,
-				course: data.course
+				course: data.course,
+				gender: data.reader_gender
 			};
 
 			// find reader by id

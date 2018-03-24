@@ -30,6 +30,7 @@ module.exports = {
 			reader_id : parseInt(req.param("reader_id")),
 			reader_mobile: (parseInt(req.param("reader_mobile")) ? req.param("reader_mobile") : "").toString().replace(/^0-9/g, ""),
 			reader_name: req.param("reader_name") ? req.param("reader_name") : "",
+			reader_gender: parseInt(req.param("reader_gender")) ? parseInt(req.param("reader_gender")) : 0,
 			note: req.param("note"),
 			deposit_id: parseInt(req.param("deposit_id")),
 			book: req.param("book"),
