@@ -27,7 +27,8 @@ angular.module('ba')
 	  };
 
 		$scope.getReaderList = function(){
-			Reader.getReaderList($scope.filter)
+			var params = $scope.filter;
+			Reader.getReaderList(params)
 				.then(function(readers){
 					$scope.readerList = readers.reader;
 					$scope.readerCount = readers.count;
@@ -114,5 +115,13 @@ angular.module('ba')
 
 			$scope.readerInfoInstance.result.then(function(){ }, function () {});
 		};
+
+		if (!io.socket.readerEventReady) {
+    	io.socket.readerEventReady = true;
+			io.socket.on("reader", function(res){
+				Store.readerTable.syncData(res.action, res.data);
+				$scope.getReaderList();
+			});
+		}
 
 	}]);

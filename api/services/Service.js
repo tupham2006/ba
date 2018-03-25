@@ -14,4 +14,8 @@ module.exports = {
 			message: e.message
 		});
 	},
+
+	sync: function(tableName, action, data) {
+		sails.sockets.broadcast('Admin', tableName, { data: data, action: action });
+	}
 };

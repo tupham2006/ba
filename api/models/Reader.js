@@ -6,7 +6,7 @@ module.exports = {
     id: { type: "integer", primaryKey: true, autoIncrement: true },
     mobile : { type: "string", size:11, required: true, unique: true, minLength: 10, maxLength: 11, defaultsTo: ''},
     name : { type: "string", size: 50, required: true, maxLength: 50, defaultsTo: ''},
-    facutly_id: {type: 'integer', defaultsTo: 0 },
+    facutly_id: {type: 'integer', defaultsTo: 1 },
     is_user: { type: 'integer', defaultsTo: 0 },
     borrow_time: {type: 'integer', defaultsTo: 0 },
     course: {type: 'integer', defaultsTo: 0 },
@@ -171,5 +171,15 @@ module.exports = {
           return resolve(result);
         });
     });
+  },
+
+  afterCreate:function (value, cb) {
+    Service.sync('reader', "create", value);
+    cb();
+  },
+
+  afterUpdate:function (value, cb) {
+    Service.sync('reader', "update", value);
+    cb();
   }
 };

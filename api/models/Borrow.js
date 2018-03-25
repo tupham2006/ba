@@ -438,5 +438,51 @@ module.exports = {
 				return resolve(result);				
 			});		
 		});
-	}
+	},
+
+	increaseReaderBorrowTime: function (id) {
+		return new Promise(function (resolve, reject) {
+			Reader.query("UPDATE reader SET borrow_time = borrow_time + 1 WHERE id = ?", [id], function (err, result) {
+				if(err) return reject(err);
+				return resolve(result);
+			});
+		});
+	},
+
+	reduceReaderBorrowTime: function (value) {
+		return new Promise(function (resolve, reject) {
+			if(value.deleted == 1) {
+				Reader.query("UPDATE reader SET borrow_time = borrow_time - 1 WHERE id = ?", [value[0].id], function (err, result) {
+					if(err) return reject(err);
+					return resolve(result);
+				});
+			} else {
+				return resolve(result);
+			}
+		});
+	},
+
+	afterCreate:function (value, cb) {
+		updateReaderBorrowTime(value.reader_id)
+			.then(function(){
+    		Service.sync('borrow', "create", value);
+    		cb();
+			})
+			.catch(function(err){
+				cb();
+				console.log("updateReaderBorrowTime: ", err);
+			});
+  },
+
+  afterUpdate: function (value, cb) {
+			updateReaderBorrowTime(value)
+				.then(function(){
+	    		Service.sync('borrow', "create", value);
+	    		cb();
+				})
+				.catch(function(err){
+					cb();
+					console.log("updateReaderBorrowTime: ", err);
+				});
+  }
 };

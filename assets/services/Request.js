@@ -126,10 +126,6 @@ io.socket.on('error', function(){
   isOnline = false;
 });
 
-io.socket.on('message', function(res){
-	CONST.notification(res);
-});
-
 // when browser trying to connect to server
 io.socket.on('reconnecting', function(){
   isOnline = false;

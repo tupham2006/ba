@@ -6,7 +6,9 @@ angular.module('ba').controller("BookCtrl",[
   "$uibModal",
   "BookType",
   "Request",
-  function($scope, Book, $rootScope, Dialog, $uibModal, BookType, Request){
+  "Store",
+  "$timeout",
+  function($scope, Book, $rootScope, Dialog, $uibModal, BookType, Request, Store, $timeout){
 
 		$rootScope.activePage = "book";
 		$scope.bookList = [];
@@ -42,9 +44,11 @@ angular.module('ba').controller("BookCtrl",[
 
 		$scope.getBookList = function(){
 			var param = $scope.filter;
+
 			Book.getBookList(param)
 				.then(function(res){
 					$scope.bookList = res.books;
+					// console.log("$scope.bookList", $scope.bookList);
 					$scope.bookCount = res.count;
 				})
 
@@ -124,10 +128,8 @@ angular.module('ba').controller("BookCtrl",[
 
 			Book.saveBook(params)
 				.then(function(res){
-
-					$scope.modalClose();
-
 					$scope.getBookList();
+					$scope.modalClose();
 				})
 
 				.catch(function(err){
@@ -152,6 +154,7 @@ angular.module('ba').controller("BookCtrl",[
         .then(function (res) {
           if(res) {
             $scope.saveBook();
+            $scope.getBookList();
           }
         });
     };
@@ -218,4 +221,16 @@ angular.module('ba').controller("BookCtrl",[
 	    		toastr.error(e);
 	    	});
 		};
+
+		 if (!io.socket.bookEventReady) {
+    	io.socket.bookEventReady = true;
+			io.socket.on("book", function(res){
+				Store.bookTable.syncData(res.action, res.data);
+				if(timeout) $timeout.cancel();
+				var timeout = $timeout(function(){
+					$scope.getBookList();
+				},200);
+			});
+  	}
+
 	}]);

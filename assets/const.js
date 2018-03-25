@@ -84,7 +84,3 @@ CONST.PROFILE_QUESTION = [
   "Bạn thích nhất môn học gì?",
   "Bạn có thể kể một kỷ niệm đẹp của bạn đưọc chứ?"
 ];
-
-CONST.NOTIFICATION = function(res) {
-
-};

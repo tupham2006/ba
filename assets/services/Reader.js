@@ -68,6 +68,7 @@ function Reader(Request, $q, $rootScope, Store){
 		for(var i in data){
 
 			// filter by typing
+			if(data[i].deleted) data[i].remove = true;
 			
 			if(typing && !isNaN(typing)){
 				
@@ -148,7 +149,7 @@ function Reader(Request, $q, $rootScope, Store){
 			.then(function(res){
 
 				if(res && !res.error && res.reader){
-					Store.readerTable.update = res.reader;
+					Store.readerTable.syncData("update", res.reader);
 
 					df.resolve();
 				} else {
@@ -165,7 +166,7 @@ function Reader(Request, $q, $rootScope, Store){
 			.then(function(res){
 				
 				if(res && !res.error){
-					Store.readerTable.create = res.reader;
+					Store.readerTable.syncData("create", res.reader);
 					df.resolve();
 				} else {
 					df.reject(res.message);
@@ -186,7 +187,7 @@ function Reader(Request, $q, $rootScope, Store){
 		Request.post("/reader/delete", params)
 			.then(function (res) {
 				if(res && res.reader && res.reader.id) {
-					Store.readerTable.delete = res.reader.id;
+					Store.readerTable.syncData("delete", res.reader.id);
 					df.resolve();					
 				} else {
 					df.reject(res.message);	

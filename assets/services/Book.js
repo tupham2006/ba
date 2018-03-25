@@ -128,7 +128,8 @@ function Book($rootScope, Request, $q, Store){
 			Request.post("/book/update", data)
 				.then(function(res){
 					if(!res.error){
-						Store.bookTable.update = res.book;
+						
+						Store.bookTable.syncData("update", res.book);
 						df.resolve();
 					} else {
 						df.reject(res.message);
@@ -142,9 +143,9 @@ function Book($rootScope, Request, $q, Store){
 		} else {
 			Request.post("/book/create", data)
 				.then(function(res){
+					console.log("res", res);
 					if(!res.error){
-						Store.bookTable.create = res.book;
-						
+						Store.bookTable.syncData("create", res.book);
 						df.resolve();
 					} else {
 						df.reject(res.message);

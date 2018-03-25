@@ -21,6 +21,7 @@ function Store(){
 	function Table(){
 		this.newTable = {
 				$list: this.$list,
+				$syncIds: [],
 				get list(){
 					var newList = Object.assign([],this.$list);
 					return newList;
@@ -31,14 +32,23 @@ function Store(){
 				},
 
 				set create(data){
-					var dataArray;
+					console.log("data", data);
+					var dataArray = [];
 
 					if(Array.isArray(data)){// create with array type
-					
-						dataArray = data;
+						for(var i in data) {
+							if(this.$syncIds.indexOf(data[i].id) == -1) {
+								this.$syncIds.push(data[i].id);
+								dataArray.push(data[i]);
+							}
+						}
 
 					} else { // crete with object
-						dataArray = [data];
+						if(this.$syncIds.indexOf(data.id) == -1) {
+							this.$syncIds.push(data.id);
+							dataArray.push(data);
+						}
+
 					}
 					this.$list = dataArray.concat(this.$list);
 				},
@@ -59,6 +69,10 @@ function Store(){
 						}
 					}
 					this.$list = newData;
+				},
+
+				syncData: function(action, data) {
+					this[action] = data;
 				}
 		};
 	}

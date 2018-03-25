@@ -2,7 +2,9 @@ angular.module('ba').controller("DashboardCtrl", [
 	"$scope",
 	"Dashboard",
 	"Facutly",
-	function($scope, Dashboard, Facutly){
+	"$state",
+	"$rootScope",
+	function($scope, Dashboard, Facutly, $state, $rootScope){
 		$rootScope.activePage = "dashboard";
 
 		$scope.date = {
@@ -123,6 +125,12 @@ angular.module('ba').controller("DashboardCtrl", [
 				.catch(function(err){
 					toastr.error(err);
 				});
+		};
+
+		$scope.gotoPage = function (type) {
+			if($rootScope && $rootScope.user && $rootScope.user.role > 2) {
+				$state.go(type);
+			}
 		};
 
 		$scope.init();

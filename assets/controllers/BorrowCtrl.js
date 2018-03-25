@@ -8,7 +8,8 @@ angular.module('ba')
 	  "Book",
 	  "Reader",
 	  "$timeout",
-	  function($scope, Borrow, $rootScope, Dialog, $uibModal, Book, Reader, $timeout){
+	  "BorrowBook",
+	  function($scope, Borrow, $rootScope, Dialog, $uibModal, Book, Reader, $timeout, BorrowBook){
 	  	$rootScope.activePage = 'borrow';
 
 	  	$scope.borrowList = [];
@@ -113,12 +114,39 @@ angular.module('ba')
 			    	$scope.showBorrowDetail(id);
 	    		})
 
+	    		.then(function(){
+	    			BorrowBook.getBorrowBookList()
+							.then(function(book_borrows){
+
+								var borrowBookObj = {};
+								for(var o in book_borrows){
+									if(new Date(book_borrows[o].borrow_date) <= new Date(params.date.endDate) && new Date(book_borrows[o].borrow_date) >= new Date(params.date.startDate)){
+										borrowBookObj[book_borrows[o].borrow_id] = book_borrows[o];
+									}
+								}
+
+								// get borrow book
+								for(var k in $scope.borrowList){
+									$scope.borrowList[k].book = [];
+
+									if(borrowBookObj[$scope.borrowList[k].id]){
+										$scope.borrowList[k].book.push({
+											id: book_borrows[o].id,
+											book_id: book_borrows[o].book_id,
+											book_name: book_borrows[o].book_name,
+											status: book_borrows[o].status
+										});
+									}
+								}
+							});
+	    		})
+
 	    		.catch(function(err){
 	    			toastr.error(err);
 	    		});
 	    };
 
-	    $scope.getBookList = function(action){
+	    $scope.getBookList = function(action, syncData){
 	    	
 	    	var params = angular.copy($scope.bookFilter);
 					    	
@@ -127,6 +155,8 @@ angular.module('ba')
 	    	} else {
 	    		$scope.bookList = [];
 	    	}
+
+	    	params.sync_data = syncData;
 
 	    	Book.getBookList(params)
 	    		.then(function(resBook){
@@ -140,8 +170,8 @@ angular.module('ba')
 	    };
 
 	    // get list to store
-	    $scope.getReaderList = function(){
-	    	Reader.getReaderList()
+	    $scope.getReaderList = function(syncData){
+	    	Reader.getReaderList({}, syncData)
 	    		.then(function(res){
 	    		});
 	    };
@@ -394,5 +424,5 @@ angular.module('ba')
 			$scope.readerInfoInstance.result.then(function(){ }, function () {});
 		};
 
-	    $scope.init();
-	  }]);
+    $scope.init();
+  }]);

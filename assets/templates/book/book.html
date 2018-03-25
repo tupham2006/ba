@@ -24,8 +24,8 @@
 					</select>
 				</div>
 				<div class="col-md-3 mb-10">
-					<span class="pull-right count">Tổng số: {{ bookCount }}</span>
-					<ul uib-pagination class="m-0 pull-right" total-items="bookCount" force-ellipses="true" items-per-page="filter.limit" ng-model="filter.currentPage" direction-links="false" ng-change="changePage()"></ul>
+					<span class="pull-right count">Tổng: {{ bookCount }}</span>
+					<ul uib-pagination class="m-0 pull-right" total-items="bookCount" force-ellipses="true" max-size="2" boundary-link-numbers="true" items-per-page="filter.limit" ng-model="filter.currentPage" direction-links="false" ng-change="changePage()"></ul>
 				</div>
 			</div>
 		</div>

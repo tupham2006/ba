@@ -42,6 +42,14 @@ module.exports.policies = {
     'getPositionList': "isAuth"
   },
 
+  'DepositController': {
+    '*': 'isAuth',
+  }, 
+
+  'FacutlyController': {
+    '*': 'isAuth',
+  }, 
+
   'PublicController': {
     '*': true
   },
@@ -49,7 +57,19 @@ module.exports.policies = {
   'AdminController': {
     '*': 'isAdmin',
     'getUserList': 'isMod'
-  }
+  },
+
+  'ReportController': {
+    '*': 'isAuth',
+  },  
+
+  'DashboardController': {
+    '*': 'isAuth',
+  }, 
+
+  'SocketController': {
+    '*': 'isAuth',
+  },
 
   /***************************************************************************
   *                                                                          *

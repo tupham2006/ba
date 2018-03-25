@@ -74,7 +74,8 @@ module.exports = {
 
 		User.updateUserInfo({ id: userId }, { role: role } )
 			.then(function(qUpdate){
-
+				req.session.user.role = role;
+				
 				if(!qUpdate || qUpdate.length == 0){
 					return res.json({
 						error: CONST.ERROR.NO_RECORD_UPDATE,
@@ -95,7 +96,6 @@ module.exports = {
 								} else { // when kick user
 									updateData.is_user = 0;
 								}
-									console.log("updateData", updateData);
 
 								Reader.update({ id: findResult.id }, updateData)
 									.then(function(){

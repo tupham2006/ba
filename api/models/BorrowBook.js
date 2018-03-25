@@ -75,5 +75,58 @@ module.exports = {
 				return resolve(result);				
 			});
 		});
-	}
+	},
+
+	updateAfterBorrowCreate: function(value) {
+		var sql = "";
+		var esc = [value.book_id];
+
+		if(value.status == 1) {
+			sql = "UPDATE book SET borrow_time = borrow_time + 1, current_quantity = current_quantity - 1 WHERE id = ? ";
+		} else {
+			sql = "UPDATE book SET borrow_time = borrow_time + 1 WHERE id = ?";
+		}
+
+		Book.query(sql, esc, function(err, result){
+			if(err) return reject(err);
+			return resolve(result);
+		});
+	},
+
+	updateAfterBorrowDestroy: function(value) {
+		var sql = "";
+		var esc = [value[0].book_id];
+		if(value.status == 1) {
+			sql = "UPDATE book SET borrow_time = borrow_time - 1, current_quantity = current_quantity + 1 WHERE id = ?";
+		} else {
+			sql = "UPDATE book SET borrow_time = borrow_time - 1 WHERE id = ?";
+		}
+
+		Book.query(sql, esc, function(err, result){
+			if(err) return reject(err);
+			return resolve(result);
+		});
+	},
+
+	afterCreate: function (value, cb) {
+		updateAfterBorrowCreate(value)
+			.then(function(){
+		    Service.sync('borrow_book', "create", value);
+		    cb();
+			})
+			.catch(function(err){
+				console.log("updateAfterBorrowCreate:: ", err);
+			});
+  },
+
+  afterDestroy:function (value, cb) {
+  	updateAfterBorrowDestroy(value)
+			.then(function(){
+		    Service.sync('borrow_book', "create", value);
+		    cb();
+			})
+			.catch(function(err){
+				console.log("updateAfterBorrowCreate:: ", err);
+			});
+  }
 };
