@@ -41,6 +41,7 @@ angular.module('ba').directive('readerSearch', ["Reader",
 				// check click to close
 				angular.element($("body").click(function($e){
 					scope.readerList = [];
+					scope.ngModel = "";
 					scope.$apply();
 				}));
 			}

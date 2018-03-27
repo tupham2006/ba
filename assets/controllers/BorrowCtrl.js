@@ -363,8 +363,17 @@ angular.module('ba')
 		    });
 	    };
 
+	    $scope.addReaderToBorrow = function(res){
+				$scope.borrowInfo.reader_mobile = res.mobile;
+				$scope.borrowInfo.reader_id = res.id;
+				$scope.borrowInfo.reader_name = res.name;
+				$scope.borrowInfo.facutly_id = res.facutly_id;
+				$scope.borrowInfo.course = res.course;
+				$scope.borrowInfo.reader_gender = res.gender;
+				$scope.existReader = true;		
+	    };
 
-	    $scope.findReaderByMobile	 = function(){
+	    $scope.findReaderByMobile	= function(){
 
     		var params = {
     			mobile: $scope.borrowInfo.reader_mobile
