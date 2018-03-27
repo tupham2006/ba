@@ -78,7 +78,7 @@ angular.module('ba')
 		  	}
 	    };
 
-			$rootScope.activePage = "report";
+			$rootScope.BAM.active_page = "report";
 
 			// report borrow time
 			$scope.borrowTimeList = [];

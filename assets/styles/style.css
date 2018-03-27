@@ -615,6 +615,27 @@ button {
 	position: relative;
 }
 
+.reader-search-child {
+	position: absolute;
+	top: 34px;
+	left: 10px;
+	width: calc(100% - 20px);
+	background: #FFF;
+	border: 1px solid #ccc;
+	z-index: 1000;
+	box-shadow: 1px 3px 5px #ccc;
+	max-height: 252px;
+	overflow-y: auto;	
+}
+
+.reader-search-child .content{
+	height: 20px;
+	line-height: 20px;
+	width: 100%;
+	vertical-align: middle;
+	border-bottom: 1px solid #ccc;
+}
+
 .block-ui-overlay {
 	background: none;
 }
@@ -732,6 +753,26 @@ button {
 	body, html {
 		font-size: 14px;
 	}
+
+	#main {
+		padding: 5px;
+		height: calc(100% - 40px);
+		overflow-x: hidden;
+		overflow-y: auto;
+	}
+
+	#dashboard .chart-main {
+		padding: 0px;
+	  background: #FFF;
+	  margin: 0px;
+	  border: none;
+	}
+
+	.borrow-bg {
+		background: white;
+		padding: 0 !important; 
+	}
+	
 	
 	.desktop-display {
 		display: none !important;

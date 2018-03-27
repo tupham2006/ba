@@ -7,7 +7,7 @@ angular.module('ba')
 	  "$uibModal",
 	  function($scope, $rootScope, Dialog, Reader, $uibModal){
 		
-		$rootScope.activePage = "reader";
+		$rootScope.BAM.active_page = "reader";
 		$scope.filter = {
 			typing: "",
 			limit: 10,
@@ -116,6 +116,7 @@ angular.module('ba')
 			$scope.readerInfoInstance.result.then(function(){ }, function () {});
 		};
 
+		// listen sync
 		if (!io.socket.readerEventReady) {
     	io.socket.readerEventReady = true;
 			io.socket.on("reader", function(res){

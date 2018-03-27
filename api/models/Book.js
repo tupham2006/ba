@@ -233,12 +233,12 @@ module.exports = {
 	},
 
 	afterCreate:function (value, cb) {
-    Service.sync('book', "create", value);
-    cb();
+  	Service.sync('book', "create", value);
+  	cb();
   },
 
   afterUpdate:function (value, cb) {
     Service.sync('book', "update", value);
-    cb();
+  	cb();
   }
 };

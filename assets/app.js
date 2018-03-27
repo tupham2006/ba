@@ -101,6 +101,17 @@ angular.module('ba',[
 
 }])
 .run(["$rootScope", function($rootScope){
-	$rootScope._error = {};
-	window.$rootScope = $rootScope; // for debug
+	$rootScope.BAM = {};
+
+	if(window.innerWidth < 800) {
+		$rootScope.BAM.isMobile = true;	
+	}
+
+	$( window ).resize(function() {
+		if(!$rootScope.BAM.isMobile && window.innerWidth < 800) {
+			window.location.reload();
+		} else if($rootScope.BAM.isMobile && window.innerWidth >= 800) {
+			window.location.reload();
+		}
+	});
 }]);

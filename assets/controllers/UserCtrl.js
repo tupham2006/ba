@@ -8,7 +8,7 @@ angular.module('ba')
 	  "$timeout",
 	  "$cookies",
 	  function($scope, User, $rootScope, Dialog, Request, $timeout, $cookies){
-	  $rootScope.activePage = 'profile';
+	  $rootScope.BAM.active_page = 'profile';
 	  $rootScope.userInfo = angular.copy($rootScope.user);
 	  var questionList = angular.copy(CONST.PROFILE_QUESTION);
 

@@ -37,5 +37,24 @@ function BorrowBook($rootScope, Request, $q, Store){
 		return df.promise;
 	}
 
+	function getBorrowBookStore(params) {
+		var returnList = [];
+		var list = angular.copy(Store.borrowBook.list);
+
+		for(var i in list) {
+			if(params && params.date && params.date.endDate && params.date.startDate) {
+				if(new Date(list[i].borrow_date) > new Date(params.date.endDate) || new Date(list[i].borrow_date) < new Date(params.date.startDate)){
+					list[i].remove = true;
+				}
+			}
+
+			if(!list[i].remove) {
+				returnList.push(list[i]);
+			}
+		}
+
+		return returnList;
+	}
+
 	return service;
 }

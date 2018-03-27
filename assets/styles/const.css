@@ -134,13 +134,13 @@
 	display: block;	
 }
 
-.bg-red { background: #ec2f29; color: #FFF; }
-.bg-green { background: #27b527; color: #FFF; }
-.bg-blue {background: #4da1ff; color: #FFF;}
-.bg-white {background: #FFF}
-.bg-gray-ec {background: #ececec}
-.bg-gray-69 {background: #696969}
-.bg-gray-33 {background: #333}
+.bg-red { background: #ec2f29; color: #FFF; border: 1px solid #ec2f29; }
+.bg-green { background: #27b527; color: #FFF; border: 1px solid #27b527 }
+.bg-blue {background: #4da1ff; color: #FFF; border: 1px solid #4da1ff}
+.bg-white {background: #FFF; border: 1px solid #FFF}
+.bg-gray-ec {background: #ececec; border: 1px solid #ececec}
+.bg-gray-69 {background: #696969; border: 1px solid #696969}
+.bg-gray-33 {background: #333; border: 1px solid #333}
 
 .bg-orange {
 	background: #fdc000;

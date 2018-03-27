@@ -1,5 +1,5 @@
 <div id="dashboard">
-	<div class="row height-100">
+	<div class="row height-100" ng-if="!BAM.isMobile">
 		<div class="col-md-8 height-100">
 			<div class="row">
 				<div class="col-md-4">
@@ -89,6 +89,35 @@
 				<div class="footer">
 					<div>BAManager Beta - Phiên bản 0.1</div>
 				</div>		
+			</div>
+		</div>
+	</div>
+	<div class="height-100" ng-if="BAM.isMobile">
+		<div class="row height-100 chart-main"> 
+			<div class="p-5 mt-5 mb-10 width-100" style="height: 50px">
+				<div class="col-xs-4 text-center bg-green" ng-click="gotoPage('borrow')"> 
+					<div>Lượt mượn</div>
+					<b>{{ headerData.borrow_count }}</b>
+				</div>
+				<div class="col-xs-4 text-center bg-orange" ng-click="gotoPage('book')"> 
+					<div>Sách</div>
+					<b>{{ headerData.book_count }}</b>
+				</div>
+				<div class="col-xs-4 text-center bg-blue" ng-click="gotoPage('reader')"> 
+					<div>Bạn đọc</div>
+					<b>{{ headerData.reader_count }}</b>
+				</div>
+			</div>
+			<div class="col-xs-12 text-blue text-center text-bold">
+				Tháng này
+			</div>
+			<div class="report-borrow-chart col-xs-12" style="height: 50%">
+				<canvas id="bar" class="chart chart-bar" chart-data="borrow.data" chart-labels="borrow.title" chart-series="borrow.series" chart-options="options" ></canvas>
+			</div>
+			<div class="col-xs-12">
+				Lượt mượn: <b>{{ borrow.total }}</b> <br>
+				Sách mượn: <b>{{borrow.borrow_book_count}}</b> <br>
+				Mượn nhiều nhất: <b>{{borrow.max_borrow_reader.reader_name}} ({{ borrow.max_borrow_reader.times }} lượt)</b><br>
 			</div>
 		</div>
 	</div>

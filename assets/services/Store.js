@@ -21,7 +21,6 @@ function Store(){
 	function Table(){
 		this.newTable = {
 				$list: this.$list,
-				$syncIds: [],
 				get list(){
 					var newList = Object.assign([],this.$list);
 					return newList;
@@ -32,25 +31,35 @@ function Store(){
 				},
 
 				set create(data){
-					console.log("data", data);
 					var dataArray = [];
+					var syncDataObj = {};
+					var i, j, k;
 
-					if(Array.isArray(data)){// create with array type
-						for(var i in data) {
-							if(this.$syncIds.indexOf(data[i].id) == -1) {
-								this.$syncIds.push(data[i].id);
-								dataArray.push(data[i]);
-							}
+					if(Array.isArray(data)){ // create with array type
+						for(i in data) {
+							syncDataObj[data[i].id] = data[i];
 						}
 
 					} else { // crete with object
-						if(this.$syncIds.indexOf(data.id) == -1) {
-							this.$syncIds.push(data.id);
-							dataArray.push(data);
-						}
-
+						syncDataObj[data.id] = data;
 					}
-					this.$list = dataArray.concat(this.$list);
+
+					// remove if exist data in $list
+					for(j in this.$list) {
+						if(syncDataObj[this.$list[j].id]) {
+							syncDataObj[this.$list[j].id].remove = true;
+						}
+					}
+
+					for(k in syncDataObj) {
+						if(!syncDataObj[k].remove) {
+							dataArray.push(syncDataObj[k]);
+						}
+					}
+
+					if(dataArray.length) {
+						this.$list = dataArray.concat(this.$list);
+					}
 				},
 
 				set update(data){
@@ -61,13 +70,24 @@ function Store(){
 					}
 				},
 
-				set delete(id){
+				set delete(data){
+					var ids = [], i, j;
 					var newData = [];
-					for(var i in this.$list){
-						if(this.$list[i].id != id){
-							newData.push(this.$list[i]);
+					
+					if(data && Array.isArray(data)) {
+						for(i in data) {
+							ids.push(data[i].id);
+						}
+					} else {
+						ids.push(data.id);
+					}
+
+					for(j in this.$list){
+						if(ids.indexOf(this.$list[j].id) == -1){
+							newData.push(this.$list[j]);
 						}
 					}
+
 					this.$list = newData;
 				},
 
@@ -92,8 +112,8 @@ function Store(){
 	if(!borrowBookTable.delete_by_borrow){
 		Object.defineProperty(borrowBookTable, "delete_by_borrow", {
 			set: function(borrow_id){
-				var newData = [];
-				for(var i in this.$list){
+				var newData = [], i;
+				for(i in this.$list){
 					if(this.$list[i].borrow_id != borrow_id){
 						newData.push(this.$list[i]);
 					}
@@ -116,9 +136,6 @@ function Store(){
 		departmentTable: departmentTable
 	};
 
-	// export store to debug
-	window.Store = service;
-	
 	return service;
 }
 

@@ -49,7 +49,8 @@ module.exports = {
 		}
 
 		// check status by book
-		for(var i in data.book){
+		var i;
+		for(i in data.book){
 			if(data.book[i].status){
 				data.status = 1;
 			}
@@ -97,7 +98,8 @@ module.exports = {
 		}
 
 		// check status by book
-		for(var i in data.book){
+		var i;
+		for(i in data.book){
 			if(data.book[i].status){
 				data.status = 1;
 			}
@@ -134,7 +136,7 @@ module.exports = {
 		Borrow.deleteBorrow({id: parseInt(req.param("id"))})
 			.then(function(result){
 				return res.json({
-					borrows: result.borrows,
+					borrows: result.borrows
 				});
 			})
 			.catch(function(e){

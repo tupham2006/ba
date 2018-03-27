@@ -16,7 +16,6 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 		var df = $q.defer();
 		
 		borrowList = Store.borrowTable.list;
-		
 
 		if(borrowList.length){
 			df.resolve(getBorrowListStore(param));
@@ -109,14 +108,16 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 		if(data.id){ // update
 			Request.post("/borrow/update", data)
 				.then(function(res){
-
 					if(res && !res.error){
+						Store.borrowTable.syncData("create", res.borrows);
+						Store.borrowTable.syncData("delete_by_borow", res.borrows.id);
+						Store.borrowBookTable.syncData("create", res.borrow_books);
+
 						df.resolve(res.borrows.id);
 						
 					} else {
 						df.reject(res.message);
 					}
-
 				})
 
 				.catch(function(e){
@@ -126,7 +127,10 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 		} else { // create new
 			Request.post("/borrow/create", data)
 				.then(function(res){
+
 					if(res && !res.error && res.borrows && res.readers && res.borrow_books){
+						Store.borrowTable.syncData("create", res.borrows);
+						Store.borrowBookTable.syncData("create", res.borrow_books);
 						df.resolve(res.borrows.id);
 
 					} else{
@@ -148,7 +152,8 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 			.then(function(res){
 
 				if(res && !res.error && res.borrows){
-
+					Store.borrowTable.syncData("delete", res.borrows);
+					Store.borrowBookTable.syncData("delete_by_borow", res.borrows.id);
 					df.resolve();
 					
 				} else {
@@ -162,81 +167,6 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 			});
 			return df.promise;
 	}
-
-	// // sync
-	// function storeData(action, res) {
-	// 	bookList = Store.bookTable.list;
-	// 	if(action == "create") {
-	// 		Store.borrowTable.create = res.borrows;
-	// 		Store.borrowBookTable.create = res.borrow_books;
-
-	// 		// handle reader
-	// 		res.readers.borrow_time += 1;
-	// 		if(!res.readers.exist_reader){
-	// 			Store.readerTable.create = res.readers;
-	// 		} else {
-	// 			Store.readerTable.update = res.readers;
-	// 		}
-			
-	// 		// update book list
-	// 		for(var i in res.borrow_books){
-	// 			for(var j in bookList){
-	// 				if(res.borrow_books[i].book_id == bookList[j].id){
-	// 					bookList[j].current_quantity -= 1;
-	// 					bookList[j].borrow_time += 1;
-	// 					Store.bookTable.update = bookList[j];
-	// 				}
-	// 			}
-	// 		}
-
-	// 	} else if(action == "update") {
-	// 		Store.borrowTable.update = res.borrows;
-
-	// 		//// Update borrow book, delete then create new
-	// 		// delete borrow book, data before update
-	// 		var borrowBookByBorrowId = [];
-	// 		for(var z in borrowBookList){
-	// 			if(borrowBookList[z].borrow_id == res.borrows.id){
-	// 				borrowBookByBorrowId.push(borrowBookList[z]);
-	// 			}
-	// 		}
-
-	// 		for(var i in borrowBookByBorrowId){
-	// 			for(var j in bookList){
-	// 				if(borrowBookByBorrowId[i].book_id == bookList[j].id){
-	// 					if(borrowBookByBorrowId[i].status){
-	// 						bookList[j].current_quantity += 1;
-	// 						bookList[j].borrow_time -= 1;
-	// 					} else {
-	// 						bookList[j].borrow_time -= 1;
-	// 					}
-	// 					Store.bookTable.update = bookList[j];
-	// 				}
-	// 			}
-	// 		}
-
-	// 		// delete store data
-	// 		Store.borrowBookTable.delete_by_borrow = res.borrows.id;
-
-	// 		// recreate after delete
-	// 		for(var b in res.borrow_books){
-	// 			Store.borrowBookTable.create = res.borrow_books[b];
-	// 			for(var x in bookList){
-	// 				if(res.borrow_books[b].book_id == bookList[x].id){
-	// 					if(res.borrow_books[b].status){
-	// 						bookList[x].current_quantity -= 1;
-	// 						bookList[x].borrow_time += 1;
-	// 					} else {
-	// 						bookList[x].borrow_time += 1;
-	// 					}
-	// 					Store.bookTable.update = bookList[x];
-	// 				}
-	// 			}
-	// 		}
-	// 	} else {
-			
-	// 	}
-	// }
 
 	return service;
 }

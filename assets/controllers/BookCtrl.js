@@ -10,7 +10,7 @@ angular.module('ba').controller("BookCtrl",[
   "$timeout",
   function($scope, Book, $rootScope, Dialog, $uibModal, BookType, Request, Store, $timeout){
 
-		$rootScope.activePage = "book";
+		$rootScope.BAM.active_page = "book";
 		$scope.bookList = [];
 		$scope.scope = {};
 
@@ -226,10 +226,7 @@ angular.module('ba').controller("BookCtrl",[
     	io.socket.bookEventReady = true;
 			io.socket.on("book", function(res){
 				Store.bookTable.syncData(res.action, res.data);
-				if(timeout) $timeout.cancel();
-				var timeout = $timeout(function(){
-					$scope.getBookList();
-				},200);
+				$scope.getBookList();
 			});
   	}
 

@@ -66,9 +66,6 @@ function Reader(Request, $q, $rootScope, Store){
 
 		// filter
 		for(var i in data){
-
-			// filter by typing
-			if(data[i].deleted) data[i].remove = true;
 			
 			if(typing && !isNaN(typing)){
 				

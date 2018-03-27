@@ -5,7 +5,7 @@ angular.module('ba').controller("DashboardCtrl", [
 	"$state",
 	"$rootScope",
 	function($scope, Dashboard, Facutly, $state, $rootScope){
-		$rootScope.activePage = "dashboard";
+		$rootScope.BAM.active_page = "dashboard";
 
 		$scope.date = {
 			start_date: moment().startOf("month").toISOString(),
@@ -128,7 +128,7 @@ angular.module('ba').controller("DashboardCtrl", [
 		};
 
 		$scope.gotoPage = function (type) {
-			if($rootScope && $rootScope.user && $rootScope.user.role > 2) {
+			if($rootScope && $rootScope.user && $rootScope.user.role >= 2) {
 				$state.go(type);
 			}
 		};

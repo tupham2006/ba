@@ -78,20 +78,29 @@ module.exports = {
 							Borrow.create(data)
 								.exec(function(borrowErr, borrow){
 									if(borrowErr) return reject(borrowErr);
+									
+									// update reader
+									Borrow.whenBorrowCreate(borrow)
+										.then(function(readerResult){
+											return readerResult;
+										})
 
-									// create book borrow
-									Borrow.handleBookBorrow(borrow.id, data)
-									.then(function(result){
+										.then(function(readerResult){
+											
+											// handle borrow book
+											return Borrow.handleBookBorrow(borrow.id, data)
+												.then(function(result){
 
-										// add borrow_time temp to reader
-										readerData.borrow_time += 1;
-
-										return resolve({
-											borrows: borrow,
-											borrow_books: result,
-											readers: readerData
+													return resolve({
+														borrows: borrow,
+														borrow_books: result,
+														readers: readerResult
+													});
+												});
+										})
+										.catch(function(err){
+											return reject(err);
 										});
-									});
 								});	
 
 						});
@@ -174,16 +183,23 @@ module.exports = {
 			var promiseArray = [];
 
 			for(var i in data.book){
+				delete data.book[i].id;
 				data.book[i].borrow_id = borrowId;
 				data.book[i].borrow_date = data.borrow_date;
 			}
 
-			// console.log("data.book", data.book);
 			BorrowBook.create(data.book)
 				.exec(function(err, result){
-					// console.log("result", result);
 					if(err) reject(err);
-					return resolve(result);
+					
+					// update book
+					Borrow.whenBorrowBookCreate(result)
+						.then(function(){
+							return resolve(result);
+						})
+						.catch(function(err){
+							reject(err);
+						});
 				});
 		});
 	},
@@ -211,24 +227,27 @@ module.exports = {
 							// delete borrow book
 							BorrowBook.destroy({borrow_id: borrowUpdateResult[0].id})
 								.exec(function(destroyErr, destroyResult){
-									// console.log("destroyResult", destroyResult);
 									if(destroyErr) return reject(destroyErr);
 
-									// create new
-									Borrow.handleBookBorrow(borrowUpdateResult[0].id, data)
-										.then(function(result){
-
-											// return to controller
-											return resolve({
-												borrow_books: result,
-												borrows: borrowUpdateResult[0]
-											});
+									Borrow.whenBorrowBookDestroy(destroyResult)
+										.then(function(){
+											return;
 										})
+										.then(function(){
+											// create new
+											return Borrow.handleBookBorrow(borrowUpdateResult[0].id, data)
+												.then(function(result){
 
+													// return to controller
+													return resolve({
+														borrow_books: result,
+														borrows: borrowUpdateResult[0]
+													});
+												});
+										})
 										.catch(function(e){
 											return reject(e);
 										});
-									
 								});
 						});
 				});
@@ -245,10 +264,12 @@ module.exports = {
 							message: "Lượt mượn không tồn tại"
 						});
 					}
+
 					// update borrow
 					Borrow.update(condition, { deleted: 1 })
 						.exec(function(borrowUpdateErr, borrowUpdateResult){
 							if(borrowUpdateErr) return reject(borrowUpdateErr);
+
 							if(!borrowUpdateResult || !borrowUpdateResult.length){
 								return reject({
 									message: "Borrow update return result:: " + borrowUpdateResult
@@ -259,17 +280,34 @@ module.exports = {
 							BorrowBook.destroy({ borrow_id: condition.id })
 								.exec(function(destroyErr, destroyResult){
 									if(destroyErr) return reject(destroyErr);
-											// return to controller
-											return resolve({
-												borrow_books: destroyResult,
-												borrows: borrowUpdateResult[0]
-											});
+									if(!destroyResult || !destroyResult.length) return reject({
+										message: "Không có dữ liệu được xóa"
+									});
+
+									Borrow.whenBorrowBookDestroy(destroyResult)
+										.then(function(){
+											return;
+										})
+										.then(function(){
+											// update reader when borrow destroy
+											return Borrow.whenBorrowDestroy(borrowUpdateResult[0])	
+												.then(function(){
+														// return to controller
+														return resolve({
+															borrow_books: destroyResult,
+															borrows: borrowUpdateResult[0]
+														});
+												})
+												.catch(function(err){
+													reject(err);
+												});
+										});
 								});
 						});
 				});
 		});
 	},
-
+	// trigger ?? huhu
 	reportBorrowTime: function(condition) {
 
 		return new Promise(function(resolve, reject){
@@ -440,49 +478,156 @@ module.exports = {
 		});
 	},
 
-	increaseReaderBorrowTime: function (id) {
-		return new Promise(function (resolve, reject) {
-			Reader.query("UPDATE reader SET borrow_time = borrow_time + 1 WHERE id = ?", [id], function (err, result) {
-				if(err) return reject(err);
-				return resolve(result);
-			});
-		});
-	},
-
-	reduceReaderBorrowTime: function (value) {
-		return new Promise(function (resolve, reject) {
-			if(value.deleted == 1) {
-				Reader.query("UPDATE reader SET borrow_time = borrow_time - 1 WHERE id = ?", [value[0].id], function (err, result) {
-					if(err) return reject(err);
-					return resolve(result);
-				});
-			} else {
-				return resolve(result);
-			}
-		});
-	},
-
 	afterCreate:function (value, cb) {
-		updateReaderBorrowTime(value.reader_id)
-			.then(function(){
-    		Service.sync('borrow', "create", value);
-    		cb();
-			})
-			.catch(function(err){
-				cb();
-				console.log("updateReaderBorrowTime: ", err);
-			});
+		Service.sync('borrow', "create", value);
+		cb();
   },
 
   afterUpdate: function (value, cb) {
-			updateReaderBorrowTime(value)
-				.then(function(){
-	    		Service.sync('borrow', "create", value);
-	    		cb();
-				})
-				.catch(function(err){
-					cb();
-					console.log("updateReaderBorrowTime: ", err);
-				});
-  }
+  	if(value && value.deleted ){
+			Service.sync('borrow', "delete", value);
+  	} else {
+			Service.sync('borrow', "update", value);
+  	}
+		cb();
+  },
+
+  // chi update reader borrow time
+  whenBorrowCreate: function(data) {
+  	return new Promise(function(resolve, reject){
+  		var updateData = {};
+  		Reader.findOne({id: data.reader_id})
+  			.exec(function(err, result){
+  				if(err) reject(err);
+  				if(result) {
+  					updateData.borrow_time = result.borrow_time + 1;
+
+  					Reader.update({id: result.id}, updateData)
+  						.exec(function(err, result){
+  							if(err) return reject(err);
+  							resolve(result);
+  						});
+
+  				} else {
+  					return resolve();
+  				}
+  			});
+  	});
+  },
+
+ 	// update reader borrow time when borrow destroy
+  whenBorrowDestroy: function(data) {
+  	return new Promise(function(resolve, reject){
+  		var updateData = {};
+  		Reader.findOne({id: data.reader_id})
+  			.exec(function(err, result){
+  				if(err) reject(err);
+  				if(result) {
+  					updateData.borrow_time = result.borrow_time - 1;
+
+  					Reader.update({id: result.id}, updateData)
+  						.exec(function(err, result){
+  							if(err) return reject(err);
+  							resolve(result);
+  						});
+  						
+  				} else {
+  					return resolve();
+  				}
+  			});
+  	});
+  },
+
+	whenBorrowBookCreate: function(data) {
+  	return new Promise(function(resolve, reject){
+  		var i, promiseArray = [];
+
+  		// create promise array
+  		for(i in data) {
+				promiseArray.push(new Promise(function (resolveAll, rejectAll){
+  				var updateData = {};
+					var dataObj = data[i];
+					Book.findOne({
+						id: dataObj.book_id
+					}).exec(function(err, findRs){
+						if(err) return rejectAll(err);
+
+						if(findRs) {
+							if(dataObj.status) {
+								updateData.borrow_time = findRs.borrow_time + 1;
+								updateData.current_quantity = findRs.current_quantity - 1;
+							} else {
+								updateData.borrow_time = findRs.borrow_time + 1;
+							}
+
+							Book.update({ id: findRs.id }, updateData)
+								.exec(function(err, result){
+									if(err) return rejectAll(err);
+									return resolveAll(result);
+								});
+						} else {
+							return rejectAll();
+						}
+					});
+				}));
+  		}
+
+  		Promise.all(promiseArray)
+  			.then(function(result){
+  				return resolve(result);
+  			})
+  			.catch(function(err){
+  				return reject(err);
+  			});
+  	});
+  },
+
+  whenBorrowBookDestroy: function(data) {
+  	return new Promise(function(resolve, reject){
+  		var i, promiseArray = [];
+  		for(i in data){
+				promiseArray.push(new Promise(function (resolveAll, rejectAll){
+  				var dataObj = data[i];
+					Book.findOne({ id: dataObj.book_id })
+					.then(function(findRs){
+						var updateData = {};
+						
+						if(findRs) {
+
+							if(dataObj.status) { // in db
+								updateData.borrow_time = findRs.borrow_time - 1;
+								updateData.current_quantity = findRs.current_quantity + 1;
+							} else {
+								updateData.borrow_time = findRs.borrow_time - 1;
+							}
+						}
+
+						return {
+							updateData: updateData,
+							id: findRs.id
+						};
+					})
+					.then(function(updateObj){
+						if(!updateObj.updateData) return resolveAll();
+
+						return Book.update({id: updateObj.id}, updateObj.updateData)
+							.then(function(result){
+								return resolveAll(result);
+							});
+					})
+					.catch(function(err){
+						return rejectAll(err);
+					});
+				}));
+  		}
+
+  		Promise.all(promiseArray)
+  			.then(function(result){
+  				return resolve(result);
+  			})
+  			.catch(function(err){
+  				return reject(err);
+  			});
+  	});
+  },
 };

@@ -97,7 +97,7 @@ angular.module('ba')
 
 		$scope.getUserList = function(){
 			
-			$rootScope.activePage = "admin";
+			$rootScope.BAM.active_page = "admin";
 			$scope.currentPage = 1;
 			// get user from server
 			Admin.getUserList($scope.filter)
