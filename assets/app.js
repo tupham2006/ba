@@ -103,6 +103,11 @@ angular.module('ba',[
 .run(["$rootScope", function($rootScope){
 	$rootScope.BAM = {};
 	$rootScope.BAM.isNavCollapsed = true;
+	$rootScope.BAM.collapedOnlyMobile = function() {
+		if($rootScope.BAM.isMobile) {
+			$rootScope.BAM.isNavCollapsed = !$rootScope.BAM.isNavCollapsed;
+		}
+	};
 
 	if(window.innerWidth < 800) {
 		$rootScope.BAM.isMobile = true;	
