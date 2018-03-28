@@ -10,7 +10,7 @@
 				</div>
 				<div class="col-xs-12 col-md-3 mb-10">
 					<select class="form-control" ng-model="filter.actived" ng-change="getReaderList()" convert-to-number>
-						<option value="0">Không hoạt động</option>
+						<option value="0">Bị khóa</option>
 						<option value="1">Đang hoạt động</option>
 					</select>
 				</div>
@@ -19,7 +19,7 @@
 				</div>
 				<div class="col-xs-12 col-md-3 mb-10">
 				<span class="pull-right count">Tổng số: {{ readerCount }}</span>
-					<ul uib-pagination class="m-0 pull-right" total-items="readerCount" force-ellipses="true" items-per-page="filter.limit" ng-model="filter.currentPage" direction-links="false" ng-change="changePage()"></ul>
+					<ul uib-pagination class="m-0 pull-right" total-items="readerCount" force-ellipses="true" max-size="2" boundary-link-numbers="true" items-per-page="filter.limit" ng-model="filter.currentPage" direction-links="false" ng-change="changePage()"></ul>
 				</div>
 			</div>
 		</div>
@@ -35,9 +35,9 @@
 			     <col class="text-center width-8 hidden-xs">
 			     <col class="text-center width-15 hidden-xs">
 			     <col class="text-center width-12 hidden-xs">
-			     <col class="text-center width-40 hidden-sm hidden-md hidden-lg">
+			     <col class="text-center width-45 hidden-sm hidden-md hidden-lg">
 			     <col class="text-center width-35 hidden-sm hidden-md hidden-lg">
-			     <col class="text-center width-25 hidden-sm hidden-md hidden-lg">
+			     <col class="text-center width-20 hidden-sm hidden-md hidden-lg">
 			  </colgroup>
 				<thead>
 					<th>Họ và tên</th>
@@ -63,7 +63,7 @@
 						<td class="hidden-xs"> <span>{{ reader.borrow_time }}</span> </td>
 						<td class="text-center">
 							<button class="btn btn-blue" ng-click="openReaderModal(reader.id)" type="button"><i class="fa fa-pencil"></i></button>
-							<button class="btn btn-red" ng-click="deleteReader(reader.id)" type="button"><i class="fa fa-trash"></i></button>
+							<button class="btn btn-red hidden-xs" ng-click="deleteReader(reader.id)" type="button"><i class="fa fa-trash"></i></button>
 						</td>
 					</tr>
 				</tbody>

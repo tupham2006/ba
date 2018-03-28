@@ -56,17 +56,17 @@
 				</div>
 				<div class="row height-50 chart-main pull-left" style="width: calc(50% - 5px); margin-right: 5px">
 					<div class="col-md-12 height-100">
-						<b class="text-blue" style="position: absolute; top: 0">Bạn đọc</b>
+						<b class="text-blue" style="position: absolute; top: 0; left: 0">Bạn đọc</b>
 						<div class="report-borrow-chart" style="height: 100%">
-							<canvas id="pie" class="chart chart-pie" chart-data="reader.data" chart-labels="reader.title"  chart-options=" { cutoutPercentage: 0 }" ></canvas>
+							<canvas id="pie" class="chart chart-pie" chart-data="reader.data" chart-labels="reader.title"  chart-options=" { cutoutPercentage: 0, legend: { display: true, position: 'right' }}" ></canvas>
 						</div>
 					</div>
 				</div>
 				<div class="row height-50 chart-main pull-left"  style="width: calc(50% - 5px); margin-left: 5px">
 					<div class="col-md-12 height-100">
-						<b class="text-blue" style="position: absolute; top: 0">Sách</b>
+						<b class="text-blue" style="position: absolute; top: 0; left: 0">Sách</b>
 						<div class="report-borrow-chart" style="height: 100%">
-							<canvas id="pie" class="chart chart-pie" chart-data="book.data" chart-labels="book.title"  chart-options=" { cutoutPercentage: 0 }" ></canvas>
+							<canvas id="pie" class="chart chart-pie" chart-data="book.data" chart-labels="book.title"  chart-options=" { cutoutPercentage: 0, legend: { display: true, position: 'right' }}" ></canvas>
 						</div>
 					</div>
 				</div>

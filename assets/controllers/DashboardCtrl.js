@@ -74,7 +74,6 @@ angular.module('ba').controller("DashboardCtrl", [
 				.then(function(){
 					Dashboard.getDashboard(param)
 						.then(function(result){
-							console.log("result", result);
 
 							$scope.headerData.borrow_count = result.borrow_count || 0;
 							$scope.headerData.book_count = result.book_count || 0;

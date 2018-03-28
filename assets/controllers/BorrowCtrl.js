@@ -475,9 +475,9 @@ angular.module('ba')
 			});
 		}		
 
-		$scope.changeMode = function(mode){
+		$scope.changeMode = function(){
 			if(!$rootScope.BAM.isMobile) return;
-			$scope.borrowMobile.createMode = mode;
+			$scope.borrowMobile.createMode = !$scope.borrowMobile.createMode;
 		};
 
     $scope.init();

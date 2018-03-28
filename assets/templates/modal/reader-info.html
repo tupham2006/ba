@@ -6,26 +6,26 @@
 		<div class="row">
 			<div class="col-md-6">
 				<div class="row">
-					<div class="col-md-3">Số điện thoại:</div>
-					<div class="col-md-9">{{readerData.mobile | tel}}</div>
+					<div class="col-xs-6 col-md-3">Số điện thoại:</div>
+					<div class="col-xs-6 col-md-9">{{readerData.mobile | tel}}</div>
 				</div>
 				<div class="row">
-					<div class="col-md-3">Giới tính: </div>
-					<div class="col-md-9"><gender-html ng-model="readerData.gender"></gender-html></div>
+					<div class="col-xs-6 col-md-3">Giới tính: </div>
+					<div class="col-xs-6 col-md-9"><gender-html ng-model="readerData.gender"></gender-html></div>
 				</div>
 				<div class="row">
-					<div class="col-md-3">Khoa: </div>
-					<div class="col-md-9"><facutly-html ng-model="readerData.facutly_id"></facutly-html> (K.{{readerData.course}})</div>
+					<div class="col-xs-6 col-md-3">Khoa: </div>
+					<div class="col-xs-6 col-md-9"><facutly-html ng-model="readerData.facutly_id"></facutly-html> (K.{{readerData.course}})</div>
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="row">
-					<div class="col-md-3">Lượt mượn: </div>
-					<div class="col-md-9">{{ readerData.borrow_time }}</div>
+					<div class="col-xs-6 col-md-3">Lượt mượn: </div>
+					<div class="col-xs-6 col-md-9">{{ readerData.borrow_time }}</div>
 				</div>
 				<div class="row">
-					<div class="col-md-3">Trạng thái: </div>
-					<div class="col-md-9">
+					<div class="col-xs-6 col-md-3">Trạng thái: </div>
+					<div class="col-xs-6 col-md-9">
 						<span ng-show="readerData.actived">Đang hoạt động</span>
 						<span ng-show="!readerData.actived">Bị khóa</span>
 					</div>
@@ -38,16 +38,16 @@
 		<div style="height: 360px; overflow: auto;">
 			<table class="table table-striped">
 				<tr>
-					<td class="col-md-3">Ngày mượn</td>
-					<td class="col-md-3">Ngày trả</td>
-					<td class="col-md-3">Sách mượn</td>
-					<td class="col-md-3">Đặt cọc</td>
+					<td class="col-xs-6 col-md-3">Ngày mượn</td>
+					<td class="col-md-3  hidden-xs">Ngày trả</td>
+					<td class="col-xs-6 col-md-3">Sách mượn</td>
+					<td class="col-md-3 hidden-xs">Đặt cọc</td>
 				</tr>
 				<tr ng-repeat="borrow in borrowList">
-					<td>
+					<td >
 						{{ borrow.borrow_date | date: "dd/MM/yyyy" }}
 					</td>
-					<td>
+					<td class="hidden-xs">
 						{{ borrow.pay_date | date: "dd/MM/yyyy" }}
 					</td>
 					<td>
@@ -55,7 +55,7 @@
 							{{ item.book_name }} <br>
 						</span>
 					</td>
-					<td>
+					<td class="hidden-xs">
 						{{ borrow.deposit_name }}
 					</td>
 				</tr>

@@ -23,7 +23,7 @@
 						<option value="4">Sách đã hủy</option>
 					</select>
 				</div>
-				<div class="col-md-3 mb-10">
+				<div class="col-xs-12 col-md-3 mb-10">
 					<span class="pull-right count">Tổng: {{ bookCount }}</span>
 					<ul uib-pagination class="m-0 pull-right" total-items="bookCount" force-ellipses="true" max-size="2" boundary-link-numbers="true" items-per-page="filter.limit" ng-model="filter.currentPage" direction-links="false" ng-change="changePage()"></ul>
 				</div>
@@ -71,7 +71,7 @@
 						<td class="text-center hidden-xs" > <span>{{ book.inventory_quantity }}</span> </td>
 						<td class="text-center">
 							<button class="btn btn-blue" ng-click="openBookModal(book.id)" type="button"><i class="fa fa-pencil"></i></button>
-							<button class="btn btn-red" ng-click="deleteBook(book.id)" type="button"><i class="fa fa-trash"></i></button>
+							<button class="btn btn-red hidden-xs" ng-click="deleteBook(book.id)" type="button"><i class="fa fa-trash"></i></button>
 						</td>
 					</tr>
 				</tbody>

@@ -754,6 +754,11 @@ button {
 		font-size: 14px;
 	}
 
+	.report-borrow-chart {
+		height: 100%;
+		position: relative;
+	}
+
 	#main {
 		padding: 5px;
 		height: calc(100% - 40px);
@@ -783,7 +788,8 @@ button {
 	}
 
 	#borrowLeft, #borrowCenter {
-		width: 100%
+		width: 100%;
+		height: calc(100% - 40px)
 	}
 
 	#borrowRight {

@@ -1,10 +1,10 @@
 <div class="row" ng-show="page.mode == 'BORROW_TIME'" style="height: calc(100% - 54px);">
-	<div class="col-xs-12 col-md-6" style="height: calc(100% - 54px);">
+	<div class="col-xs-12 col-md-6" ng-class="BAM.isMobile ? 'height-60' : 'height-100'">
 		<div class="report-borrow-chart">
-			<canvas id="bar" class="chart chart-bar" chart-data="borrowTime" chart-labels="borrowDate" chart-series="series" chart-options="options"></canvas>
+			<canvas id="bar" class="chart chart-bar" chart-data="borrowTime" chart-labels="borrowDate" chart-series="series" 	chart-options="options"></canvas>
 		</div>
 	</div>
-	<div class="col-xs-12 col-md-6">
+	<div class="col-xs-12 col-md-6 mt-20">
 		<table class="table table-bordered table-striped">
 			<thead>
 				<th>Thời gian</th>
@@ -27,6 +27,5 @@
 		<div class="mt-10">
 			<ul uib-pagination class="m-0 pull-right" total-items="borrowTimeList.length" force-ellipses="true" items-per-page="filter.limit" ng-model="filter.currentPage" direction-links="false" ng-change="changePage()"></ul>
 		</div>
-	</div>
 	</div>
 </div>
