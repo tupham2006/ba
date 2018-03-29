@@ -51,7 +51,12 @@ module.exports.policies = {
   }, 
 
   'PublicController': {
-    '*': true
+    '*': true,
+    "ratingBook" : "isPublicAuth"
+  },
+
+  'PublicUserController': {
+    '*': true,
   },
 
   'AdminController': {

@@ -6,8 +6,8 @@ module.exports = {
 	attributes: {
 		id: { type: "integer", primaryKey: true, autoIncrement: true },
 		book_id: { type: "integer", required: true},
-		fb_id: { type: "integer", required: true },
-		fb_name: { type: "integer", required: true },
+		user_id: { type: "integer", required: true },
+		user_name: { type: "integer", required: true },
 		content: { type: "string",size: 10000, maxLength: 10000, required: true, defaultTo: ''},
 		deleted: { type: "integer", defaultTo: 0},
 		actived: { type: "integer", defaultTo: 0},

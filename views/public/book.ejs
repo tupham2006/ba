@@ -240,20 +240,17 @@
 		/************************
 						PAGE
 		************************/
-		checkLoginFacebook()
-			.then(function(){
-				Request("/public/bookPage", {access_token: accessToken})
-					.then(function(response){
-						bookList = response.books;
-						for(var j in response.book_types) {
-							$("#filterType").append(
-								'<option value="' + response.book_types[j].id + '">' + response.book_types[j].name + '</option>'
-							);
-						}	
-						renderPaging();
-						renderBookTemplate();
-					});
-		});
+		Request("/public/bookPage")
+			.then(function(response){
+				bookList = response.books;
+				for(var j in response.book_types) {
+					$("#filterType").append(
+						'<option value="' + response.book_types[j].id + '">' + response.book_types[j].name + '</option>'
+					);
+				}	
+				renderPaging();
+				renderBookTemplate();
+			});
 
 		/****************************
 							SIDE BAR
@@ -338,7 +335,6 @@
 		******************************/
 		function getBookList(changePage) {
 			var data = filter;
-			if(accessToken) data.access_token = accessToken;
 			Request('/public/getBookList', data)
 				.then(function(response){
 					bookList = response.books;
@@ -391,13 +387,13 @@
 
 			var rateType = parseInt($(this).attr("value"));
 			var bookId = parseInt($(this).attr("book_id"));
-
-			if(!accessToken) {
+			
+			if(!public_token) {
 				toastr.error("Vui lòng đăng nhập để tiếp tục!");
 				return;
 			}
 
-			Request("/public/ratingBook", { rate_type: rateType, book_id: bookId, access_token: accessToken })
+			Request("/public/ratingBook", { rate_type: rateType, book_id: bookId })
 				.then(function(res){
 					if(res && res.book) {
 						for(var i in bookList) {
@@ -464,7 +460,7 @@
 		$("#clickToComment").click(function () {
 			var content = "Vui lòng đăng nhập để bình luận";
 
-			if(accessToken) {
+			if(public_token) {
 				content = '<textarea type="text" class="form-control" rows="1" id="modalBookCommentEnter" placeholder="Bạn nghĩ gì về cuốn sách này"></textarea>';
 			}
 

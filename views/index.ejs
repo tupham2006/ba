@@ -151,14 +151,19 @@
             <li class="button" id="buttonBook">
                <div><a href="/sach"> SÁCH </a></div>
             </li>
-            <li class="button" style="display: none;" id="isLoginFB">
+            <li class="button" style="display: none;" id="logout">
               <div><a href="javascript:void(0)"> 
                	ĐĂNG XUẤT
               </a></div>
             </li>
-            <li class="button" style="display: none;" id="isLogoutFB">
+            <li class="button" style="display: none;" id="login">
               <div><a href="javascript:void(0)"> 
                	ĐĂNG NHẬP
+              </a></div>
+            </li>
+            <li class="button" style="display: none;" id="register">
+              <div><a href="javascript:void(0)"> 
+               	ĐĂNG KÝ
               </a></div>
             </li>
             <!-- <li class="button">
@@ -174,9 +179,22 @@
 	<script type="text/javascript" src="publics/sdk.js"></script>
 	<script type="text/javascript">
 		var isSending;
-		var isLoginFB;
-		var accessToken = "";
 		var pageUrl = window.location.href;
+		var public_token;
+		
+		function checkLoginStatus() {
+			public_token = getCookie('public_token');
+			if(public_token) {
+				$("#logout").show();
+				$("#login").hide();
+				$("#register").hide();
+			} else {
+				$("#logout").hide();
+				$("#login").show();
+				$("#register").show();
+			}
+		}
+		checkLoginStatus();
 
 		// facebook init
 	  (function(d, s, id){
@@ -195,19 +213,6 @@
 		    version          : 'v2.12'
 		  });
 	  };
-
-	  window.fbAsyncInit();
-
-	  // check login fb
-    checkLoginFacebook()
-      .then(function (isLoginFB) {
-
-      	if(isLoginFB) {
-      		$("#isLoginFB").show();
-      	} else {
-          $("#isLogoutFB").show();
-      	}
-      });
 
 		$(document).ready(function() {
 
@@ -271,6 +276,9 @@
 				type: "post",
 				url: url,
 				data: data,
+				headers: {
+		      'authorization': 'Bearer ' + public_token
+		    },
 				success: function(response){
 					blockPage();
 					if(response && !response.error){
@@ -320,63 +328,102 @@
 			}
 		}
 
-		function checkLoginFacebook() {
-
-			return new Promise(function (resolve, reject) {
-				//after 10 second
-				var connectFbTimeout = setTimeout(function(){
-						return resolve();
-				}, 7000);
-
-				FB.getLoginStatus(function(response) {
-
-					clearTimeout(connectFbTimeout);
-
-          if(response.status == "connected"){
-          	accessToken = response.authResponse.accessToken;
-			      return resolve(response.authResponse.accessToken);
-
-				  } else {
-			      return resolve();
-				  }
+		// Auth
+		function fbLogin() {
+			return new Promise(function(resolve, reject){
+				FB.login(function(response){
+					console.log("response", response);
+					if(response.status === "connected") {
+						var accessToken = response.authResponse.accessToken;	  		
+						return  resolve(accessToken);
+					} else {
+						return reject(response)
+						toastr.error("Đăng nhập Facebook thất bại");
+					}
 				});
-			});
+				
+			})
 		}
 
-		$("#isLogoutFB").click(function(e){
-			FB.login(function(response){
-				if(response.status === "connected") {
-					accessToken = response.authResponse.accessToken;
+		$("#register").click(function(e){
+			fbLogin()
+				.then(function(accessToken){
+					if(!accessToken) return;
 
-					isLoginFB = true;
-					toastr.success("Đăng nhập thành công");
-		  		
-		  		if(window.location.pathname == "/sach") {
-		  			window.location.reload();
-		  		}
-		  		
-		  		$("#isLoginFB").show();
-		  		$("#isLogoutFB").hide();
-				} else {
-					toastr.error("Đăng nhập thất bại");
-				}
-			});
+					Request("/public/register", { access_token: accessToken })
+						.then(function(res){
+							if(res && !res.error) {
+								setCookie(res);
+								window.location.reload();
+							} else {
+								toastr.error(res.message);
+							}
+						})
+				})
+				.catch(function(err){
+					console.log(err);
+				})
 		});
 
-		$("#isLoginFB").click(function(e){
-			FB.logout(function(response){
-				if(response.status !== "connected") {
+		$("#login").click(function(e){
+			fbLogin()
+				.then(function(accessToken){
+					if(!accessToken) {
+						toastr.error("Đăng nhập Facebook thất bại!");
+						return;
+					}
 
-					accessToken = "";
-					isLoginFB = false;
-					toastr.success("Đăng xuất thành công");
-		  		$("#isLoginFB").hide();
-		  		$("#isLogoutFB").show();
-				} else {
-					toastr.error("Đăng xuất thất bại");
-				}
-			});
-		});
+					Request("/public/login", { access_token: accessToken })
+						.then(function(res){
+							if(res && !res.error) {
+								setCookie(res);
+								window.location.reload();
+							} else {
+								toastr.error(res.message);
+							}
+						})
+				})
+				.catch(function(err){
+					console.log(err);
+				})
+		})
+
+		$("#logout").click(function(e){
+			document.cookie = "public_token=";
+		  document.cookie = "public_user=";
+		  window.location.reload();
+		})
+
+		function setCookie(response) {
+			var user = "";
+			try{
+				user = JSON.stringify(response.user);
+			} catch(e){
+				console.log(e);
+			}
+			var currentDate = new Date().getDate() + 10;
+			var exp = new Date(new Date().setDate(currentDate));
+
+			document.cookie = "public_token=" + response.token + "; expires = " + exp;
+			document.cookie = "public_user=" + user + "; expires = " + exp;
+		}
+
+		function getCookie(cookieType){
+		  var data = "";
+		  if(document.cookie){
+		    var cookie = document.cookie.split(';');
+		    if(cookie && cookie.length > 0){
+		      for(var i in cookie){
+		        var childOfCookie = null;
+		        childOfCookie = cookie[i].split('=');
+		        if(childOfCookie && childOfCookie.length > 0 && childOfCookie[0] && childOfCookie[0].trim() == cookieType){
+		          data = childOfCookie[1];
+		        }
+		      }
+		    } 
+		  }
+		  return data;
+		};
 
 	</script>
 	<div id="body">

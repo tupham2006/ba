@@ -219,5 +219,4 @@ module.exports = {
 				return Service.catch(req, res, e, "updateUserInfo");
 			});
 	}
-
 };

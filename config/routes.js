@@ -229,6 +229,16 @@ module.exports.routes = {
     action: "ratingBook"
   },  
 
+  'post /public/register': {
+    controller: "PublicUserController",
+    action: "register"
+  },
+
+  'post /public/login': {
+    controller: "PublicUserController",
+    action: "login"
+  },
+
   /*=====================================
   =            Position routes            =
   =====================================*/

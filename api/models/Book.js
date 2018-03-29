@@ -138,98 +138,125 @@ module.exports = {
     });
 	},
 
-	getBookPublic: function(condition, limit, offset, sort_name, sort_type, accessToken) {
+	getBookPublic: function(condition, limit, offset, sort_name, sort_type, userId) {
 		return new Promise(function(resolve, reject){
+			var result = {};
+
 			Book.getBookList({
 				where: condition,
 				limit: limit,
 				skip: offset,
 				sort: sort_name + ' ' + sort_type
-			}).then(function(books){
+			}).then(function(bookResult){
+
+				result.books = bookResult
+				return result;
+			})
+			.then(function(result){
+				return Book.countBook({where: condition})
+					.then(function(count){
+						result.count = count;
+						return result;
+					});
+			})
+			.then(function(result){
+				return BookComment.find()
+					.then(function(commentResult){
+						result.comments = commentResult;
+						return result;
+					});
+			})
+			.then(function(result){
 				var bookList = [];
 
-				// get book count
-				Book.countBook({where: condition})
-					.then(function(count){
+				if(userId){
+					BookRating.getBookRatingByUserId(userId)
+						.then(function(bookRatingResult){
+							result.ratings = bookRatingResult;
+							bookList = Book.filterBook(result);
 
-						BookComment.find()
-							.then(function(commentResult){
+							return resolve ({
+								book_count: result.count,
+								books: bookList
+							});
 
-								// get rating facebook
-								if(accessToken) {
-									BookRating.getBookRatingByFbUser(accessToken)
-										.then(function(bookRatingResult){
-
-											if(books && books.length > 0) {
-												// filter data
-												for(var i in books) {
-														books.comment = [];
-                            if(commentResult && commentResult.length) {
-                              for(var j in commentResult) {
-                                if(books[i].id == commentResult[j].book_id) {
-                                  books.comment.push(commentResult[j]);
-                                }
-    													}
-                            }
-
-													bookList.push({
-														id: books[i].id,
-														name: books[i].name,
-														image: books[i].image,
-														hot: books[i].hot,
-														author: books[i].author,
-														intro: books[i].intro,
-														current_quantity: books[i].current_quantity,
-														comment_time: books[i].comment_time,
-														love_time: books[i].love_time,
-														hate_time: books[i].hate_time,
-														type_name: books[i].type_name,
-                            borrow_time: books[i].borrow_time,
-														comment: books[i].comment
-													});
-												}
-											}
-
-											if(bookRatingResult && bookRatingResult.length) {
-												for(var i in bookList) {
-													for(var j in bookRatingResult) {
-														if(bookList[i].id == bookRatingResult[j].book_id) {
-															bookList[i].is_rating = bookRatingResult[j].type;
-														}
-													}
-
-												}
-											}
-
-											return resolve ({
-												book_count: count,
-												books: bookList
-											});
-										})
-										.catch(function(err){
-											return reject(err);
-										});
-								
-								} else {
-									return resolve ({
-										book_count: count,
-										books: bookList
-									});
-								}
 						})
 						.catch(function(err){
 							return reject(err);
 						});
 
-					})
-					.catch(function(err){
-						return reject(err);
+				} else {
+					bookList = Book.filterBook(result);
+					return resolve ({
+						book_count: result.count,
+						books: bookList
 					});
+				}
 			})
 			.catch(function(err){
 				return reject(err);
 			});
 		});
+	},
+
+	filterBook: function(result) {
+		var bookList = [];
+		// handle comment
+		var commentObj = {}, i, j, k, bookRatingObj = {};
+
+		if(result.comments && result.comments.length) {
+      for(i in result.comments) {
+        if(!commentObj[result.comments[i].book_id]) {
+        	commentObj[result.comments[i].book_id] = [];
+        }
+        commentObj[result.comments[i].book_id].push(result.comments[i]);
+			}
+    }
+
+    // handle rating
+    if(result.ratings && result.ratings.length) {
+			for(j in result.ratings) {
+				bookRatingObj[result.ratings[j].book_id] = result.ratings[j].type;
+			}
+		}
+
+		if(result.books && result.books.length > 0) {
+			for(k in result.books) {
+
+				// add comment to book
+				result.books[k].comment = [];
+				if(Object.getOwnPropertyNames(commentObj).length) {
+					if(bookRatingObj[result.books[k].book_id]) {
+						result.books[k].comment = bookRatingObj[result.books[k].book_id];
+					}
+				}
+
+				if(Object.getOwnPropertyNames(bookRatingObj).length) {
+					if(bookRatingObj[result.books[k].id]) {
+						result.books[k].is_rating = bookRatingObj[result.books[k].id];
+					}
+				}
+
+				bookList.push({
+					id: result.books[k].id,
+					name: result.books[k].name,
+					image: result.books[k].image,
+					hot: result.books[k].hot,
+					author: result.books[k].author,
+					intro: result.books[k].intro,
+					current_quantity: result.books[k].current_quantity,
+					comment_time: result.books[k].comment_time,
+					love_time: result.books[k].love_time,
+					hate_time: result.books[k].hate_time,
+					type_name: result.books[k].type_name,
+          borrow_time: result.books[k].borrow_time,
+					comment: result.books[k].comment,
+					is_rating: result.books[k].is_rating
+				});
+			}
+		}
+
+		return bookList;
 	},
 
 	afterCreate:function (value, cb) {
