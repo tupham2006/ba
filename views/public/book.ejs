@@ -24,7 +24,6 @@
 
 		.book-data-title {
 			height: 30px;
-			margin-top: 5px;
 			line-height: 30px;
 			vertical-align: middle;
 			color: rgb(65, 140, 252);
@@ -32,6 +31,7 @@
 		}
 
 		.book-data-rate {
+			margin-top: 5px;
 			width: 100%;
 			height: 20px;
 			line-height: 20px;
@@ -157,17 +157,9 @@
 						</select>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-xs-12">
-						<nav aria-label="...">
-						  <ul class="pagination"></ul>
-						</nav>
-					</div>
-				</div>
 			</div>
-			<div class="col-xs-12 col-md-9 height-100 pt-10 pb-10" style="overflow: auto;">
-				<div class="row height-100" id="bookData">
-				</div>
+			<div class="col-xs-12 col-md-9 height-100 pt-10 pb-10 load-more" style="overflow: auto;">
+				<div class="row" id="bookData"></div>
 			</div>
 		</div>
 	</div>
@@ -243,41 +235,28 @@
 		Request("/public/bookPage")
 			.then(function(response){
 				bookList = response.books;
+				bookCount = response.book_count;
+				totalItem = bookList.length;
+
 				for(var j in response.book_types) {
 					$("#filterType").append(
 						'<option value="' + response.book_types[j].id + '">' + response.book_types[j].name + '</option>'
 					);
 				}	
-				renderPaging();
+				finishLoadingPage();
 				renderBookTemplate();
 			});
 
 		/****************************
 							SIDE BAR
 		****************************/
-		/**
-			Paging 
-		*/
-		function renderPaging() {
-			var pages = Math.floor(bookCount/10) ? Math.floor(bookCount/10) : 1;
-			$(".pagination").empty();
 
-			for(var k = 0; k < pages; k++ ) {
-				$(".pagination").append(
-					'<li value=' + k + '><a href="javascript:void(0)" >' + (k + 1) + '</a></li>'
-				);
+		$(".load-more").scroll(function() {
+			if($(".load-more").scrollTop() + $(".load-more").height() ==  $("#bookData").height()) {
+				filter.offset += 12;
+				if(filter.offset >= bookCount) return;
+				getBookList("LOAD_MORE");
 			}
-
-			$(".pagination li").first().addClass('active');
-		}
-
-		// when click page
-		$('ul.pagination').on('click', "li", function(e){
-			$(".pagination li").removeClass("active");
-			$(this).addClass("active");
-			var currentPage = parseInt($(this).attr('value'));
-			filter.offset = (currentPage * filter.limit);
-			getBookList(true);
 		});
 
 		/**
@@ -286,6 +265,9 @@
 		// sort name
 		$('#sort a').click(function(e){
 			filter.sort_name = $(this).attr('value');
+			filter.limit = bookList.length;
+			filter.offset = 0;
+
 			$('#sortTitle').html($(this).html());
 			$("#sort").collapse('hide');
 
@@ -294,6 +276,8 @@
 
 		// sort type
 		$("#sortIcon").click(function(e){
+			filter.limit = bookList.length;
+			filter.offset = 0;
 			if($("#sortIcon").hasClass("fa-sort-amount-desc")){
 				$("#sortIcon").removeClass("fa-sort-amount-desc");
 				$("#sortIcon").addClass("fa-sort-amount-asc");
@@ -314,6 +298,9 @@
 			if(timeoutSearch) clearTimeout(timeoutSearch);
 			timeoutSearch = setTimeout(function(){
 				filter.search = $('#filterSearch').val();
+				filter.limit = 12;
+				filter.offset = 0;
+				$(".load-more").scrollTop(0);
 				getBookList();
 			}, 500);
 		});
@@ -321,46 +308,60 @@
 		// filter type	
 		$('#filterType').change(function(e){
 			filter.type = parseInt($('#filterType').val());
+			filter.limit = 12;
+			filter.offset = 0;
+			$(".load-more").scrollTop(0);
 			getBookList();
 		});
 
 		// filter status	
 		$('#filterStatus').change(function(e){
+			filter.limit = 12;
+			filter.offset = 0;
 			filter.status = parseInt($('#filterStatus').val());
+			$(".load-more").scrollTop(0);
 			getBookList();
 		});
 
 		/*****************************
 									MAIN
 		******************************/
-		function getBookList(changePage) {
+		function getBookList(action) {
+			if(isSending) return;
+			blockUI(true);
+			
 			var data = filter;
 			Request('/public/getBookList', data)
 				.then(function(response){
-					bookList = response.books;
-
-					$("#bookData").empty();
-					renderBookTemplate();
-					if(changePage) {
-						renderPaging();
+					console.log("response", response);
+					bookCount = response.book_count;
+					if(action == "LOAD_MORE") {
+						bookList = bookList.concat(response.books);
+					} else {
+						bookList = response.books;
 					}
+					renderBookTemplate(action);
+					blockUI();
 
 				})
-				.catch(function(){});
+				.catch(function(){
+
+				});
 		}
 
-		function renderBookTemplate() {
+		function renderBookTemplate(action) {
+			
 			$("#bookData").empty();
 
 			for(var i in bookList) {
 				$("#bookData").append(
-					'<div class="col-md-3 mb-10">' +
+					'<div class="col-md-3 mb-10" style="border-bottom: 1px dashed #ccc">' +
 						'<div class="book-data-main" book_id="' + bookList[i].id + '" title="' + bookList[i].name + (!bookList[i].current_quantity ? ' (Đã mượn)' : '') + '">' +
-							'<div class="book-data-image" style="background: url(\'' + bookList[i].image + '\');  background-size: contain; background-repeat: no-repeat; background-position: center;">' +
-							(!bookList[i].image ? '<i class="fa fa-file-image-o default-book"></i>' : '') + '</div>' + 
 							'<div class="book-data-title text-overflow" style="' + (!bookList[i].current_quantity ? 'color: red;' : '') + '">' + 
 							bookList[i].name + 
 							'</div>' +
+							'<div class="book-data-image" style="background: url(\'' + bookList[i].image + '\');  background-size: contain; background-repeat: no-repeat; background-position: center;">' +
+							(!bookList[i].image ? '<i class="fa fa-file-image-o default-book"></i>' : '') + '</div>' + 
 							'<div class="book-data-rate">' +
 								'<div class="width-30 display-inblock" title="Yêu thích">' +
 									'<i class="fa love ' + ((bookList[i].is_rating == 1) ? "loved" : '') + '" value="1" book_id=' + bookList[i].id + '></i> ' +

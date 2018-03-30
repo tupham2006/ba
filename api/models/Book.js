@@ -232,7 +232,7 @@ module.exports = {
 				}
 
 				if(Object.getOwnPropertyNames(bookRatingObj).length) {
-					if(bookRatingObj[result.books[k].id]) {
+					if(bookRatingObj[result.books[k].id] >= 0) {
 						result.books[k].is_rating = bookRatingObj[result.books[k].id];
 					}
 				}
