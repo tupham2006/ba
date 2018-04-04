@@ -109,6 +109,9 @@
 
 		#modalBookComment .cmt {
 			margin-top: 10px;
+			height: 300px;
+			width: 100%;
+			overflow-y: auto;
 		}
 
 	</style>
@@ -364,7 +367,7 @@
 		function renderBookTemplate(action) {
 			
 			$("#bookData").empty();
-			console.log($("#bookData"))
+
 			for(var i in bookList) {
 				$("#bookData").append(
 					'<div class="col-md-3 mb-10" style="border-bottom: 1px dashed #ccc">' +
@@ -408,8 +411,6 @@
 					} else {
 						bookList = response.books;
 					}
-					console.log('call', typeof renderBookTemplate);
-						console.log("bookList", bookList);
 					renderBookTemplate(action);
 					blockUI();
 
@@ -426,7 +427,7 @@
 			var rateType = parseInt($(this).attr("value"));
 			var bookId = parseInt($(this).attr("book_id"));
 			
-			if(!public_token) {
+			if(!publicUser.public_token) {
 				toastr.error("Vui lòng đăng nhập để tiếp tục!");
 				return;
 			}
@@ -444,20 +445,36 @@
 		/**************************
 						MODAL
 		***************************/
-		function renderComment() {
-			var j, cmtContentHtml = [];
-			console.log("bookInfo.comment", bookInfo.comment);
-			if(!bookInfo.comment.length) return;
+		function renderComment(comment_id) {
+			var j, cmtContentHtml = [], comment_content;
+			if(bookInfo.comment.length){
 
 				for(j in bookInfo.comment) {
-					cmtContentHtml.push('<div class="mb-10">');
+					comment_content = "";
+
+					cmtContentHtml.push('<div class="mb-10" style="word-wrap: break-word;">');
 					cmtContentHtml.push('<span class="text-green pr-10"><i class="fa fa-commenting-o"></i> ' + formatDate(bookInfo.comment[j].createdAt) + '</span>');
+					if(publicUser) {
+						if(bookInfo.comment[j].user_id == publicUser.id) {
+							cmtContentHtml.push('<a href="javascript:void(0)" book-id="'+  bookInfo.comment[j].book_id + '"  comment-id="' + bookInfo.comment[j].id +'" class="delete-comment text-red pull-right mr-10"><i class="fa fa-trash"></i></a>');
+						}
+					}
 					cmtContentHtml.push('<span class="text-bold text-green">' + bookInfo.comment[j].user_name + '</span> ');
-					cmtContentHtml.push('<div class="content ml-10">' + toHtmlEntities(bookInfo.comment[j].content) + '</div>');
+					if(bookInfo.comment[j].content.length > 500 && bookInfo.comment[j].id != comment_id) {
+						comment_content = bookInfo.comment[j].content.slice(0, 500);
+					} else {
+						comment_content = bookInfo.comment[j].content;
+					}
+					cmtContentHtml.push('<div class="content ml-10"><span >' + toHtmlEntities(comment_content) + '</span>');
+					if(bookInfo.comment[j].content.length > 500 && bookInfo.comment[j].id != comment_id) {
+						cmtContentHtml.push(' <a href="javascript:void(0)" class="more-content" comment-id="'+  bookInfo.comment[j].id + '">Xem thêm</a>');
+					}
+					cmtContentHtml.push('</div>');
 					cmtContentHtml.push('</div>');
 				}
+			}
 
-				$("#modalBookComment .cmt").html(cmtContentHtml.join(""));
+			$("#modalBookComment .cmt").html(cmtContentHtml.join(""));
 		}
 
 		$('#bookData').on("click", ".book-data-main" , function(event) {
@@ -494,7 +511,7 @@
 			}
 
 			// comment
-			if(public_token) {
+			if(publicUser.public_token) {
 				$("#modalBookComment .cmt-box").show();
 			} else {
 				$("#modalBookComment .cmt-box").hide();
@@ -506,10 +523,14 @@
 			$("#bookModal").modal('show');
 		});
 
+		$(document).on('click', '.more-content', function(e){
+			renderComment($(this).attr("comment-id"))
+		});
+
 		$("#submitComment").click(function(e){
 			var content = $("#modalBookCommentEnter").val() || "";
 			if(!content.trim()) return;
-			
+			blockUI(true);
 			var params = {
 				book_id: bookInfo.id,
 				content: content
@@ -526,10 +547,47 @@
 						}
 						renderComment();
 						renderBookTemplate();
-
-						console.log("bookList", bookList);
+						$("#modalBookCommentEnter").val("");
+						blockUI();
 					}
-				}).catch(function(e){});
+				}).catch(function(e){
+					blockUI();
+				});
+		});
+
+		$(document).on("click", ".delete-comment", function(e){
+			var commentId = parseInt($(this).attr("comment-id"));
+			var bookId = parseInt($(this).attr("book-id"));
+			if(!commentId || !bookId) return;
+			var confirmBox = confirm("Bạn có muốn xóa bình luận này không?");
+			if(confirmBox) {
+				blockUI(true);
+				Request('/public/deleteCommentBook', { id: commentId, book_id: bookId })
+					.then(function(res){
+						var i, j, index, newComment = [];
+
+						for(i in bookList) {
+							if(bookList[i].id == bookId) {
+								index = i;
+								bookList[i].comment_time -= 1;
+
+								for(j in bookList[i].comment) {
+									if(bookList[i].comment[j].id != commentId) {
+										newComment.push(bookList[i].comment[j])
+									}
+								}
+								break;
+							}
+						}
+
+						bookList[index].comment = newComment;
+						renderComment();
+						renderBookTemplate();
+						blockUI();
+					}).catch(function(){
+						blockUI();
+					});
+			}
 		});
 	});
 

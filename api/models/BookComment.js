@@ -28,7 +28,6 @@ module.exports = {
 				.then(function(userResult){
 					if(!userResult) throw new Error("Tài khoản của bạn không tồn tại hoặc đã bị khóa");
 					data.user_name = userResult.name;
-					console.log("data", data);
 					return;
 				})
 
@@ -42,7 +41,6 @@ module.exports = {
 				})
 				// comment book
 				.then(function(){
-						console.log("data2", data);
 					return BookComment.create(data)
 						.exec(function(err, result){
 							if(err) reject(err);

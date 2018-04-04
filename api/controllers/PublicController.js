@@ -213,6 +213,10 @@ module.exports = {
 		var content = (req.param("content") || "").trim();
 		var bookId = parseInt(req.param("book_id"));
 		var returnData = {};
+		if(!req.session.public_user) {
+			return Service.catch(req, res, { message: "Vui lòng đăng nhập để tiếp tục" }, "ratingBook");
+		}
+
 		var userId = req.session.public_user.id;
 
 		if(!bookId){
@@ -232,6 +236,35 @@ module.exports = {
 			.catch(function(e){
 				return Service.catch(req, res, e, "commentBook");
 			});
+	},
 
+	deleteCommentBook: function(req, res) {
+		var bookId = parseInt(req.param("book_id"));
+		var id = parseInt(req.param("id"));
+		var returnData = {};
+		if(!req.session.public_user) {
+			return Service.catch(req, res, { message: "Vui lòng đăng nhập để tiếp tục" }, "deleteCommentBook");
+		}
+		var userId = req.session.public_user.id;
+
+		if(!bookId){
+			return Service.catch(req, res, { message: "Vui lòng nhập ID sách" }, "deleteCommentBook");
+		}
+
+		if(!id){
+			return Service.catch(req, res, { message: "Vui lòng nhập ID comment" }, "deleteCommentBook");
+		}
+
+		BookComment.update({
+			user_id: userId,
+			book_id: bookId,
+			id: id
+		}, { deleted: 1 })
+			.then(function(data){
+				return res.json({});
+			})
+			.catch(function(e){
+				return Service.catch(req, res, e, "deleteCommentBook");
+			});
 	}
 };

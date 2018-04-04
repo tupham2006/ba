@@ -244,11 +244,14 @@
 	<script type="text/javascript">
 		var isSending;
 		var pageUrl = window.location.href;
-		var public_token;
-		
+		var publicUser = {
+			public_token: getCookie('public_token'),
+			id: getCookie('public_user') ? JSON.parse(getCookie('public_user')).id : 0,
+			name: getCookie('public_user') ? JSON.parse(getCookie('public_user')).name : ""
+		};
+
 		function checkLoginStatus() {
-			public_token = getCookie('public_token');
-			if(public_token) {
+			if(publicUser.public_token) {
 				$("#logout").show();
 				$("#login").hide();
 				$("#register").hide();
@@ -338,7 +341,7 @@
 				url: url,
 				data: data,
 				headers: {
-		      'authorization': 'Bearer ' + public_token
+		      'authorization': 'Bearer ' + publicUser.public_token
 		    },
 				success: function(response){
 					if(response && !response.error){
@@ -440,7 +443,7 @@
 						.then(function(res){
 							if(res && !res.error) {
 								setCookie(res);
-								window.location.reload();
+								// window.location.reload();
 							} else {
 								toastr.error(res.message);
 							}
@@ -466,7 +469,9 @@
 			}
 			var currentDate = new Date().getDate() + 10;
 			var exp = new Date(new Date().setDate(currentDate));
-
+			publicUser.public_token = response.token;
+			publicUser.id = response.user.id;
+			publicUser.name = response.user.name;
 			document.cookie = "public_token=" + response.token + "; expires = " + exp;
 			document.cookie = "public_user=" + user + "; expires = " + exp;
 		}
@@ -487,7 +492,6 @@
 		  }
 		  return data;
 		}
-
 	// common function
 	function formatDate(data){
 		var date = new Date(data);

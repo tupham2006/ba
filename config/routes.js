@@ -233,6 +233,10 @@ module.exports.routes = {
     controller: "PublicController",
     action: "commentBook"
   },  
+  'post /public/deleteCommentBook': {
+    controller: "PublicController",
+    action: "deleteCommentBook"
+  },  
 
   'post /public/register': {
     controller: "PublicUserController",
