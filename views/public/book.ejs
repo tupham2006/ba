@@ -107,6 +107,10 @@
 			width: 100%;
 		}
 
+		#modalBookComment .cmt {
+			margin-top: 10px;
+		}
+
 	</style>
 
 	<div id="book" class="container-fluid">
@@ -188,7 +192,7 @@
 									</div> -->
 				      	</div>
 				      	<div class="clear"></div>
-			      	</div>
+			      	</div>	
 			      	 <!-- Tab panes -->
 			      	  <ul class="nav nav-tabs mb-10" role="tablist">
     							<li role="presentation" class="width-50 active" id="clickToIntro"><a href="#modalBookIntro" aria-controls="modalBookIntro" role="tab" data-toggle="tab">Giới thiệu sách</a></li>
@@ -199,13 +203,17 @@
     							</li>
     						</ul>
 							  <div class="tab-content" id="modalBookBody">
-							    <div role="tabpanel" class="tab-pane active" id='modalBookIntro'>
-							    </div>
+							    <div role="tabpanel" class="tab-pane active" id='modalBookIntro'></div>
 							    <div role="tabpanel" class="tab-pane" id="modalBookComment">
-							    	<div class="cmt-box text-center">
+							    	<div class="cmt-box text-center mb-10">
+							    		<div class="width-80 display-inblock pull-left">
+							    			<textarea type="text" class="form-control" rows="1" id="modalBookCommentEnter" placeholder="Bạn nghĩ gì về cuốn sách này"></textarea>
+							    		</div> 
+							    		<div class="width-20 display-inblock">
+							    			<button type="button" id="submitComment" class="btn btn-green">Gửi</button>
+							    		</div>
 							    	</div>
-							    	<div class="cmt">
-							    	</div>
+							    	<div class="cmt"></div>
 							    </div>
 							  </div>
 			      </div>
@@ -215,9 +223,35 @@
 </html>
 
 <script type="text/javascript">
-	var bookList = []; 
+
+	/* bookObject */
+	// ListObj
+	var bookList = [];
+
+	// Update book list
+	function updateBookList(data) {
+		for(var i in bookList) {
+			if(bookList[i].id == data.id) {
+				bookList[i] = data;
+			}
+		}
+	}
+
+	// book info object
 	var bookCount = 0;
 
+	var bookInfo = {};
+	// get info
+	function getBookInfoById(id) {
+		bookInfo = {};
+		var i;
+		for(i in bookList) {
+			if(bookList[i].id == id){
+				bookInfo = bookList[i];
+			}
+		}
+	}
+	
 	var filter = {
 		limit: 12,
 		offset: 0,
@@ -274,7 +308,7 @@
 			getBookList();
 		});
 
-		// sort type
+			// sort type
 		$("#sortIcon").click(function(e){
 			filter.limit = bookList.length;
 			filter.offset = 0;
@@ -326,33 +360,11 @@
 		/*****************************
 									MAIN
 		******************************/
-		function getBookList(action) {
-			if(isSending) return;
-			blockUI(true);
-			
-			var data = filter;
-			Request('/public/getBookList', data)
-				.then(function(response){
-					console.log("response", response);
-					bookCount = response.book_count;
-					if(action == "LOAD_MORE") {
-						bookList = bookList.concat(response.books);
-					} else {
-						bookList = response.books;
-					}
-					renderBookTemplate(action);
-					blockUI();
-
-				})
-				.catch(function(){
-
-				});
-		}
-
+		
 		function renderBookTemplate(action) {
 			
 			$("#bookData").empty();
-
+			console.log($("#bookData"))
 			for(var i in bookList) {
 				$("#bookData").append(
 					'<div class="col-md-3 mb-10" style="border-bottom: 1px dashed #ccc">' +
@@ -382,6 +394,31 @@
 			}
 		}
 
+		// Get book list
+		function getBookList(action) {
+			if(isSending) return;
+			blockUI(true);
+			
+			var data = filter;
+			Request('/public/getBookList', data)
+				.then(function(response){
+					bookCount = response.book_count;
+					if(action == "LOAD_MORE") {
+						bookList = bookList.concat(response.books);
+					} else {
+						bookList = response.books;
+					}
+					console.log('call', typeof renderBookTemplate);
+						console.log("bookList", bookList);
+					renderBookTemplate(action);
+					blockUI();
+
+				})
+				.catch(function(){
+					blockUI();	
+				});
+		}
+
 		// when love or hate
 		$('#bookData').on('click', '.book-data-rate .love, .book-data-rate .hate', function(e){
 			e.stopPropagation();
@@ -397,13 +434,9 @@
 			Request("/public/ratingBook", { rate_type: rateType, book_id: bookId })
 				.then(function(res){
 					if(res && res.book) {
-						for(var i in bookList) {
-							if(bookList[i].id == res.book.id) {
-								bookList[i] = res.book;
-							}
-						}
+						updateBookList(res.book);
 						renderBookTemplate();
-					}
+					}	
 				})
 				.catch(function(){});
 		});
@@ -411,6 +444,22 @@
 		/**************************
 						MODAL
 		***************************/
+		function renderComment() {
+			var j, cmtContentHtml = [];
+			console.log("bookInfo.comment", bookInfo.comment);
+			if(!bookInfo.comment.length) return;
+
+				for(j in bookInfo.comment) {
+					cmtContentHtml.push('<div class="mb-10">');
+					cmtContentHtml.push('<span class="text-green pr-10"><i class="fa fa-commenting-o"></i> ' + formatDate(bookInfo.comment[j].createdAt) + '</span>');
+					cmtContentHtml.push('<span class="text-bold text-green">' + bookInfo.comment[j].user_name + '</span> ');
+					cmtContentHtml.push('<div class="content ml-10">' + toHtmlEntities(bookInfo.comment[j].content) + '</div>');
+					cmtContentHtml.push('</div>');
+				}
+
+				$("#modalBookComment .cmt").html(cmtContentHtml.join(""));
+		}
+
 		$('#bookData').on("click", ".book-data-main" , function(event) {
 
 			$("#clickToIntro").tab('show');
@@ -418,14 +467,9 @@
 			$("#modalBookIntro").addClass('active');
 
 			var bookId = parseInt($(this).attr('book_id'));
-			var bookInfo = {};
-				
-			for(var i in bookList) {
-				if(bookList[i].id == bookId){
-					bookInfo = bookList[i];
-				}
-			}
-			
+			getBookInfoById(bookId);
+			renderComment();
+
 			// title left
 			if(bookInfo.image) {
 				$("#modalBookHeader .book-avatar").empty();
@@ -449,29 +493,43 @@
 				bookInfo.intro = "Nội dung đang được cập nhật!";
 			}
 
+			// comment
+			if(public_token) {
+				$("#modalBookComment .cmt-box").show();
+			} else {
+				$("#modalBookComment .cmt-box").hide();
+			}
+			
 			$("#modalBookIntro").html(bookInfo.intro);
-			// $("#modalBookLove").html(bookInfo.love_time);
-			// $("#modalBookHate").html(bookInfo.hate_time);
-			// $("#clickToComment .count-comment").html(bookInfo.comment_time);
 
 			// show modal
 			$("#bookModal").modal('show');
 		});
 
-		$("#clickToComment").click(function () {
-			var content = "Vui lòng đăng nhập để bình luận";
+		$("#submitComment").click(function(e){
+			var content = $("#modalBookCommentEnter").val() || "";
+			if(!content.trim()) return;
+			
+			var params = {
+				book_id: bookInfo.id,
+				content: content
+			};
 
-			if(public_token) {
-				content = '<textarea type="text" class="form-control" rows="1" id="modalBookCommentEnter" placeholder="Bạn nghĩ gì về cuốn sách này"></textarea>';
-			}
+			Request('/public/commentBook', params)
+				.then(function(res){
+					if(res && res.data) {
+						for(var i in bookList) {
+							if(bookList[i].id == res.data.book_id) {
+								bookList[i].comment_time += 1;
+								bookList[i].comment.unshift(res.data);
+							}
+						}
+						renderComment();
+						renderBookTemplate();
 
-			$('#modalBookComment .cmt-box').html(content);
-		});
-
-		$("#modalBookComment .cmt-box").on("keypress","#modalBookCommentEnter", function(e) {
-	    if( !e.shiftKey && e.which == 13) {
-	      $("#clickToComment").trigger('click');
-	    }
+						console.log("bookList", bookList);
+					}
+				}).catch(function(e){});
 		});
 	});
 

@@ -227,6 +227,11 @@ module.exports.routes = {
   'post /public/ratingBook': {
     controller: "PublicController",
     action: "ratingBook"
+  },
+
+  'post /public/commentBook': {
+    controller: "PublicController",
+    action: "commentBook"
   },  
 
   'post /public/register': {

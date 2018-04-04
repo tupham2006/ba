@@ -70,5 +70,18 @@ module.exports = {
 				return resolve(findResult);
 			});
 		});
+	},
+
+	getUserById: function(userId) {
+		return new Promise(function(resolve, reject){
+			PublicUser.findOne({
+				id: userId,
+				actived: 1,
+				deleted: 0
+			}).exec(function(err, result){
+				if(err) return reject(err);
+				return resolve(result);
+			});
+		});
 	}
 };

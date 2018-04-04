@@ -53,6 +53,17 @@ module.exports = {
 		});
 	},
 
+	getBookById: function(bookId) {
+		return new Promise(function(resolve, reject){
+			Book.findOne({
+				id: bookId
+			}).exec(function(err, result){
+				if(err) return reject(err);
+				return resolve(result);
+			});
+		});
+	},
+
 	updateBook: function(id, data){
 		return new Promise(function(resolve, reject){
 			Book.findOne({
@@ -149,7 +160,7 @@ module.exports = {
 				sort: sort_name + ' ' + sort_type
 			}).then(function(bookResult){
 
-				result.books = bookResult
+				result.books = bookResult;
 				return result;
 			})
 			.then(function(result){
@@ -160,7 +171,7 @@ module.exports = {
 					});
 			})
 			.then(function(result){
-				return BookComment.find()
+				return BookComment.find({where: { deleted: 0, actived: 1 }, sort: "createdAt DESC"})
 					.then(function(commentResult){
 						result.comments = commentResult;
 						return result;
@@ -226,8 +237,8 @@ module.exports = {
 				// add comment to book
 				result.books[k].comment = [];
 				if(Object.getOwnPropertyNames(commentObj).length) {
-					if(bookRatingObj[result.books[k].book_id]) {
-						result.books[k].comment = bookRatingObj[result.books[k].book_id];
+					if(commentObj[result.books[k].id]) {
+						result.books[k].comment = commentObj[result.books[k].id];
 					}
 				}
 

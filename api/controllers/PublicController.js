@@ -65,7 +65,6 @@ module.exports = {
 		var status = parseInt(req.param('status')) ? parseInt(req.param('status')) : 0;
 		var typeId = parseInt(req.param('type')) ? parseInt(req.param('type')) : 0;
 		var public_user = JWT.checkPublicLogin(req);
-		console.log("public_user", public_user);
 		var userId = public_user ? public_user.id : 0;
 
 		var condition = {
@@ -100,7 +99,6 @@ module.exports = {
 		var rateType = parseInt(req.param("rate_type"));
 		var bookId = parseInt(req.param("book_id"));
 		var returnData = {};
-		console.log("req.session", req.session);
 		var userId = req.session.public_user.id;
 		
 		if(!(rateType <= 1)) {
@@ -209,5 +207,31 @@ module.exports = {
 				return Service.catch(req, res, e, "ratingBook");
 			});
   	});
-}
+	},
+
+	commentBook: function(req, res) {
+		var content = (req.param("content") || "").trim();
+		var bookId = parseInt(req.param("book_id"));
+		var returnData = {};
+		var userId = req.session.public_user.id;
+
+		if(!bookId){
+			return Service.catch(req, res, { message: "Vui lòng nhập ID sách" }, "ratingBook");
+		}
+
+		if(!content){
+			return Service.catch(req, res, { message: "Vui lòng nhập nội dung sách" }, "ratingBook");
+		}
+
+		BookComment.commentBook(content, bookId, userId)
+			.then(function(data){
+				return res.json({
+					data: data
+				});
+			})
+			.catch(function(e){
+				return Service.catch(req, res, e, "commentBook");
+			});
+
+	}
 };
