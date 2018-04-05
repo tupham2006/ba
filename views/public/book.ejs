@@ -90,11 +90,13 @@
 			width: 30%;
 			height: 150px;
 			float: left;
+			padding: 5px;
 		}
 
 		#modalBookHeader .book-info {
 			width: 70%;
 			float: left;
+			padding: 5px;
 		}
 
 		#modalBookHeader .book-info .name {
@@ -113,14 +115,26 @@
 			width: 100%;
 			overflow-y: auto;
 		}
+		@media(max-width: 768px) { 
+		}
+
+		@media(max-width: 767px) {
+			#filterAction {
+				display: none;
+			}
+
+			#showFilter {
+				text-align: right;
+			}
+		}
 
 	</style>
 
 	<div id="book" class="container-fluid">
 		<div class="row height-100">
-			<div class="col-xs-12 col-md-3 height-100 pt-10 pb-10">
-				<div class="row mb-20">
-					<div class="col-xs-12 mb-10" style="font-size: 16px; color: rgb(65, 140, 252);">
+			<div id="sideBar" class="col-xs-12 col-md-3 pt-10 pb-10">
+				<div class="row">
+					<div class="col-xs-8 col-md-12 mb-20" style="font-size: 16px; color: rgb(65, 140, 252);">
 						<i class="fa fa-sort-amount-desc" id="sortIcon" style="cursor: pointer;"></i> 
 						<div class="display-inblock" role="button" data-toggle="collapse" href="#sort" aria-expanded="false" aria-controls="sort">Xếp theo: <span id="sortTitle">Sách mới</span> </div>
 						<div class="collapse" id="sort" style="margin-left: 16px; font-size: 14px">
@@ -129,39 +143,40 @@
 						  <a href="javascript:void(0)" value='hot'>Sách hot </a>
 						</div>
 					</div>
-					
-				</div>
-				<div class="row mb-20">
-					<div class="col-xs-12 mb-10" style="font-size: 16px; color: rgb(65, 140, 252);">
+					<div class="col-xs-4 col-md-12 mb-20" id="showFilter" style="font-size: 16px; color: rgb(65, 140, 252);">
 						<i class="fa fa-filter"></i> Lọc
 					</div>
-					<div class="col-xs-12 mb-10">
-					Tìm kiếm sách
-					</div>
-					<div class="col-xs-12">
-						<input type="text" class="form-control" id="filterSearch" placeholder="Nhập tên sách">
-					</div>
 				</div>
-				<div class="row mb-20">
-					<div class="col-xs-12 mb-10">
-					Thể loại sách
+				<div id="filterAction">
+					<div class="row mb-20">
+						<div class="col-xs-12 mb-10">
+						Tìm kiếm sách
+						</div>
+						<div class="col-xs-12">
+							<input type="text" class="form-control" id="filterSearch" placeholder="Nhập tên sách">
+						</div>
 					</div>
-					<div class="col-xs-12">
-						<select id="filterType" class="form-control">
-							<option value="0" selected> Tất cả</option>
-						</select>
+					<div class="row mb-20">
+						<div class="col-xs-12 mb-10">
+						Thể loại sách
+						</div>
+						<div class="col-xs-12">
+							<select id="filterType" class="form-control">
+								<option value="0" selected> Tất cả</option>
+							</select>
+						</div>
 					</div>
-				</div>
-				<div class="row mb-20">
-					<div class="col-xs-12 mb-10">
-						Trạng thái sách
-					</div>
-					<div class="col-xs-12">
-						<select id="filterStatus" class="form-control">
-							<option value="0" selected> Tất cả</option>
-							<option value="1"> Chưa mượn</option>
-							<option value="2"> Đã mượn</option>
-						</select>
+					<div class="row mb-20">
+						<div class="col-xs-12 mb-10">
+							Trạng thái sách
+						</div>
+						<div class="col-xs-12">
+							<select id="filterStatus" class="form-control">
+								<option value="0" selected> Tất cả</option>
+								<option value="1"> Chưa mượn</option>
+								<option value="2"> Đã mượn</option>
+							</select>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -174,6 +189,9 @@
 			<div class="modal fade" id="bookModal" tabindex="-1" role="dialog">
 			  <div class="modal-dialog" role="document">
 			    <div class="modal-content">
+			    	<div class="modal-header" style="padding: 10px;">
+			    		<button type="button" class="close" data-dismiss="modal">×</button>
+			    	</div>
 			      <div class="modal-body">
 			      	<div id="modalBookHeader" class="mb-20">
 				      	<div class="book-avatar" style="line-height: 150px; vertical-align: middle;">
@@ -184,15 +202,6 @@
 				      		<div class="type">Thể loại: <span></span></div>	
 				      		<div class="author">Tác giả: <span></div>	
 				      		<div class="borrow_time">Lượt mượn: <span></span></div>	
-						<!-- 	<div class="book-data-rate" style="text-align: left;">
-				      			Đánh giá: 
-										<div class="width-10 display-inblock" title="Yêu thích">
-											<i class="fa love"></i> <span id="modalBookLove"></span>
-										</div>
-										<div class="width-10 display-inblock" title="Ghét">
-											<i class="fa fa-thumbs-o-down hate"></i> <span id="modalBookHate"></span>
-										</div>
-									</div> -->
 				      	</div>
 				      	<div class="clear"></div>
 			      	</div>	
@@ -287,6 +296,9 @@
 		/****************************
 							SIDE BAR
 		****************************/
+		$("#showFilter").click(function(){
+			$("#filterAction").toggle();
+		});
 
 		$(".load-more").scroll(function() {
 			if($(".load-more").scrollTop() + $(".load-more").height() ==  $("#bookData").height()) {

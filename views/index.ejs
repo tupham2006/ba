@@ -170,6 +170,10 @@
 				z-index: 1000;
 			}
 
+			#header .logo {
+				margin-left: 10px;
+			}
+
 			#header .navbar-toggle {
 				border-color: unset !important;
 			}
@@ -443,7 +447,7 @@
 						.then(function(res){
 							if(res && !res.error) {
 								setCookie(res);
-								// window.location.reload();
+								window.location.reload();
 							} else {
 								toastr.error(res.message);
 							}

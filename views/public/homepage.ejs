@@ -30,17 +30,6 @@
 			left: 0px;
 		}
 
-		#home .title .title-content {
-			display: inline-block;
-			line-height: 50px;
-			vertical-align: middle;
-			padding: 5px;
-			padding-left: 45px;
-			font-size: 20px;
-			margin-left: -30px;
-			width: calc(100% - 30px);
-		}
-
 		#home .title .title-art {
 			float: right;
 			line-height: 50px;
@@ -91,11 +80,33 @@
 			cursor: wait;
 			pointer-events: none;
 		}
+		@media(min-width: 768px) {
+			#home .title .title-content {
+				display: inline-block;
+				line-height: 50px;
+				vertical-align: middle;
+				padding: 5px;
+				padding-left: 45px;
+				font-size: 20px;
+				margin-left: -30px;
+				width: calc(100% - 30px);
+			}
+			#bookName {
+				background: linear-gradient(to right, #0f8206 , rgb(47, 161, 37))
+			}
+		}
 
 		@media(max-width: 767px) {
+			.image {
+				height: 200px;
+			}
 			#home {
 				font-size: 14px;
 				color: #000000;
+			}
+
+			#home .section {
+				padding: 10px !important;
 			}
 
 			#home .title-icon {
@@ -109,6 +120,11 @@
 				position: relative;
 				overflow: hidden;
 			}
+
+			#home .title .title-content {
+				font-weight: bold;
+				color: #27b527;
+			}
 		}
 	</style>
 
@@ -118,10 +134,10 @@
 				<div class="row height-100" id="bookMain">
 					<div class="col-xs-12 col-md-6">
 						<div class="title mb-10">
-							<div class="title-icon" style="background: rgb(47, 161, 37); border: 3px solid #0f8206;">
+							<div class="title-icon hidden-xs" style="background: rgb(47, 161, 37); border: 3px solid #0f8206;">
 								<i class="glyphicon glyphicon-book"></i>
 							</div>
-							<div class="title-content" id="bookName" style="background: linear-gradient(to right, #0f8206 , rgb(47, 161, 37));"></div>				
+							<div class="title-content" id="bookName"></div>				
 						</div>
 						<div class="content" id="bookContent"></div>
 						<div class="title-art pull-right"><i id="bookArt"></i></div>
@@ -135,68 +151,11 @@
 				</div>
 			</div>
 		</div>
-		<!-- <div class="section">
-			<div class="container-fluid">
-				<div class="row" id="actionMain">
-					<div class="col-xs-12 col-md-4 height-100">
-				    <div class="image">
-				    	<div class="content">
-				    		<img src="uploads/event/test.jpg">
-				    	</div>
-				    </div>
-					</div>
-					<div class="col-xs-12 col-md-8">
-						<div class="title mb-10">
-							<div class="title-icon pull-right">
-								<i class="fa fa-flash" style="font-size: 60px; top: 10px; left: 15px;"></i>
-							</div>
-							<div class="title-content pull-right" style="padding-right: 20px;">
-								Tri ân
-							</div>				
-							<div class="clear"></div>
-						</div>
-						<div class="content">
-								Ai sinh ra trên đời mà chẳng phải có nguồn cội của mình. CLB Sách và Hành động HUMG cũng vậy. Vì thế nên thế hệ sau đã quyết định tri ân các anh chị - những người đã đặt nền móng và gây dựng nên B&A HUMG của hôm nay. :) 
-								Chân thành cảm ơn các anh, chị đã giành thời gian quay lại trường và dự buổi tri ân với CLB.
-								Mong rằng sẽ luôn có những thành viên nhiệt huyết và đáng yêu như các anh, chị để CLB ngày càng lớn mạnh hơn nữa.
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="section">
-			<div class="container-fluid height-100">
-				<div class="row height-100">
-					<div class="col-xs-12 col-md-6">
-						<div class="title mb-10">
-							<div class="title-icon">
-								<i class="fa fa-pencil-square-o" style="font-size: 50px; top: 15px; left: 5px;"></i>
-							</div>
-							<div class="title-content">
-								Cảm xúc buổi tri ân
-							</div>				
-							<div class="title-art">
-								<i>- Đỗ Tiến Thịnh -</i>
-							</div>
-						</div>
-						<div class="content">
-								Tình hình là tớ đọc xong quyển này rồi. Cơ mà thấy nhiều đứa chưa ghi hay chưa được ghi nên là lúc nào t về các bạn ghi vào nhé. Nhớ các bạn lắm
-						</div>
-					</div>
-					<div class="col-xs-12 col-md-6 height-100">
-				    <div class="image">
-				    	<div class="content" style='background: url("uploads/event/test3.jpg"); background-size: contain, background-repeat: no-repeat; background-position: center'>
-				    	</div>
-				    </div>
-					</div>
-				</div>
-			</div>
-		</div> -->
 		<div class="section">
 			<div class="container-fluid height-100">
 				<div class="row height-100">
 					<div class="col-xs-12 col-md-10 col-md-offset-1">
-						<div class="title mb-10">
+						<div class="title mb-10 hidden-xs">
 							<div class="title-icon" style="background: rgb(65, 140, 252); border: 3px solid #2a66c1;">
 								<i class="fa fa-info-circle" style="font-size: 50px; top: 15px; left: 5px;"></i>
 							</div>
@@ -204,13 +163,16 @@
 								Giới thiệu
 							</div>				
 						</div>
+						<div class="text-green hidden-sm hidden-md hidden-lg">
+							<b>Giới thiệu</b>
+						</div>
 						<div class="content">
 								Fanpage CLB Sách Và Hành Động ĐH Mỏ Địa Chất ra đời nhằm 3 nhiệm vụ chính:<br>
 								1. CLB sẽ huy động một nguồn lớn sách từ các nhà hảo tâm liên quan đến các vấn đề chính trị,kinh tế,xã hội,kinh doanh,nấu ăn,tiểu thuyết,... để cho các bạn sinh viên mượn miễn phí ngay trong khuôn viên trường.<br>
 								2. Trên fan page clb sẽ chia sẻ tất cả các hoạt động,event của các trường ĐH khác trên HÀ NỘi Như ĐH Ngoại Thương, ĐH Kinh tế Quốc Dân..., các đại sứ quán, các tổ chức phi chính phủ như YVS Hanoi, Life B, Chạy xuyên Việt... liên quan đến các vấn đề tình nguyện,kinh doanh, từ thiện,học tập,trao đổi văn hóa,nghệ thuật,âm nhạc.....để những bạn sinh viên Mỏ nào trong trường có mong muốn tham gia thì sẽ có được thông tin.<br>
 								3. Tổ chức các talk show,các event tại trường,mời các doanh nhân,diễn giả và những người thành công trên con đường chính trị,kinh tế,lịch sử,văn học... đến để chia sẻ với sinh viên Mỏ Địa Chất để sinh viên Mỏ ngày càng học tập tốt,năng động và có những định hướng,suy nghĩ tích cực hơn trong cuộc sống.<br><br><br>
 								Địa chỉ: Không gian sách - Sảnh C12 tầng<br>
-								Liên hệ: 0123456789<br>
+								<!-- Liên hệ: 0123456789<br> -->
 						</div>
 					</div>
 				</div>

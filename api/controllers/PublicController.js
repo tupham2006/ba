@@ -15,7 +15,11 @@ module.exports = {
 			skip: 0
 		})
 		.then(function(bookResult){
-			returnData.book = bookResult;
+			if(bookResult && bookResult.length) {
+				returnData.book = bookResult[0];
+			} else {
+				returnData.book = {};
+			}
 		})
 		.then(function(){
 			return res.json({
