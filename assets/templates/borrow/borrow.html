@@ -196,7 +196,7 @@
 	<div class="right-parent" loadmore="getBookList('LOAD_MORE')">
 		<div ng-repeat ="book in bookList track by $index" class="book-item" ng-class="{'ready': book.current_quantity > 0, 'not-ready': book.current_quantity < 1}">
 			<div ng-click="showBookDefail(book.id)" class="book-image"> <book-img ng-model="book.image" av-size="40"></book-img> </div>
-			<div class="book-content" ng-class="book.current_quantity < 1 ? 'point-e-n' : ''" ng-click="addBookToBorrow(book.id, book.name)">{{ book.name }}
+			<div class="book-content" ng-class="book.current_quantity < 1 ? 'point-e-n' : ''" ng-click="addBookToBorrow(book)">{{ book.name }}
 				<div ng-show="(book.current_quantity > 1) || (book.use_quantity > 1 && book.current_quantity > 0)" ng-class="book.current_quantity < 1 ? 'btn-red' : 'btn-green'" class="borrow-current-quantity text-center">{{ book.current_quantity }}</div>
 			</div>
 			<div class="clear-both"></div>

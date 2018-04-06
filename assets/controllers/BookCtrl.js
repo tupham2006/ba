@@ -97,12 +97,8 @@ angular.module('ba').controller("BookCtrl",[
       }
 		};
 
-		$scope.onSelectBook = function (id) {
-			for(var i in $scope.bookList){
-				if($scope.bookList[i].id == id){
-					$scope.bookInfo = angular.copy($scope.bookList[i]);
-				}
-			}
+		$scope.onSelectBook = function (book) {
+			$scope.bookInfo = angular.copy(book);
 		};
 
 		$scope.saveBook = function(){

@@ -1,7 +1,7 @@
 <div class="book-search-parent" id="bookSearchParent">
 	<input type="text" ng-model="ngModel" ng-hide="option.input == 'hide'" class="form-control" placeholder="{{ option.placeholder }}" ng-change="getBookList()">
 	<div ng-show="bookList.length" class="book-search-child" ng-class="{'top-0' : option.input == 'hide' }">
-		<div class="content cursor-pointer" ng-repeat="book in bookList track by $index" ng-click="selectBook(book.id, book.name, book.current_quantity)" ng-class="{'ready': book.current_quantity > 0, 'not-ready': book.current_quantity < 1}">
+		<div class="content cursor-pointer" ng-repeat="book in bookList track by $index" ng-click="selectBook(book)" ng-class="{'ready': book.current_quantity > 0, 'not-ready': book.current_quantity < 1}">
 			<div style="float: left; width: 50px; height: 50px; padding: 5px;">
 					<label style="border: 1px solid #ddd; width: 40px;height: 40px; background: url('{{book.image}}'); background-size: contain; background-position: center center; background-repeat: no-repeat;" ng-show="book.image" ng-model="book.image" id="directiveAvatar" >
 					</label>

@@ -256,20 +256,20 @@ angular.module('ba')
 	    	
 	    };
 
-	    $scope.addBookToBorrow = function(id, name, currentQuantity){
+	    $scope.addBookToBorrow = function(book){
 	    	
-	    	if(currentQuantity == 0) return;
+	    	if(book.current_quantity == 0) return;
 
 	    	// not allow add 2 time 1 book
 	    	for(var i in $scope.borrowInfo.book){
-	    		if($scope.borrowInfo.book[i].book_id == id){
+	    		if($scope.borrowInfo.book[i].book_id == book.id){
 	    			return;
 	    		}
 	    	}
 
 	    	$scope.borrowInfo.book.push({
-	    		book_id: id,
-	    		book_name: name,
+	    		book_id: book.id,
+	    		book_name: book.name,
 	    		status: 1,
 	    	});
 	    };

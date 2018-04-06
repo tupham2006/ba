@@ -13,7 +13,7 @@ function Department(Store, Request, $q){
 
 	function getDepartmentList(params){
 		var df = $q.defer();
-		depositList = Store.departmentTable.list;
+		departmentList = Store.departmentTable.list;
 
 		if(departmentList.length){
 			df.resolve(getDepartmentListStore(params));
@@ -68,6 +68,7 @@ function Department(Store, Request, $q){
 		var df = $q.defer();
 		Request.post("/department/save", params)
 			.then(function(res){
+				console.log("res", res);
 
 				if(res && !res.error && res.data){
 					if(params.id && res.data.length > 0) {
