@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost
-Source Server Version : 100130
+Source Server Version : 50505
 Source Host           : localhost:3306
 Source Database       : ba
 
 Target Server Type    : MYSQL
-Target Server Version : 100130
+Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2018-03-20 12:52:26
+Date: 2018-04-08 02:09:19
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS `book`;
 CREATE TABLE `book` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
-  `image` varchar(200) DEFAULT NULL,
+  `image` varchar(200) DEFAULT '',
   `type_id` int(11) NOT NULL DEFAULT '1',
   `type_name` varchar(50) NOT NULL,
   `hot` tinyint(1) DEFAULT '0',
@@ -44,30 +44,23 @@ CREATE TABLE `book` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of book
--- ----------------------------
-
--- ----------------------------
 -- Table structure for book_comment
 -- ----------------------------
 DROP TABLE IF EXISTS `book_comment`;
 CREATE TABLE `book_comment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `book_id` int(11) NOT NULL,
-  `fb_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `user_name` varchar(50) DEFAULT NULL,
   `content` varchar(10000) DEFAULT NULL,
   `actived` tinyint(1) DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `book_comment_ibfk_1` (`fb_id`),
-  CONSTRAINT `book_comment_ibfk_1` FOREIGN KEY (`fb_id`) REFERENCES `fb_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `book_comment_ibfk_1` (`user_id`),
+  CONSTRAINT `book_comment_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `public_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of book_comment
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for book_rating
@@ -76,18 +69,14 @@ DROP TABLE IF EXISTS `book_rating`;
 CREATE TABLE `book_rating` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `book_id` int(11) NOT NULL,
-  `fb_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `type` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `book_rating_ibfk_1` (`fb_id`),
-  CONSTRAINT `book_rating_ibfk_1` FOREIGN KEY (`fb_id`) REFERENCES `fb_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `book_rating_ibfk_1` (`user_id`),
+  CONSTRAINT `book_rating_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `public_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of book_rating
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for book_type
@@ -98,12 +87,7 @@ CREATE TABLE `book_type` (
   `name` varchar(100) NOT NULL,
   `actived` int(1) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of book_type
--- ----------------------------
-INSERT INTO `book_type` VALUES ('1', 'Chưa phân loại', '1');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for borrow
@@ -113,10 +97,11 @@ CREATE TABLE `borrow` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT '1',
   `reader_id` int(11) NOT NULL DEFAULT '1',
+  `reader_mobile` varchar(11) NOT NULL,
   `reader_name` varchar(50) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
-  `borrow_date` timestamp NOT NULL,
-  `pay_date` timestamp NULL DEFAULT NULL,
+  `borrow_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `pay_date` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `note` varchar(10000) DEFAULT NULL,
   `deposit_name` varchar(50) NOT NULL,
   `deposit_id` int(11) NOT NULL DEFAULT '1',
@@ -131,10 +116,6 @@ CREATE TABLE `borrow` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of borrow
--- ----------------------------
-
--- ----------------------------
 -- Table structure for borrow_book
 -- ----------------------------
 DROP TABLE IF EXISTS `borrow_book`;
@@ -144,15 +125,11 @@ CREATE TABLE `borrow_book` (
   `book_id` int(11) NOT NULL,
   `book_name` varchar(100) NOT NULL,
   `status` tinyint(1) DEFAULT '1',
-  `borrow_date` timestamp NOT NULL,
+  `borrow_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `borrow_book_ibfk_1` (`borrow_id`),
   CONSTRAINT `borrow_book_ibfk_1` FOREIGN KEY (`borrow_id`) REFERENCES `borrow` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of borrow_book
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for department
@@ -166,11 +143,6 @@ CREATE TABLE `department` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of department
--- ----------------------------
-INSERT INTO `department` VALUES ('1', 'Chưa phân ban', '1');
-
--- ----------------------------
 -- Table structure for deposit
 -- ----------------------------
 DROP TABLE IF EXISTS `deposit`;
@@ -180,14 +152,7 @@ CREATE TABLE `deposit` (
   `actived` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of deposit
--- ----------------------------
-INSERT INTO `deposit` VALUES ('1', 'Thẻ sinh viên', '1');
-INSERT INTO `deposit` VALUES ('2', 'Chứng minh thư', '1');
-INSERT INTO `deposit` VALUES ('3', 'Tiền mặt', '1');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for facutly
@@ -215,22 +180,24 @@ INSERT INTO `facutly` VALUES ('9', 'Mỏ', '1');
 INSERT INTO `facutly` VALUES ('10', 'Địa chất', '1');
 
 -- ----------------------------
--- Table structure for fb_user
+-- Table structure for notification
 -- ----------------------------
-DROP TABLE IF EXISTS `fb_user`;
-CREATE TABLE `fb_user` (
+DROP TABLE IF EXISTS `notification`;
+CREATE TABLE `notification` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `fb_id` varchar(50) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `actived` tinyint(1) DEFAULT '1',
+  `message` varchar(200) NOT NULL,
+  `priority` enum('INFO','PRIMARY','WARNING','ERROR') NOT NULL,
+  `role` tinyint(1) NOT NULL DEFAULT '1',
+  `action` varchar(50) DEFAULT NULL,
+  `click` varchar(50) DEFAULT NULL,
+  `data_id` int(11) NOT NULL,
+  `creator_id` int(11) DEFAULT NULL,
+  `creator_name` varchar(50) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of fb_user
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for position
@@ -241,12 +208,22 @@ CREATE TABLE `position` (
   `name` varchar(50) NOT NULL,
   `actived` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of position
+-- Table structure for public_user
 -- ----------------------------
-INSERT INTO `position` VALUES ('1', 'Chưa có chức vụ', '1');
+DROP TABLE IF EXISTS `public_user`;
+CREATE TABLE `public_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `actived` tinyint(4) NOT NULL DEFAULT '1',
+  `deleted` tinyint(4) DEFAULT '0',
+  `name` varchar(50) NOT NULL,
+  `fb_id` varchar(50) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for reader
@@ -265,15 +242,12 @@ CREATE TABLE `reader` (
   `note` varchar(10000) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `reader_ibfk_1` (`facutly_id`),
   KEY `reader_ibfk_2` (`is_user`),
   CONSTRAINT `reader_ibfk_1` FOREIGN KEY (`facutly_id`) REFERENCES `facutly` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of reader
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for user
@@ -299,6 +273,7 @@ CREATE TABLE `user` (
   `dob_year` int(4) DEFAULT '2000',
   `actived` tinyint(1) DEFAULT '1',
   `deleted` tinyint(1) DEFAULT '0',
+  `last_seen_noti_id` int(11) DEFAULT '0',
   `note` varchar(10000) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -314,14 +289,7 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'admins', '99999999999', '$2a$15$qB37wP12HcBj.MZmb1mowuzqgZsBifP1XHWqUHxVpUIas2FTXQ0YS', 'Admin', '3', '1', '1', '', '1', '0', '', '', '0', '1', '1', '2000', '1', '0', '', '2018-03-20 12:50:22', '2018-03-20 12:50:22');
-DROP TRIGGER IF EXISTS `after_book_comment_create`;
-DELIMITER ;;
-CREATE TRIGGER `after_book_comment_create` AFTER INSERT ON `book_comment` FOR EACH ROW BEGIN
-		UPDATE book SET comment_time = comment_time + 1 WHERE id = NEW.book_id;
-END
-;;
-DELIMITER ;
+INSERT INTO `user` VALUES ('1', 'admins', '99999999999', '$2a$15$qB37wP12HcBj.MZmb1mowuzqgZsBifP1XHWqUHxVpUIas2FTXQ0YS', 'Admin', '3', '1', '1', '', '1', '0', '', '', '0', '1', '1', '2000', '1', '0', '3', '', '2018-03-20 12:50:22', '2018-04-07 22:11:05');
 DROP TRIGGER IF EXISTS `after_book_comment_update`;
 DELIMITER ;;
 CREATE TRIGGER `after_book_comment_update` AFTER UPDATE ON `book_comment` FOR EACH ROW BEGIN
@@ -374,3 +342,4 @@ CREATE TRIGGER `after_book_rating_delete` AFTER DELETE ON `book_rating` FOR EACH
 	END IF;
 END
 ;;
+DELIMITER ;
