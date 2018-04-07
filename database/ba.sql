@@ -100,7 +100,7 @@ CREATE TABLE `borrow` (
   `reader_mobile` varchar(11) NOT NULL,
   `reader_name` varchar(50) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
-  `borrow_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `borrow_date` timestamp NOT NULL,
   `pay_date` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `note` varchar(10000) DEFAULT NULL,
   `deposit_name` varchar(50) NOT NULL,
@@ -125,7 +125,7 @@ CREATE TABLE `borrow_book` (
   `book_id` int(11) NOT NULL,
   `book_name` varchar(100) NOT NULL,
   `status` tinyint(1) DEFAULT '1',
-  `borrow_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `borrow_date` timestamp NOT NULL,
   PRIMARY KEY (`id`),
   KEY `borrow_book_ibfk_1` (`borrow_id`),
   CONSTRAINT `borrow_book_ibfk_1` FOREIGN KEY (`borrow_id`) REFERENCES `borrow` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
