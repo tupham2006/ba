@@ -100,8 +100,19 @@ angular.module('ba',[
 	  });
 
 }])
-.run(["$rootScope", function($rootScope){
+.run(["$rootScope", "Notification","$state", "User", "$cookies", function($rootScope, Notification, $state, User, $cookies){
 	$rootScope.BAM = {};
+
+	// init to rootScope
+	$rootScope.$state = $state;
+	
+	$rootScope.BAM.notification = {
+		data: [],
+		unread_count: 0,
+		readNotification: readNotification
+	};
+
+	getNotification();
 	$rootScope.BAM.isNavCollapsed = true;
 	$rootScope.BAM.collapedOnlyMobile = function() {
 		if($rootScope.BAM.isMobile) {
@@ -120,4 +131,68 @@ angular.module('ba',[
 			window.location.reload();
 		}
 	});
+
+	/*
+		Notification
+	*/
+	function getNotification() {
+		Notification.getNotificationList()
+			.then(function(res){
+				$rootScope.BAM.notification.data = res;
+				var i, htmlNotification = [];
+				for(i in $rootScope.BAM.notification.data) {
+					
+					if($rootScope.BAM.notification.data[i].id > $rootScope.user.last_seen_noti_id) {
+						$rootScope.BAM.notification.unread_count += 1;
+					}
+
+					htmlNotification.push('<li role="menuitem" class="fix-notification">');
+					htmlNotification.push('<a href="javascript:void(0)" ng-click="' + renderActionNotification($rootScope.BAM.notification.data[i].click) + '" ' + (($rootScope.BAM.notification.data[i].id > $rootScope.user.last_seen_noti_id) ? 'style="background: #f6f6f6"' : "") + '>');
+					htmlNotification.push('<div class="fix-notification-message"><i class="fa '+ renderNotificationClassByPriotity($rootScope.BAM.notification.data[i].priority) + '"></i> ' + $rootScope.BAM.notification.data[i].message + '</div>');
+					htmlNotification.push('<div class="fix-notification-info">' + moment($rootScope.BAM.notification.data[i].created_at).format("HH:mm DD/MM/YYYY") + '</div>');
+					htmlNotification.push('</a>');
+					htmlNotification.push('</li>');
+				}
+
+				// build notification
+				angular.element($("#notification").html(htmlNotification.join("")));
+			})
+			.catch(function(err){
+				toast.error(err);
+			});
+	}
+	function renderNotificationClassByPriotity(priority) {
+		switch(priority) {
+			case "INFO": return "";
+			case "PRIMARY": return "fa-info-circle text-blue";
+			case "WARNING": return "fa-exclamation-triangle text-orange";
+			case "ERROR": return "fa-minus-circle text-red";
+			default: return "";
+		}
+	}
+
+	function renderActionNotification(action) {
+		switch(action) {
+			default: return "$state.go(" + action + ")";
+		}
+	}
+
+	function readNotification() {
+		$rootScope.BAM.notification.unread_count = 0;
+		var i, user = angular.copy($rootScope.user);
+		for(i in $rootScope.BAM.notification.data) {
+			user.last_seen_noti_id = Math.max(user.last_seen_noti_id, $rootScope.BAM.notification.data[i].id);
+		}
+		User.updateUserInfo(user)
+			.then(function(res){
+				$rootScope.user.last_seen_noti_id = user.last_seen_noti_id;
+				$cookies.putObject("user", res);
+				getNotification();
+			})
+
+			.catch(function(err){
+				toastr.error(err);
+			});
+	}
+
 }]);
