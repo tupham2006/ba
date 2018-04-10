@@ -73,14 +73,15 @@ CONST.ROLE = [
 CONST.PROFILE_QUESTION = [
   "Bạn cao bao nhiêu?",
   "Sở thích của bạn là gì?",
-  "Con vật yêu thích của bạn là gì",
+  "Kể về con vật mà bạn yêu thích",
   "Tình trạng hôn nhân của bạn?",
+  "Bật mí chỉ số 3 vòng được không nhỉ?",
   "Bạn nặng bao nhiêu?",
   "Thần tượng của bạn là ai?",
   "Tài lẻ mà bạn có?",
   "Bạn thân nhất của bạn là ai?",
   "Ước mơ của bạn là gì?",
-  "Gia đình bạn gồm mấy người?",
+  "Gia đình bạn có bao nhiêu thành viên?",
   "Bạn thích nhất môn học gì?",
-  "Bạn có thể kể một kỷ niệm đẹp của bạn đưọc chứ?"
+  "Bạn có thể kể một kỷ niệm đẹp của bạn?"
 ];
