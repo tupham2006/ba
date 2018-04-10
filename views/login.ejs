@@ -20,9 +20,9 @@
 	<link rel="stylesheet" type="text/css" href="../styles/const.css">
 	<link rel="stylesheet" type="text/css" href="../styles/theme.css">
 </head>
-<body class="login-background">
-	<div class="container-fluid">
-	<div class="row login-main" id="loginTab">
+<body class="login-background ">
+	<div class="container-fluid height-100" style="margin-top: -25px;">
+	<div class="row login-main item-center" id="loginTab">
 		<div class=" col-xs-12 col-md-4 col-md-push-4">
 			<form id="loginForm">
 				<div class="row mb-20 text-red">
@@ -67,11 +67,11 @@ $(document).ready(function(e){
 	$("#account").on("keyup", function(e){
 		var account = $("#account").val();
 		account = account.trim().toLowerCase();
-	  account = account.replace(/đ/g,"");
 	  account = account.replace(/ /g,"");
-	  account = account.replace(/[^0-9a-z_.]/g,"");
+	  // account = account.replace(/[^0-9a-z_.]/g,"");
 		$("#account").val(account);
 	});
+
 	
 	$('input').change(function(e){
 		validate($(this).attr("id"));
@@ -127,6 +127,7 @@ $(document).ready(function(e){
 
 					window.location.href = "/clb#/profile";
 				} else {
+					isSending = false;
 					$('#error').show();
 					$('#error').html(response.message);
 				}

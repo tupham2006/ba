@@ -100,9 +100,8 @@ $(document).ready(function(e){
 	$("#account").on("keyup", function(e){
 		var account = $("#account").val();
 		account = account.trim().toLowerCase();
-	  account = account.replace(/đ/g,"");
 	  account = account.replace(/ /g,"");
-	  account = account.replace(/[^0-9a-z_.]/g,"");
+	  // account = account.replace(/[^0-9a-z_.]/g,"");
 		$("#account").val(account);
 	});
 
@@ -157,8 +156,6 @@ $(document).ready(function(e){
 
 				if(res && res.error == 0){
 					$('#successModal').modal('show');
-					$("#registerText").show();
-					$("#sendingText").hide();
 
 				} else if (res && res.error == 1) {
 					$('#error').show();
@@ -168,6 +165,9 @@ $(document).ready(function(e){
 					$('#error').show();
 					$('#error').html("Lỗi đưòng truyền");
 				}
+				
+				$("#registerText").show();
+				$("#sendingText").hide();
 			}
 		});
 		

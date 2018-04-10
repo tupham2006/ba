@@ -33,8 +33,8 @@ table th, table td {
 }
 
 .login-main {
-	margin-top: 100px;
-	
+	height: 100%;
+	width: 100%;
 }
 
 #loginForm{
@@ -166,6 +166,53 @@ button {
 .menu-active {
 	background: #0078ff;
 	font-weight: bold;
+}
+
+.noti-icon {  
+  position: relative; 
+  vertical-align: middle;
+}
+
+.noti-icon i {
+  vertical-align: middle;
+	line-height: 40px;
+}
+
+.noti-icon span {
+	position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  border-radius: 50%;
+  background: #ec2f29;
+  color: white;
+  vertical-align: middle;
+  text-align: center;
+}
+
+#notification {
+	max-height: 400px;
+	overflow: auto;
+}
+
+.fix-notification {
+	width: 400px;
+	border-bottom: 1px solid #ddd;
+}
+
+.fix-notification a {
+	padding: 10px 10px !important;
+}
+
+.fix-notification-info {
+	font-size: 12px;
+}
+
+.fix-notification-message {
+	word-wrap: break-word;
+	white-space: normal;
 }
 
 #user .view-mode {
