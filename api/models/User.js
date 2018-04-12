@@ -128,7 +128,7 @@ module.exports = {
   },
 
   afterCreate: function(value, cb) {
-    value
+    NotificationService.user("create", value);
     cb();
   }
 };

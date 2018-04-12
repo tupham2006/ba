@@ -218,7 +218,7 @@ angular.module('ba').controller("BookCtrl",[
 	    	});
 		};
 
-		 if (!io.socket.bookEventReady) {
+		if (!io.socket.bookEventReady) {
     	io.socket.bookEventReady = true;
 			io.socket.on("book", function(res){
 				Store.bookTable.syncData(res.action, res.data);

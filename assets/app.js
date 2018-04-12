@@ -100,7 +100,7 @@ angular.module('ba',[
 	  });
 
 }])
-.run(["$rootScope", "Notification","$state", "User", "$cookies", function($rootScope, Notification, $state, User, $cookies){
+.run(["$rootScope", "Notification","$state", "User", "$cookies", "Store", function($rootScope, Notification, $state, User, $cookies, Store){
 	$rootScope.BAM = {};
 
 	// init to rootScope
@@ -139,9 +139,11 @@ angular.module('ba',[
 		Notification.getNotificationList()
 			.then(function(res){
 				$rootScope.BAM.notification.data = res;
+				
 				var i, htmlNotification = [];
+				$rootScope.BAM.notification.unread_count = 0;
+
 				for(i in $rootScope.BAM.notification.data) {
-					
 					if($rootScope.BAM.notification.data[i].id > $rootScope.user.last_seen_noti_id) {
 						$rootScope.BAM.notification.unread_count += 1;
 					}
@@ -161,6 +163,7 @@ angular.module('ba',[
 				toast.error(err);
 			});
 	}
+
 	function renderNotificationClassByPriotity(priority) {
 		switch(priority) {
 			case "INFO": return "";
@@ -193,6 +196,15 @@ angular.module('ba',[
 			.catch(function(err){
 				toastr.error(err);
 			});
+	}
+
+	if (!io.socket.notificationEventReady) {
+  	io.socket.notificationEventReady = true;
+		io.socket.on("notification", function(res){
+			console.log("res", res);
+			Store.notificationTable.syncData(res.action, res.data);
+			getNotification();
+		});
 	}
 
 }]);
