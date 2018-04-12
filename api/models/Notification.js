@@ -28,7 +28,7 @@ module.exports = {
 					}
 				},
 				sort: "id DESC",
-				limit: 100
+				limit: 50
 			}).exec(function(err, result){
 				if(err) reject(err);
 				return resolve(result);

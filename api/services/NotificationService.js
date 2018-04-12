@@ -13,7 +13,7 @@ module.exports = {
 
 		switch(action) {
 			case "create" : 
-				createNotificationData.message = "Thành viên <b>" + value.name + "</b> vừa đăng ký tài khoản";
+				createNotificationData.message = "Thành viên " + value.name + " vừa đăng ký tài khoản";
 				break;
 		}
 
