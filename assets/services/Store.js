@@ -15,7 +15,8 @@ function Store(){
 		depositTable,
 		facutlyTable,
 		positionTable,
-		departmentTable
+		departmentTable,
+		notificationTable
 	;
 
 	function Table(){
@@ -107,6 +108,7 @@ function Store(){
 	if(!facutlyTable) facutlyTable = new Table().newTable;
 	if(!positionTable) positionTable = new Table().newTable;
 	if(!departmentTable) departmentTable = new Table().newTable;
+	if(!notificationTable) notificationTable = new Table().newTable;
 
 	// special
 	if(!borrowBookTable.delete_by_borrow){
@@ -133,9 +135,10 @@ function Store(){
 		depositTable: depositTable,
 		facutlyTable: facutlyTable,
 		positionTable: positionTable,
-		departmentTable: departmentTable
+		departmentTable: departmentTable,
+		notificationTable: notificationTable
 	};
 
+	window.Store = service;
 	return service;
 }
-

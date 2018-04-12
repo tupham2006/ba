@@ -100,8 +100,26 @@ angular.module('ba',[
 	  });
 
 }])
-.run(["$rootScope", function($rootScope){
+.run(["$rootScope", 
+	"Notification",
+	"$state", 
+	"User", 
+	"$cookies", 
+	"Store", 
+	"$compile",
+	function($rootScope, Notification, $state, User, $cookies, Store, $compile){
 	$rootScope.BAM = {};
+
+	// init to rootScope
+	$rootScope.$state = $state;
+	
+	$rootScope.BAM.notification = {
+		data: [],
+		unread_count: 0,
+		readNotification: readNotification,
+	};
+
+	getNotification();
 	$rootScope.BAM.isNavCollapsed = true;
 	$rootScope.BAM.collapedOnlyMobile = function() {
 		if($rootScope.BAM.isMobile) {
@@ -120,4 +138,54 @@ angular.module('ba',[
 			window.location.reload();
 		}
 	});
+
+	/*
+		Notification
+	*/
+	function getNotification() {
+		Notification.getNotificationList()
+			.then(function(res){
+				$rootScope.BAM.notification.data = res;
+				$rootScope.BAM.notification.unread_count = 0;				
+				var i;
+
+				for(i in $rootScope.BAM.notification.data) {
+					if($rootScope.BAM.notification.data[i].id > $rootScope.user.last_seen_noti_id) {
+						$rootScope.BAM.notification.unread_count += 1;
+					}
+				}
+			})
+			.catch(function(err){
+				toast.error(err);
+			});
+	}
+
+	function readNotification() {
+		if(!$rootScope.BAM.notification.unread_count) return;
+		$rootScope.BAM.notification.unread_count = 0;
+		var i, user = angular.copy($rootScope.user);
+		for(i in $rootScope.BAM.notification.data) {
+			user.last_seen_noti_id = Math.max(user.last_seen_noti_id, $rootScope.BAM.notification.data[i].id);
+		}
+		User.updateUserInfo(user)
+			.then(function(res){
+				$rootScope.user.last_seen_noti_id = user.last_seen_noti_id;
+				$cookies.putObject("user", res);
+				getNotification();
+			})
+
+			.catch(function(err){
+				toastr.error(err);
+			});
+	}
+
+	if (!io.socket.notificationEventReady) {
+  	io.socket.notificationEventReady = true;
+		io.socket.on("notification", function(res){
+			toastr.info(res.data.message);
+			Store.notificationTable.syncData(res.action, res.data);
+			getNotification();
+		});
+	}
+
 }]);

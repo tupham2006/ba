@@ -188,6 +188,10 @@ module.exports = {
 			data.status = req.param("status");
 		}
 
+		if(parseInt(req.param('last_seen_noti_id'))) {
+			data.last_seen_noti_id = parseInt(req.param('last_seen_noti_id'));
+		}
+
 		User.updateUserInfo(condition, data)
 			.then(function(qUpdate){
 				if(!qUpdate || qUpdate.length == 0){

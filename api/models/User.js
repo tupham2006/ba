@@ -31,6 +31,7 @@ module.exports = {
     dob_year : { type: "integer", min: 1970, max: currentYear, defaultsTo: 2000 },
     actived : { type: "integer", defaultsTo: 1 }, // user is active in club 
     deleted : { type: "integer", defaultsTo: 0 },
+    last_seen_noti_id : { type: "integer"},
     note: {type: 'string', size: 10000, maxLength: 10000, defaultsTo: '' },
     createdAt: {type: "datetime", columnName: "created_at" },
     updatedAt: {type: "datetime", columnName: "updated_at" },
@@ -124,6 +125,11 @@ module.exports = {
           return resolve(count);
         });
     });
+  },
+
+  afterCreate: function(value, cb) {
+    NotificationService.user("create", value);
+    cb();
   }
 };
 

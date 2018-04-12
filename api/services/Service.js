@@ -18,7 +18,8 @@ module.exports = {
 		});
 	},
 
-	sync: function(tableName, action, data) {
-		sails.sockets.broadcast('Admin', tableName, { data: data, action: action });
+	sync: function(tableName, action, data, role) {
+		if(!role) role = "MOD";
+		sails.sockets.broadcast(role, tableName, { data: data, action: action });
 	}
 };

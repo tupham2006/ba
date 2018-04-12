@@ -121,6 +121,7 @@
 .text-orange {color: #fdc000}
 .text-white { color: #FFFFFF; }
 .text-pink { color: #fd6863 }
+.text-f5 { color: #f5f5f5 }
 
 .text-cap { text-transform: uppercase; }
 .text-bold { font-weight: bold; }

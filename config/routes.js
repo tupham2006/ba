@@ -336,4 +336,12 @@ module.exports.routes = {
     controller: "DashboardController",
     action: "getDashboard"
   },
+
+  /*=============================================
+  =                 Notification                =
+  =============================================*/
+  'post /notification/getList': {
+    controller: "NotificationController",
+    action: "getNotificationList"
+  },
 };
