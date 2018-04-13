@@ -30,6 +30,21 @@ module.exports = {
     });
   },
 
+  getReaderListIsUser: function () {
+    return new Promise(function(resolve, reject){
+      Reader.find({
+        deleted: 0,
+        actived: 1,
+        is_user: {
+          ">": 0
+        }
+      })
+        .exec(function(err, result){
+          if(err) return reject(err);
+          return resolve(result);
+        });
+    });
+  },
 
   countReader: function(condition){
     if(condition && condition.limit) delete condition.limit;

@@ -704,36 +704,20 @@ button {
 	height: 100%;
 }
 
-#dashboard .top1main {
-	height: 100%;
-	width: 100%;
-	color: #FFFFFF;
+.chart-main .borrow-total, .chart-main .borrow-book-total {
+	height: 60px;
+	line-height: 40px;
+	vertical-align: middle;
 	padding: 10px;
-	position: relative;
-	overflow: hidden;
 }
 
-#dashboard .top1main .background-icon {
-	position: absolute;
-	font-size: 150px;
-	opacity: 0.3;
-	top: 0;
-	left: 0;
+.chart-main .borrow-total {
+	background: #fdc000;
 }
 
-#dashboard .top1main .title {
-	font-weight: bold;
-}
-
-#dashboard .top1main .content {
-	width: 100%
-}
-
-#dashboard .top1main .content {
-	width: 100%;
-	font-size: 35px;
-	text-align: center;
-	line-height: 1.5;
+.chart-main .borrow-book-total {
+	background: #27b527;
+	color: #FFF;
 }
 
 #dashboard #side {
@@ -785,7 +769,6 @@ button {
 	padding: 10px;
   background: #FFF;
   margin: 0px;
-  margin-top: 10px;
   border: 1px solid #ddd;
 }
 

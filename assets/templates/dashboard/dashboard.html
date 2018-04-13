@@ -1,78 +1,61 @@
 <div id="dashboard">
 	<div class="row height-100" ng-if="!BAM.isMobile">
-		<div class="col-md-8 height-100">
-			<div class="row">
-				<div class="col-md-4">
-					<div class="top1main" style="background: #50af00; cursor: pointer;" ng-click="gotoPage('borrow')">
-						<i class="glyphicon glyphicon-star background-icon"></i>
-						<div class="title">
-							Mượn sách
-						</div>
-						<div class="content">
-								{{ headerData.borrow_count }} <span class="font-16"> lượt</span>
-						</div>
+		<div class="col-md-9 height-100">
+			<div class="row height-100 chart-main">
+				<div class="col-md-8 height-100">
+					<div class="mb-10">
+						<input type="text" date-range-picker class="form-control date-picker" ng-change="getBorrowList()" ng-model="dateRange.value" options="dateRange.options" >
 					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="top1main" style="background: #ff7b00; cursor: pointer;" ng-click="gotoPage('book')">
-						<i class="glyphicon glyphicon-book background-icon" style="font-size: 120px; top: 10px;"></i>
-						<div class="title">
-							Sách
+					<div class="row mb-30">
+						<div class="col-md-6">
+							<div class="borrow-total">
+								<span>Lượt mượn</span>
+								<span class="text-bold pull-right font-25">{{ borrow.total }}</span>
+							</div>
 						</div>
-						<div class="content">
-							<div class="number">
-								{{ headerData.book_count }} <span class="font-16"> quyển </span>
+						<div class="col-md-6">
+							<div class="borrow-book-total">
+								<span>Sách mượn</span>
+								<span class="text-bold pull-right font-25">{{borrow.borrow_book_count}}</span>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="top1main" style="background: #c336bc; cursor: pointer;" ng-click="gotoPage('reader')">
-						<i class="fa fa-user background-icon"></i>
-						<div class="title">
-							Bạn đọc
-						</div>
-						<div class="content">
-							<div class="number">
-								{{ headerData.reader_count }} <span class="font-16"> bạn </span>
-							</div>
-						</div>
+					<div class="report-borrow-chart" style="height: calc(100% - 134px)">
+						<canvas id="bar" class="chart chart-bar" chart-data="borrow.data" chart-labels="borrow.title" chart-series="borrow.series" chart-options="options" ></canvas>
 					</div>
 				</div>
-			</div>
-			<div  style="height:calc(100% - 112px);">
-				<div class="row height-50 chart-main"> 
-					<div class="col-md-8 height-100">
-						<div class="report-borrow-chart" style="height: 100%">
-							<canvas id="bar" class="chart chart-bar" chart-data="borrow.data" chart-labels="borrow.title" chart-series="borrow.series" chart-options="options" ></canvas>
-						</div>
+				<div class="col-md-4 height-100">
+					<div class="panel panel-default">
+					  <div class="panel-heading text-blue">Top bạn đọc mượn</div>
+					  <div class="panel-body">
+					    <div ng-repeat="item in borrow.top_reader">
+					    	<span class="text-blue text-bold font-18">{{ item.times }} </span>
+					    	<span class="text-cap-name"> {{item.reader_name}} </span> 
+					    	<span class="font-12"> ({{ item.reader_mobile | tel }}) </span>
+					    </div>
+					  </div>
 					</div>
-					<div class="col-md-4 height-100">
-						<b class="text-blue">Tháng này</b><br>
-						Lượt mượn: <b>{{ borrow.total }}</b> <br>
-						Sách mượn: <b>{{borrow.borrow_book_count}}</b> <br>
-						Mượn nhiều nhất: <b>{{borrow.max_borrow_reader.reader_name}} ({{ borrow.max_borrow_reader.times }} lượt)</b><br>
+					<div class="panel panel-default">
+					  <div class="panel-heading text-blue">Top sách mượn</div>
+					  <div class="panel-body">
+					    <div ng-repeat="item in borrow.top_book">
+					    	<span class="text-blue text-bold font-18">{{ item.times }} </span>
+					    	<span class="text-cap-name"> {{item.book_name}} </span> 
+						  </div>
+					  </div>
 					</div>
-				</div>
-				<div class="row height-50 chart-main pull-left" style="width: calc(50% - 5px); margin-right: 5px">
-					<div class="col-md-12 height-100">
-						<b class="text-blue" style="position: absolute; top: 0; left: 0">Bạn đọc</b>
-						<div class="report-borrow-chart" style="height: 100%">
-							<canvas id="pie" class="chart chart-pie" chart-data="reader.data" chart-labels="reader.title"  chart-options=" { cutoutPercentage: 0, legend: { display: true, position: 'right' }}" ></canvas>
-						</div>
-					</div>
-				</div>
-				<div class="row height-50 chart-main pull-left"  style="width: calc(50% - 5px); margin-left: 5px">
-					<div class="col-md-12 height-100">
-						<b class="text-blue" style="position: absolute; top: 0; left: 0">Sách</b>
-						<div class="report-borrow-chart" style="height: 100%">
-							<canvas id="pie" class="chart chart-pie" chart-data="book.data" chart-labels="book.title"  chart-options=" { cutoutPercentage: 0, legend: { display: true, position: 'right' }}" ></canvas>
-						</div>
+					<div class="panel panel-default">
+					  <div class="panel-heading text-blue">Top thành viên mượn</div>
+					  <div class="panel-body">
+				    	<span class="text-blue text-bold font-18">{{ borrow.top_user.times }} </span>
+				    	<span class="text-cap-name"> {{borrow.top_user.reader_name}} </span> 
+				    	<span class="font-12"> ({{ borrow.top_user.reader_mobile | tel }}) </span>
+					  </div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4" id="side">
+		<div class="col-md-3" id="side">
 			<div class="sidebar">
 				<div class="action" ui-sref="profile">
 					<div class="icon">

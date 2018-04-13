@@ -12,34 +12,11 @@ module.exports = {
 			view: "DATE"
 		};
 
-		Borrow.countBorrow({
-			deleted: 0	
-		})
-		.then(function(borrowCount){
-			returnData.borrow_count = borrowCount;
-		})
-		.then(function(){
-			return Book.countBook()
-				.then(function(bookCount){
-					returnData.book_count = bookCount;
-				});
-		})
-		.then(function(){
-			return Reader.countReader({
-				actived: 1,
-				deleted: 0
-			})
-			.then(function(readerCount){
-				returnData.reader_count = readerCount;
-			});
-		})
-		.then(function(){
-			return Borrow.reportBorrowTime(condition)
-				.then(function(borrowResult){
-					returnData.borrow = {
-						data: borrowResult
-					};
-				});
+		Borrow.reportBorrowTime(condition)
+			.then(function(borrowResult){
+				returnData.borrow = {
+					data: borrowResult
+				};
 		})
 		.then(function(){
 			return BorrowBook.countBorrowBook({
@@ -56,33 +33,45 @@ module.exports = {
 			return Borrow.reportBorrowReader({
 				start_date: startDate,
 				end_date: endDate,
-				limit: 1
+				limit: 3
 			})
 				.then(function(maxBorrowReader){
 					if(maxBorrowReader.length > 0) {
-						returnData.borrow.max_borrow_reader = maxBorrowReader[0];
+						returnData.borrow.top_reader = maxBorrowReader;
 					} else {
-						returnData.borrow.max_borrow_reader = {
+						returnData.borrow.top_reader = [{
 							reader_name: "Chưa có",
 							times: 0
-						};
+						}];
 					}
 				});
 		})
 		.then(function(){
-			return Reader.reportReaderFacutly()
-				.then(function(readerFacutlyResult){
-					returnData.reader = {
-						data: readerFacutlyResult
-					};
+			return Borrow.reportBorrowUser({
+				start_date: startDate,
+				end_date: endDate,
+				limit: 1,
+			})
+				.then(function(maxBorrowUser){
+					if(maxBorrowUser.length > 0) {
+						returnData.borrow.top_user = maxBorrowUser[0];
+					} else {
+						returnData.borrow.top_user = [{
+							reader_name: "Chưa có",
+							times: 0
+						}];
+					}
 				});
 		})
 		.then(function(){
-			return Book.reportBookType()
-				.then(function(bookTypeResult){
-					returnData.book = {
-						data: bookTypeResult
-					};
+			return Borrow.reportBorrowBookTime({
+				start_date: startDate,
+				end_date: endDate,
+				limit: 3,
+				view: 'DATE'
+			})
+				.then(function(borrowBookResult){
+					returnData.borrow.top_book = borrowBookResult;
 				});
 		})
 		.then(function(){
