@@ -64,7 +64,9 @@ angular.module('ba').controller("DashboardCtrl", [
 		      },
 		      eventHandlers: {
 			      'apply.daterangepicker': function(ev, picker) { // when user apply new date range
-
+			      	$scope.filter.start_date = $scope.dateRange.value.startDate.toISOString();
+			      	$scope.filter.end_date = $scope.dateRange.value.endDate.toISOString();
+			      	init();
 			      }
 			  	}
 	  		}
@@ -102,7 +104,7 @@ angular.module('ba').controller("DashboardCtrl", [
       },				
 		};
 
-		init = function(){
+		function init(){
 			Dashboard.getDashboard($scope.filter)
 				.then(function(result){
 					$scope.headerData.borrow_count = result.borrow_count || 0;

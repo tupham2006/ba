@@ -720,6 +720,16 @@ button {
 	color: #FFF;
 }
 
+.chart-main .custom-daterange .input-group-addon {
+	border-color: #4da1ff;
+	background: #4da1ff;
+	color: #FFFFFF;
+}
+
+.chart-main .custom-daterange .form-control {
+	border-color: #4da1ff;
+}
+
 #dashboard #side {
 	height: 100%;
 }
@@ -729,6 +739,7 @@ button {
 	padding: 10px;
 	background-color: #FFF; 
 	height: 100%;
+	border: 1px solid #ddd;
 }
 
 #dashboard #side .sidebar .action {
