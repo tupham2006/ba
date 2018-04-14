@@ -213,7 +213,9 @@ angular.module('ba')
 		};
 
 
-		$scope.saveDepartment = function(){
+		$scope.saveDepartment = function(actived){
+			if(actived) $scope.departmentInfo = actived;
+			
 			Department.saveDepartment($scope.departmentInfo)
 				.then(function(){
 					getDepartmentList();
@@ -228,8 +230,8 @@ angular.module('ba')
 				});
 		};
 
-		$scope.savePosition = function(){
-
+		$scope.savePosition = function(actived){
+			if(actived) $scope.positionInfo = actived;
 			Position.savePosition($scope.positionInfo)
 				.then(function(){
 					getPositionList();
@@ -244,7 +246,8 @@ angular.module('ba')
 				});
 		};
 
-		$scope.saveDeposit = function(){
+		$scope.saveDeposit = function(actived){
+			if(actived) $scope.depositInfo = actived;
 			Deposit.saveDeposit($scope.depositInfo)
 				.then(function(){
 					getDepositList();
