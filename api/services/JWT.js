@@ -1,6 +1,6 @@
 const JWT = require('jsonwebtoken');
-const KEY = "bdbvbmkdpe";
-const publicKey = "haylamotnguoiyeusach";
+const KEY = "abcdefgh";
+const publicKey = "abcdefgh";
 
 module.exports ={
 	issue: function (user) {
