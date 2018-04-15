@@ -72,9 +72,9 @@
 							</div>
 						</div>
 						<div class="row">
-							<span class="label-control col-md-3 required-field mb-10">Tên Bạn Đọc</span>
+							<span class="label-control col-md-3 required-field mb-10">Tên bạn đọc</span>
 							<div class="col-md-9 col-md-6 mb-10">
-									<input type="text" ng-disabled="existReader" class="form-control text-uppercase" name="readerName" ng-model="borrowInfo.reader_name" required>
+									<input type="text" ng-disabled="existReader" class="form-control text-cap-name" name="readerName" ng-model="borrowInfo.reader_name" required>
 									<span class="validation-error-label" ng-show="borrowForm.readerName.$touched && borrowForm.readerName.$invalid"> Bạn chưa nhập tên bạn đọc </span>
 							</div>
 							<span ng-if="BAM.isMobile" class="col-xs-12 mb-10">Giới tính</span>
