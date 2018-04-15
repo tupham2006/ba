@@ -44,6 +44,7 @@ module.exports = {
 							times: 0
 						}];
 					}
+					return;
 				});
 		})
 		.then(function(){
@@ -61,6 +62,7 @@ module.exports = {
 							times: 0
 						}];
 					}
+					return;
 				});
 		})
 		.then(function(){
@@ -72,6 +74,7 @@ module.exports = {
 			})
 				.then(function(borrowBookResult){
 					returnData.borrow.top_book = borrowBookResult;
+					return;
 				});
 		})
 		.then(function(){

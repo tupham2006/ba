@@ -540,7 +540,7 @@ module.exports = {
 				})
 				.then(function(readerIds){
 					if(!readerIds) {
-						return [];
+						return resolve([]);
 					}
 
 					// query reader by user id
