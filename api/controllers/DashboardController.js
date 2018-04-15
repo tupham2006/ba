@@ -39,10 +39,7 @@ module.exports = {
 					if(maxBorrowReader.length > 0) {
 						returnData.borrow.top_reader = maxBorrowReader;
 					} else {
-						returnData.borrow.top_reader = [{
-							reader_name: "Chưa có",
-							times: 0
-						}];
+						returnData.borrow.top_reader = [];
 					}
 					return;
 				});

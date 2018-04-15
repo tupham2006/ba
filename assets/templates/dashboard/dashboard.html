@@ -30,7 +30,7 @@
 					</div>
 
 					<div class="text-blue text-bold"><i class="fa fa-star"></i> Top bạn đọc mượn</div>
-			    <div ng-repeat="item in borrow.top_reader" class="ml-15">
+			    <div ng-repeat="item in borrow.top_reader" ng-show="borrow.top_reader.length" class="ml-15">
 			    	<span class="font-18">{{ item.times }} </span>
 			    	<span class="text-cap-name"> {{item.reader_name}} </span> 
 			    	<span class="font-12"> | {{ item.reader_mobile | tel }} </span>
@@ -43,7 +43,7 @@
 				  </div>
 				  <hr>
 					<div class="text-blue text-bold"><i class="fa fa-star"></i> Top thành viên mượn</div>
-				  <div class="ml-15">
+				  <div class="ml-15" ng-show="borrow.top_user.reader_name">
 			    	<span class="font-18">{{ borrow.top_user.times }} </span>
 			    	<span class="text-cap-name"> {{borrow.top_user.reader_name}} </span> 
 			    	<span class="font-12"> | {{ borrow.top_user.reader_mobile | tel }} </span>
