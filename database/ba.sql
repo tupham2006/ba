@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2018-04-08 02:09:19
+Date: 2018-04-15 15:06:00
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -44,6 +44,10 @@ CREATE TABLE `book` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Records of book
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for book_comment
 -- ----------------------------
 DROP TABLE IF EXISTS `book_comment`;
@@ -63,6 +67,10 @@ CREATE TABLE `book_comment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Records of book_comment
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for book_rating
 -- ----------------------------
 DROP TABLE IF EXISTS `book_rating`;
@@ -79,6 +87,10 @@ CREATE TABLE `book_rating` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Records of book_rating
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for book_type
 -- ----------------------------
 DROP TABLE IF EXISTS `book_type`;
@@ -88,6 +100,10 @@ CREATE TABLE `book_type` (
   `actived` int(1) DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of book_type
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for borrow
@@ -100,7 +116,7 @@ CREATE TABLE `borrow` (
   `reader_mobile` varchar(11) NOT NULL,
   `reader_name` varchar(50) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
-  `borrow_date` timestamp NOT NULL,
+  `borrow_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `pay_date` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `note` varchar(10000) DEFAULT NULL,
   `deposit_name` varchar(50) NOT NULL,
@@ -116,6 +132,10 @@ CREATE TABLE `borrow` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Records of borrow
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for borrow_book
 -- ----------------------------
 DROP TABLE IF EXISTS `borrow_book`;
@@ -125,11 +145,15 @@ CREATE TABLE `borrow_book` (
   `book_id` int(11) NOT NULL,
   `book_name` varchar(100) NOT NULL,
   `status` tinyint(1) DEFAULT '1',
-  `borrow_date` timestamp NOT NULL,
+  `borrow_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `borrow_book_ibfk_1` (`borrow_id`),
   CONSTRAINT `borrow_book_ibfk_1` FOREIGN KEY (`borrow_id`) REFERENCES `borrow` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of borrow_book
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for department
@@ -140,7 +164,16 @@ CREATE TABLE `department` (
   `name` varchar(50) NOT NULL,
   `actived` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of department
+-- ----------------------------
+INSERT INTO `department` VALUES ('1', 'Chưa phân ban', '1');
+INSERT INTO `department` VALUES ('2', 'Văn hóa đọc', '1');
+INSERT INTO `department` VALUES ('3', 'Tài chính nhân sự', '1');
+INSERT INTO `department` VALUES ('4', 'Truyền thông - đối ngoại', '1');
+INSERT INTO `department` VALUES ('5', 'Sự kiện', '1');
 
 -- ----------------------------
 -- Table structure for deposit
@@ -152,7 +185,15 @@ CREATE TABLE `deposit` (
   `actived` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of deposit
+-- ----------------------------
+INSERT INTO `deposit` VALUES ('1', 'Thẻ sinh viên', '1');
+INSERT INTO `deposit` VALUES ('2', 'Chứng minh thư', '1');
+INSERT INTO `deposit` VALUES ('3', 'Bằng lái xe', '1');
+INSERT INTO `deposit` VALUES ('4', 'Tiền mặt', '1');
 
 -- ----------------------------
 -- Table structure for facutly
@@ -200,6 +241,10 @@ CREATE TABLE `notification` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Records of notification
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for position
 -- ----------------------------
 DROP TABLE IF EXISTS `position`;
@@ -208,7 +253,16 @@ CREATE TABLE `position` (
   `name` varchar(50) NOT NULL,
   `actived` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of position
+-- ----------------------------
+INSERT INTO `position` VALUES ('1', 'Chủ nhiệm', '1');
+INSERT INTO `position` VALUES ('2', 'Phó chủ nhiệm', '1');
+INSERT INTO `position` VALUES ('3', 'Trưởng ban', '1');
+INSERT INTO `position` VALUES ('4', 'Thành viên', '1');
+INSERT INTO `position` VALUES ('5', 'Cộng tác viên', '1');
 
 -- ----------------------------
 -- Table structure for public_user
@@ -224,6 +278,10 @@ CREATE TABLE `public_user` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of public_user
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for reader
@@ -248,6 +306,10 @@ CREATE TABLE `reader` (
   KEY `reader_ibfk_2` (`is_user`),
   CONSTRAINT `reader_ibfk_1` FOREIGN KEY (`facutly_id`) REFERENCES `facutly` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of reader
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for user

@@ -223,7 +223,6 @@ angular.module('ba')
 						}
 
 						// reader report
-							console.log("result", result);
 						if(result && result.reader) {
 							$scope.borrowReaderLabels = [];
 							$scope.borrowReader = [[]];

@@ -374,7 +374,6 @@ angular.module('ba')
 	    };
 
 	    $scope.findReaderByMobile	= function(){
-	    	console.log($scope.borrowInfo.reader_mobile, 'mobile');
     		var params = {
     			mobile: $scope.borrowInfo.reader_mobile
     		};
