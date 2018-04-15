@@ -54,10 +54,7 @@ module.exports = {
 					if(maxBorrowUser.length > 0) {
 						returnData.borrow.top_user = maxBorrowUser[0];
 					} else {
-						returnData.borrow.top_user = [{
-							reader_name: "Chưa có",
-							times: 0
-						}];
+						returnData.borrow.top_user = [];
 					}
 					return;
 				});
