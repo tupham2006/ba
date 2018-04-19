@@ -41,7 +41,7 @@ function Department(Store, Request, $q){
 	function getDepartmentListStore(param){
 
 		if(!param) param = {};
-		var actived = param.actived >= 0 ? param.actived : 1;
+		var actived = param.actived;
 		var data = angular.copy(departmentList);
 
 		var filterList = [];
@@ -50,7 +50,7 @@ function Department(Store, Request, $q){
 		for(var i in data){
 
 			// filter typing
-			if(actived){
+			if(parseInt(actived) >= 0){
 				if(data[i].actived != actived) data[i].remove = true;
 			}
 			
