@@ -4,7 +4,7 @@
 </div>
 <div class="modal-body">
 	<div ng-show="bookTypeMode =='VIEW'">
-		<button class="btn btn-green mb-10" ng-click="editBookType();"><i class="fa fa-plus"></i> Thêm loại</button>
+		<button type="button" class="btn btn-green mb-10" ng-click="editBookType();"><i class="fa fa-plus"></i> Thêm loại</button>
 		<form class="form">
 			<div class="row mb-10">
 				<div class="col-md-12">
@@ -28,7 +28,7 @@
 								<span ng-show="!type.actived">Khóa</span>
 							</td>
 							<td>
-								<button class="btn btn-blue" ng-click="editBookType(type.id)">Sửa</button>
+								<button type="button" class="btn btn-blue" ng-click="editBookType(type.id)">Sửa</button>
 							</td>
 						</tr>
 					</table>
