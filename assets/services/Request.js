@@ -40,7 +40,8 @@ function request($http, $cookies, $rootScope, FileUploader, $q, blockUI){
 	    	if(io.socket && isOnline) {
 	    		option.data.clientId = $rootScope.user ? $rootScope.user.id : 0;
 	    		
-	    		io.socket.request(option, function(res){
+	    		io.socket.request(option, function(res, jwres){
+	    			if(jwres && jwres.statusCode == 403) CONST.clearCookie();
 	    			if(window.debugMode){
   						console.log(option.method + " " + option.url, res);
   					}	
@@ -148,7 +149,7 @@ function connectSocket(type) {
 	};
 
 	io.socket.request(option, function(res, jwres){
-
+		if(jwres && jwres.statusCode == 403) CONST.clearCookie();
 		if(type == "reconnect") {
 			toastr.success("Kết nối thành công!");
 		}
