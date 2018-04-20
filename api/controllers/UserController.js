@@ -5,6 +5,7 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 const CONST = require('../../const.js');
+var moment = require('moment');
 
 module.exports = {
 
@@ -79,7 +80,7 @@ module.exports = {
     	mobile = mobile.toString().replace(/[^0-9]/g, "");
 
 		if(account.length < 6 || account.length > 50 || password.length < 6 || password.length > 50 || !name || name.length > 50 || mobile.length > 11 || mobile.length < 10){
-			console.log("Register :: pass? :: account: " + account + ", password: " + password + ", name: " + name + ", mobile: " + mobile );
+			console.log(moment().add(7, "hour").format("HH:mm DD/MM/YYYY") + " - Register :: pass? :: account: " + account + ", password: " + password + ", name: " + name + ", mobile: " + mobile );
 			return res.json({
 	  			error: CONST.ERROR.YES,
 	  			message: "Vui lòng nhập các trường bắt buộc"

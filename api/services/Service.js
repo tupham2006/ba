@@ -1,4 +1,5 @@
 const CONST = require('../../const.js');
+var moment = require('moment');
 
 module.exports = {
 	catch: function (req, res, e, action) {
@@ -10,8 +11,7 @@ module.exports = {
 			userId = req.session.public_user.id;
 		}
 
-		console.log("User: " + userId + " :: " + action + " :: ", e);
-		console.log(JSON.stringify(e.message));
+		console.log(moment().add(7, "hour").format("HH:mm DD/MM/YYYY") + " - User: " + userId + " :: " + action + " :: ", e);
 		return res.json({
 			error: CONST.ERROR.YES,
 			message: e.message
