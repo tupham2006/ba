@@ -1,7 +1,7 @@
 <div class="reader-search-parent">
 	<input type="text" ng-model="ngModel" class="form-control" placeholder="{{ option.placeholder }}" ng-change="getReaderList()">
 	<div ng-show="readerList.length" class="reader-search-child">
-		<div class="content cursor-pointer" ng-repeat="reader in readerList track by $index" ng-click="selectReader(reader)">
+		<div class="reader-search" ng-repeat="reader in readerList track by $index" ng-click="selectReader(reader)">
 			<div>
 				<span class="text-blue text-bold">{{ reader.name }} </span>({{ reader.mobile | tel }})
 			</div>

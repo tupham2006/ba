@@ -61,7 +61,6 @@ module.exports.policies = {
 
   'AdminController': {
     '*': 'isAdmin',
-    'getUserList': 'isMod'
   },
 
   'ReportController': {

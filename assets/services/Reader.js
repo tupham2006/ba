@@ -67,13 +67,10 @@ function Reader(Request, $q, $rootScope, Store){
 		// filter
 		for(var i in data){
 			
-			if(typing && !isNaN(typing)){
-				
-				if(typing != data[i].mobile) data[i].remove = true;
-				
-			} else if(typing){
-
-				if(CONST.removeVN(data[i].name).indexOf(CONST.removeVN(typing)) == -1){
+			if(typing){
+				if((CONST.removeVN(data[i].name).indexOf(CONST.removeVN(typing)) == -1) && 
+					(data[i].mobile.indexOf(typing) == -1)
+					){
 			 		data[i].remove = true;
 				}			 
 			}

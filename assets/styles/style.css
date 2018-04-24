@@ -357,6 +357,14 @@ button {
 	overflow-x: hidden;
 }
 
+.reader-search {
+	padding: 10px;
+	width: 100%;
+	cursor: pointer;
+	border-bottom: 1px solid #ccc;
+
+}
+
 #borrowRight {
 	background: white;
 	height: 100%;

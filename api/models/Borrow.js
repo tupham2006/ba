@@ -384,7 +384,7 @@ module.exports = {
 			sql.push("AND borrow_date <= ?");
 
 			// group
-			sql.push("GROUP BY " + condition.view + "(borrow_date)");
+			sql.push("GROUP BY book_id");
 
 			// order
 			sql.push("ORDER BY COUNT(*) DESC");
