@@ -284,3 +284,9 @@
 	display: flex;
   align-items: center;
 }
+
+.hide-long-text {
+	text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

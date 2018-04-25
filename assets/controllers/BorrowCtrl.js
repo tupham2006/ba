@@ -260,6 +260,8 @@ angular.module('ba')
 	    	
 	    	if(book.current_quantity == 0) return;
 
+	    	$scope.bookName = "";
+	    	
 	    	// not allow add 2 time 1 book
 	    	for(var i in $scope.borrowInfo.book){
 	    		if($scope.borrowInfo.book[i].book_id == book.id){
@@ -272,6 +274,7 @@ angular.module('ba')
 	    		book_name: book.name,
 	    		status: 1,
 	    	});
+
 	    };
 
 	    $scope.removeBookFromBorrow = function(id){

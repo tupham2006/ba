@@ -43,10 +43,8 @@ angular.module('ba').directive('bookSearch', ["Book",
 
 				// check click to close
 				angular.element($("body").click(function($e){
-					if((!$e.target.closest("#bookSearchParent") && scope.bookList.length) || (scope.option && scope.option.hide_when_click) ){ // clear book list when click outside element
-						scope.bookList = [];
-						scope.$apply();
-					}
+					scope.bookList = [];
+					scope.$apply();
 				}));
 			}
 		};
