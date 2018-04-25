@@ -17,7 +17,7 @@ angular.module('ba').filter('numberDay', function(){
 		}
 
 		if(!returnData){
-			returnData = "0 giờ";
+			returnData = "0 ngày";
 		}
 
 		return returnData;

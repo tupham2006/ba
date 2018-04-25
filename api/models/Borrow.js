@@ -307,7 +307,7 @@ module.exports = {
 				});
 		});
 	},
-	// trigger ?? huhu
+	
 	reportBorrowTime: function(condition) {
 
 		return new Promise(function(resolve, reject){

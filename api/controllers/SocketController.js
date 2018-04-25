@@ -38,6 +38,9 @@ module.exports = {
           } else {
             console.log(moment().add(7, "hour").format("HH:mm DD/MM/YYYY") + " - " + (req.session.user.name || "Unknown") + " Online");
           }
+
+          return res.json({});
+          
       	}
       });
 	}

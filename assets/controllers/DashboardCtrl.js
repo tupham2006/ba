@@ -129,7 +129,7 @@ angular.module('ba').controller("DashboardCtrl", [
 				.catch(function(err){
 					toastr.error(err);
 				});
-		};
+		}
 
 		$scope.gotoPage = function (type) {
 			if($rootScope && $rootScope.user && $rootScope.user.role >= 2) {

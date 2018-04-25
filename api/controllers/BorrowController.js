@@ -35,7 +35,7 @@ module.exports = {
 			deposit_id: parseInt(req.param("deposit_id")),
 			book: req.param("book"),
 			borrow_date: new Date(req.param("borrow_date")).toISOString(),
-			status: 0,
+			status: parseInt(req.param("status")) ? parseInt(req.param("status")) : 0,
 			facutly_id: req.param("facutly_id") ? req.param("facutly_id") : 1,
 			course: parseInt(req.param("course")) ? parseInt(req.param("course")) : moment().get('years') - 1956
 		};
@@ -48,14 +48,14 @@ module.exports = {
 			return Service.catch(req, res, { message: "Vui lòng nhập loại đặt cọc" }, "createBorrow");
 		}
 
-		// check status by book
-		var i;
-		for(i in data.book){
-			if(data.book[i].status){
-				data.status = 1;
+		if(!data.status){
+			if(new Date(req.param("pay_date")) != "Invalid Date"){
+				data.pay_date = new Date(req.param("pay_date")).toISOString();
+			} else {
+				data.pay_date = new Date().toISOString();
 			}
 		}
-		
+
 		// console.log("data", data);
 		Borrow.createBorrow(data)
 			.then(function(result){
@@ -86,7 +86,7 @@ module.exports = {
 			deposit_id: parseInt(req.param("deposit_id")),
 			book: req.param("book"),
 			borrow_date: new Date(req.param("borrow_date")).toISOString(),
-			status: 0
+			status: parseInt(req.param("status")) ? parseInt(req.param("status")) : 0,
 		};
 		
 		if(!data.book || !Array.isArray(data.book) || !data.book.length){
@@ -95,14 +95,6 @@ module.exports = {
 
 		if(!data.deposit_id){
 			return Service.catch(req, res, { message: "Vui lòng nhập loại đặt cọc" }, "updateBorrow");
-		}
-
-		// check status by book
-		var i;
-		for(i in data.book){
-			if(data.book[i].status){
-				data.status = 1;
-			}
 		}
 
 		if(!data.status){

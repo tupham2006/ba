@@ -189,10 +189,10 @@ angular.module('ba')
 	    };
 
     	$scope.borrowDate = {
-    		date : moment()
+    		date : moment().startOf('days')
     	};
     	$scope.payDate = {
-    		date: moment()
+    		date: moment().startOf('days')
     	};
 
     	$scope.borrowDateOption = {
@@ -232,7 +232,7 @@ angular.module('ba')
 
     		if(!id || !Object.getOwnPropertyNames($scope.borrowInfo)){
 	    		$scope.borrowInfo = {
-		    		borrow_date: moment(),
+		    		borrow_date: moment().startOf('days'),
 		    		status: 1,
 		    		deposit_id: 1,
 		    		book: [],
@@ -316,18 +316,24 @@ angular.module('ba')
 	    		reader_gender: $scope.borrowInfo.reader_gender
 	    	};
 
-	    	// when borrow now
-	    	if(type == "BORROW_NOW"){
+	    	if(type == "BORROW_NOW") params.status = 0;
+
+	    	// Kiểm tra xem có phải trạng thái trả sách hay không
+	    	// Với status chính = 1
+	    	if(params.status == 1) {
+
+	    	// với status chính = 0
+	    	// Set toàn bộ trạng thái của sách về đã trả
+	    	} else {
 	    		for(var i in params.book){
 	    			params.book[i].status = 0;
 	    		}
-	    	}
 
-	    	if(!params.status){
+	    		// đặt ngày trả
 	    		if(!$scope.payDate.date){
-	    			params.pay_date = new Date().toISOString();
+	    			params.pay_date = moment().startOf('days').toISOString();
 	    		} else {
-	    			params.pay_date = $scope.payDate.date.toISOString();
+	    			params.pay_date = moment($scope.payDate.date).startOf('days').toISOString();
 	    		}
 	    	}
 
@@ -399,13 +405,9 @@ angular.module('ba')
 	    	if(!$scope.borrowInfo.status){
 
 	    		if(!$scope.borrowInfo.pay_date){
-	    			$scope.payDate.date = $scope.borrowInfo.pay_date = moment();
+	    			$scope.payDate.date = $scope.borrowInfo.pay_date = moment().startOf('days');
 	    		}
 	    		
-	    		for(var i in $scope.borrowInfo.book){
-	    			$scope.borrowInfo.book[i].status = 0;
-	    		}
-
 	    		$scope.calBorrowTime();
 
 	    	} else {
