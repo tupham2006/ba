@@ -197,6 +197,7 @@ angular.module('ba')
 
     	$scope.borrowDateOption = {
 	    	singleDatePicker: true,
+	    	drops: "up",
 	    	eventHandlers: {
 		      'apply.daterangepicker': function(ev, picker) { // when user apply new date range
 	    			$scope.borrowInfo.warning_borrow_time = Math.max(0, moment($scope.payDate.date).diff(moment($scope.borrowDate.date), "milliseconds"));
@@ -206,6 +207,7 @@ angular.module('ba')
 
 	    $scope.payDateOption = {
 	    	singleDatePicker: true,
+	    	drops: "up",
 	    	eventHandlers: {
 		      'apply.daterangepicker': function(ev, picker) { // when user apply new date range							  	
 	    			$scope.borrowInfo.warning_borrow_time = Math.max(0, moment($scope.payDate.date).diff(moment($scope.borrowDate.date), "milliseconds"));
@@ -261,7 +263,7 @@ angular.module('ba')
 	    	if(book.current_quantity == 0) return;
 
 	    	$scope.bookName = "";
-	    	
+
 	    	// not allow add 2 time 1 book
 	    	for(var i in $scope.borrowInfo.book){
 	    		if($scope.borrowInfo.book[i].book_id == book.id){
