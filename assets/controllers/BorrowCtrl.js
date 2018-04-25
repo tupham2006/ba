@@ -302,7 +302,7 @@ angular.module('ba')
 	    	}
 
 	    	var params = {
-	    		borrow_date: moment($scope.borrowDate.date).toISOString(),
+	    		borrow_date: moment($scope.borrowDate.date).startOf('days').toISOString(),
 	    		deposit_id: $scope.borrowInfo.deposit_id,
 	    		note: $scope.borrowInfo.note,
 	    		reader_id: $scope.borrowInfo.reader_id,
