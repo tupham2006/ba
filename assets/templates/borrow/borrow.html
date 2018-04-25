@@ -26,8 +26,8 @@
 							<button type="button" ng-show="borrow.status" ng-click="showBorrowDetail(borrow.id); saveBorrow('BORROW_NOW')" class="btn btn-sm btn-white fast-borrow">Trả ngay</button>
 						</div>
 						<div class="book-name">
-							<span class="mr-5 label" ng-class="{'bg-green': book.status, 'bg-gray-69': !book.status }" ng-repeat="book in borrow.book track by $index">
-								 {{ book.book_name }} 
+							<span class="mr-5 label" style="max-width: 100%" ng-class="{'bg-green': book.status, 'bg-gray-69': !book.status }" ng-repeat="book in borrow.book track by $index">
+								 <span class="hide-long-text">{{ book.book_name }} </span>
 							</span>
 						</div>
 						<div class="deposit-name">	
