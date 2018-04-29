@@ -70,9 +70,7 @@ module.exports = {
 
 			Book.createBook(data)
 				.then(function(result){
-					return res.json({
-						book: result
-					});
+					return res.json(result);
 				})
 				.catch(function(e){
 					return Service.catch(req, res, e, "createBook");
@@ -128,9 +126,7 @@ module.exports = {
 			// find type name
 			Book.updateBook(id, data)
 				.then(function(result){
-					return res.json({
-						book: result
-					});
+					return res.json(result);
 				})
 				.catch(function(e){
 					return Service.catch(req, res, e, "updateBook");

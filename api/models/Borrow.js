@@ -91,11 +91,17 @@ module.exports = {
 											return Borrow.handleBookBorrow(borrow.id, data)
 												.then(function(result){
 
-													return resolve({
+													var syncData = {
 														borrows: borrow,
 														borrow_books: result,
-														readers: readerResult
-													});
+														syncId: new Date().getTime()
+													};
+
+													// create borrow book
+													Service.sync("borrow", "create", syncData);
+
+													// socket broadcast
+													return resolve(syncData);
 												});
 										})
 										.catch(function(err){
@@ -110,12 +116,16 @@ module.exports = {
 	},
 
 	handleReaderBorrow: function(data){
-
 		return new Promise(function(resolve, reject){
 			var condition = {
-				mobile: data.reader_mobile,
-				deleted: 0
+				where: {
+					deleted: 0,
+					or: []
+				}
 			};
+
+			if(data.reader_mobile) condition.where.or.push({ mobile: data.reader_mobile });
+			if(data.reader_id) condition.where.or.push({ id: data.reader_id });
 
 			var readerData = {
 				mobile: data.reader_mobile,
@@ -125,56 +135,13 @@ module.exports = {
 				gender: data.reader_gender
 			};
 
-			// find reader by id
-			if(data.reader_id){
-				Reader.findOne({id: data.reader_id, deleted: 0})
-					.exec(function(err, readerById){
-						if(err) return reject(err);
-						if(readerById){ // update
-							
-							data.reader_mobile = readerById.mobile;
-							data.reader_name = readerById.name;
-							data.facutly_id = readerById.facutly_id;
-							data.course = readerById.course;
-							return resolve(readerById);
-
-						} else { // find by mobile
-							Reader.findOne(condition)
-								.exec(function(err, findData){
-									if(err) return reject(err);
-									if(findData){
-										findData.exist_reader = true;
-										return resolve(findData);
-
-									} else {
-										Reader.create(readerData)
-											.exec(function(err, readerByMobile){
-												if(err) return reject(err);
-												return resolve(readerByMobile);
-											});
-									}
-								});
-						}
-					});
-
-			 // find by mobile					
-			} else {
-				Reader.findOne(condition)
-					.exec(function(err, findData){
-						if(err) return reject(err);
-						if(findData){
-							findData.exist_reader = true;
-							return resolve(findData);
-
-						} else {
-							Reader.create(readerData)
-								.exec(function(err, readerByMobile){
-									if(err) return reject(err);
-									return resolve(readerByMobile);
-								});
-						}
-					});
-			}
+			Reader.findOrCreateReader(condition, readerData)
+				.then(function(findData){
+					return resolve(findData.reader);
+				})
+				.catch(function(err){
+					return reject(err);
+				});
 		});
 	},
 
@@ -238,11 +205,16 @@ module.exports = {
 											return Borrow.handleBookBorrow(borrowUpdateResult[0].id, data)
 												.then(function(result){
 
-													// return to controller
-													return resolve({
+													var syncData = {
 														borrow_books: result,
-														borrows: borrowUpdateResult[0]
-													});
+														borrows: borrowUpdateResult[0],
+														syncId: new Date().getTime()
+													};
+
+													Service.sync("borrow", "update", syncData);
+
+													// return to controller
+													return resolve(syncData);
 												});
 										})
 										.catch(function(e){
@@ -292,11 +264,15 @@ module.exports = {
 											// update reader when borrow destroy
 											return Borrow.whenBorrowDestroy(borrowUpdateResult[0])	
 												.then(function(){
+
+													var syncData = {
+														borrows: borrowUpdateResult[0],
+														syncId: new Date().getTime()
+													};
+
+													Service.sync("borrow", "delete", syncData);
 														// return to controller
-														return resolve({
-															borrow_books: destroyResult,
-															borrows: borrowUpdateResult[0]
-														});
+														return resolve(syncData);
 												})
 												.catch(function(err){
 													reject(err);
@@ -588,40 +564,17 @@ module.exports = {
 		});
 	},
 
-	afterCreate:function (value, cb) {
-		Service.sync('borrow', "create", value);
-		cb();
-  },
-
-  afterUpdate: function (value, cb) {
-  	if(value && value.deleted ){
-			Service.sync('borrow', "delete", value);
-  	} else {
-			Service.sync('borrow', "update", value);
-  	}
-		cb();
-  },
-
   // chi update reader borrow time
   whenBorrowCreate: function(data) {
   	return new Promise(function(resolve, reject){
   		var updateData = {};
-  		Reader.findOne({id: data.reader_id})
-  			.exec(function(err, result){
-  				if(err) reject(err);
-  				if(result) {
-  					updateData.borrow_time = result.borrow_time + 1;
-
-  					Reader.update({id: result.id}, updateData)
-  						.exec(function(err, result){
-  							if(err) return reject(err);
-  							resolve(result);
-  						});
-
-  				} else {
-  					return resolve();
-  				}
-  			});
+			Reader.updateReader(data.reader_id, updateData, ["increase_borrow_time"])
+				.then(function(result){
+					return resolve(result);
+				})
+				.catch(function(e){
+					console.log(e)
+				});
   	});
   },
 
@@ -629,22 +582,13 @@ module.exports = {
   whenBorrowDestroy: function(data) {
   	return new Promise(function(resolve, reject){
   		var updateData = {};
-  		Reader.findOne({id: data.reader_id})
-  			.exec(function(err, result){
-  				if(err) reject(err);
-  				if(result) {
-  					updateData.borrow_time = result.borrow_time - 1;
-
-  					Reader.update({id: result.id}, updateData)
-  						.exec(function(err, result){
-  							if(err) return reject(err);
-  							resolve(result);
-  						});
-  						
-  				} else {
-  					return resolve();
-  				}
-  			});
+			Reader.updateReader(data.reader_id, updateData, ["reduce_borrow_time"])
+				.then(function(result){
+					return resolve(result);
+				})
+				.catch(function(e){
+					console.log(e)
+				});
   	});
   },
 
@@ -655,36 +599,27 @@ module.exports = {
   		// create promise array
   		for(i in data) {
 				promiseArray.push(new Promise(function (resolveAll, rejectAll){
-  				var updateData = {};
-					var dataObj = data[i];
-					Book.findOne({
-						id: dataObj.book_id
-					}).exec(function(err, findRs){
-						if(err) return rejectAll(err);
+  				var updateData = {}, dataObj = data[i], updateByFind;
+					
+					if(dataObj.status) {
+						updateByFind = ["increase_borrow_time", "reduce_current_quantity"];
+					} else {
+						updateByFind = ["increase_borrow_time"];
+					}
 
-						if(findRs) {
-							if(dataObj.status) {
-								updateData.borrow_time = findRs.borrow_time + 1;
-								updateData.current_quantity = findRs.current_quantity - 1;
-							} else {
-								updateData.borrow_time = findRs.borrow_time + 1;
-							}
-
-							Book.update({ id: findRs.id }, updateData)
-								.exec(function(err, result){
-									if(err) return rejectAll(err);
-									return resolveAll(result);
-								});
-						} else {
-							return rejectAll();
-						}
-					});
+					Book.updateBook(dataObj.book_id, updateData, updateByFind)
+						.then(function(result){
+							return resolveAll();
+						})
+						.catch(function(e){
+							console.log(e);
+						});
 				}));
   		}
 
   		Promise.all(promiseArray)
   			.then(function(result){
-  				return resolve(result);
+  				return resolve();
   			})
   			.catch(function(err){
   				return reject(err);
@@ -697,47 +632,30 @@ module.exports = {
   		var i, promiseArray = [];
   		for(i in data){
 				promiseArray.push(new Promise(function (resolveAll, rejectAll){
-  				var dataObj = data[i];
-					Book.findOne({ id: dataObj.book_id })
-					.then(function(findRs){
-						var updateData = {};
-						
-						if(findRs) {
+  				var dataObj = data[i], updateByFind;
 
-							if(dataObj.status) { // in db
-								updateData.borrow_time = findRs.borrow_time - 1;
-								updateData.current_quantity = findRs.current_quantity + 1;
-							} else {
-								updateData.borrow_time = findRs.borrow_time - 1;
-							}
-						}
+					if(dataObj.status) { // in db
+						updateByFind = ['reduce_borrow_time', 'increase_current_quantity'];
+					} else {
+						updateByFind = ['reduce_borrow_time'];
+					}
 
-						return {
-							updateData: updateData,
-							id: findRs.id
-						};
-					})
-					.then(function(updateObj){
-						if(!updateObj.updateData) return resolveAll();
-
-						return Book.update({id: updateObj.id}, updateObj.updateData)
-							.then(function(result){
-								return resolveAll(result);
-							});
-					})
-					.catch(function(err){
-						return rejectAll(err);
-					});
+					Book.updateBook(dataObj.book_id, {}, updateByFind)
+						.then(function(result){
+							return resolveAll();
+						}).catch(function(e){
+							console.log(e);
+						});
 				}));
   		}
 
   		Promise.all(promiseArray)
   			.then(function(result){
-  				return resolve(result);
+  				return resolve();
   			})
   			.catch(function(err){
   				return reject(err);
   			});
   	});
-  },
+  }
 };

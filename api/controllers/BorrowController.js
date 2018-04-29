@@ -59,11 +59,7 @@ module.exports = {
 		// console.log("data", data);
 		Borrow.createBorrow(data)
 			.then(function(result){
-				return res.json({
-					borrows: result.borrows,
-					borrow_books: result.borrow_books,
-					readers: result.readers
-				});
+				return res.json(result);
 			})
 			.catch(function(e){
 				return Service.catch(req, res, e, "createBorrow");
@@ -108,10 +104,7 @@ module.exports = {
 		// console.log("data", data);
 		Borrow.updateBorrow({id: parseInt(req.param("id"))}, data)
 			.then(function(result){
-				return res.json({
-					borrows: result.borrows,
-					borrow_books: result.borrow_books
-				});
+				return res.json(result);
 			})
 			.catch(function(e){
 				return Service.catch(req, res, e, "updateBorrow");
@@ -127,9 +120,7 @@ module.exports = {
 		// console.log("data", data);
 		Borrow.deleteBorrow({id: parseInt(req.param("id"))})
 			.then(function(result){
-				return res.json({
-					borrows: result.borrows
-				});
+				return res.json(result);
 			})
 			.catch(function(e){
 				return Service.catch(req, res, e, "deleteBorrow");

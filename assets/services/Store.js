@@ -21,80 +21,62 @@ function Store(){
 
 	function Table(){
 		this.newTable = {
-				$list: this.$list,
-				get list(){
-					var newList = Object.assign([],this.$list);
-					return newList;
-				},
+			$syncId: 0,
+			$list: this.$list,
+			get list(){
+				var newList = Object.assign([],this.$list);
+				return newList;
+			},
 
-				set list(data){
-					this.$list = data; 
-				},
+			set list(data){
+				this.$list = data; 
+			},
 
-				set create(data){
-					var dataArray = [];
-					var syncDataObj = {};
-					var i, j, k;
-
-					if(Array.isArray(data)){ // create with array type
-						for(i in data) {
-							syncDataObj[data[i].id] = data[i];
-						}
-
-					} else { // crete with object
-						syncDataObj[data.id] = data;
-					}
-
-					// remove if exist data in $list
-					for(j in this.$list) {
-						if(syncDataObj[this.$list[j].id]) {
-							syncDataObj[this.$list[j].id].remove = true;
-						}
-					}
-
-					for(k in syncDataObj) {
-						if(!syncDataObj[k].remove) {
-							dataArray.push(syncDataObj[k]);
-						}
-					}
-
-					if(dataArray.length) {
-						this.$list = dataArray.concat(this.$list);
-					}
-				},
-
-				set update(data){
-					for(var i in this.$list){
-						if(this.$list[i].id == data.id ){
-							this.$list[i] = data;
-						}
-					}
-				},
-
-				set delete(data){
-					var ids = [], i, j;
-					var newData = [];
-					
-					if(data && Array.isArray(data)) {
-						for(i in data) {
-							ids.push(data[i].id);
-						}
-					} else {
-						ids.push(data.id);
-					}
-
-					for(j in this.$list){
-						if(ids.indexOf(this.$list[j].id) == -1){
-							newData.push(this.$list[j]);
-						}
-					}
-
-					this.$list = newData;
-				},
-
-				syncData: function(action, data) {
-					this[action] = data;
+			set create(data){
+				var dataArray = [];
+				if(Array.isArray(data)) {
+					dataArray = data;
+				} else {
+					dataArray.push(data);
 				}
+				
+				this.$list = dataArray.concat(this.$list);
+			},
+
+			set update(data){
+				for(var i in this.$list){
+					if(this.$list[i].id == data.id ){
+						this.$list[i] = data;
+					}
+				}
+			},
+
+			set delete(data){
+				var ids = [], i, j;
+				var newData = [];
+				
+				if(data && Array.isArray(data)) {
+					for(i in data) {
+						ids.push(data[i].id);
+					}
+				} else {
+					ids.push(data.id);
+				}
+
+				for(j in this.$list){
+					if(ids.indexOf(this.$list[j].id) == -1){
+						newData.push(this.$list[j]);
+					}
+				}
+
+				this.$list = newData;
+			},
+
+			syncData: function(action, data, syncId) {
+				if(syncId && (this.$syncId >= syncId)) return;
+				this.$syncId = syncId;
+				this[action] = data;
+			}
 		};
 	}
 

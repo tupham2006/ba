@@ -76,14 +76,4 @@ module.exports = {
 			});
 		});
 	},
-
-	afterCreate: function (value, cb) {
-    Service.sync('borrow_book', "create", value);
-    cb();
-  },
-
-  afterDestroy:function (value, cb) {
-    Service.sync('borrow_book', "delete", value);
-    cb();
-	}
 };

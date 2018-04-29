@@ -143,7 +143,7 @@ function Reader(Request, $q, $rootScope, Store){
 			.then(function(res){
 
 				if(res && !res.error && res.reader){
-					Store.readerTable.syncData("update", res.reader);
+					Store.readerTable.syncData("update", res.reader, res.syncId);
 
 					df.resolve();
 				} else {
@@ -160,7 +160,7 @@ function Reader(Request, $q, $rootScope, Store){
 			.then(function(res){
 				
 				if(res && !res.error){
-					Store.readerTable.syncData("create", res.reader);
+					Store.readerTable.syncData("create", res.reader, res.syncId);
 					df.resolve();
 				} else {
 					df.reject(res.message);
@@ -181,7 +181,7 @@ function Reader(Request, $q, $rootScope, Store){
 		Request.post("/reader/delete", params)
 			.then(function (res) {
 				if(res && res.reader && res.reader.id) {
-					Store.readerTable.syncData("delete", res.reader.id);
+					Store.readerTable.syncData("delete", res.reader.id, res.syncId);
 					df.resolve();					
 				} else {
 					df.reject(res.message);	

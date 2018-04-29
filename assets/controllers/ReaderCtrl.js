@@ -120,7 +120,7 @@ angular.module('ba')
 		if (!io.socket.readerEventReady) {
     	io.socket.readerEventReady = true;
 			io.socket.on("reader", function(res){
-				Store.readerTable.syncData(res.action, res.data);
+				Store.readerTable.syncData(res.action, res.data.reader, res.data.syncId);
 				$scope.getReaderList();
 			});
 		}

@@ -108,10 +108,12 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 		if(data.id){ // update
 			Request.post("/borrow/update", data)
 				.then(function(res){
+					console.log("res", res);
+					
 					if(res && !res.error){
-						Store.borrowTable.syncData("create", res.borrows);
-						Store.borrowTable.syncData("delete_by_borow", res.borrows.id);
-						Store.borrowBookTable.syncData("create", res.borrow_books);
+						Store.borrowTable.syncData("update", res.borrows, res.syncId);
+						Store.borrowBookTable.syncData("delete_by_borrow", res.borrows.id, res.syncId);
+						Store.borrowBookTable.syncData("create", res.borrow_books, res.syncId + 1);
 
 						df.resolve(res.borrows.id);
 						
@@ -128,9 +130,9 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 			Request.post("/borrow/create", data)
 				.then(function(res){
 
-					if(res && !res.error && res.borrows && res.readers && res.borrow_books){
-						Store.borrowTable.syncData("create", res.borrows);
-						Store.borrowBookTable.syncData("create", res.borrow_books);
+					if(res && !res.error && res.borrows && res.borrow_books && res.syncId){
+						Store.borrowTable.syncData("create", res.borrows, res.syncId);
+						Store.borrowBookTable.syncData("create", res.borrow_books, res.syncId);
 						df.resolve(res.borrows.id);
 
 					} else{
@@ -152,8 +154,8 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 			.then(function(res){
 
 				if(res && !res.error && res.borrows){
-					Store.borrowTable.syncData("delete", res.borrows);
-					Store.borrowBookTable.syncData("delete_by_borow", res.borrows.id);
+					Store.borrowTable.syncData("delete", res.borrows, res.syncId);
+					Store.borrowBookTable.syncData("delete_by_borrow", res.borrows.id, res.syncId);
 					df.resolve();
 					
 				} else {

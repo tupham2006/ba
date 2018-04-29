@@ -127,9 +127,10 @@ function Book($rootScope, Request, $q, Store){
 		if(data.id){
 			Request.post("/book/update", data)
 				.then(function(res){
+
 					if(!res.error){
 						
-						Store.bookTable.syncData("update", res.book);
+						Store.bookTable.syncData("update", res.book, res.syncId);
 						df.resolve();
 					} else {
 						df.reject(res.message);
@@ -143,9 +144,9 @@ function Book($rootScope, Request, $q, Store){
 		} else {
 			Request.post("/book/create", data)
 				.then(function(res){
-					console.log("res", res);
+					
 					if(!res.error){
-						Store.bookTable.syncData("create", res.book);
+						Store.bookTable.syncData("create", res.book, res.syncId);
 						df.resolve();
 					} else {
 						df.reject(res.message);

@@ -2,6 +2,8 @@
 		Created at 11/11/2017
  */
 const CONST = require('../../const.js');
+var moment = require('moment');
+
 module.exports = {
 	tableName: "book",
 	schema: true,
@@ -64,7 +66,7 @@ module.exports = {
 		});
 	},
 
-	updateBook: function(id, data){
+	updateBook: function(id, data, updateByFindData){
 		return new Promise(function(resolve, reject){
 			Book.findOne({
 				id: id
@@ -76,6 +78,26 @@ module.exports = {
 					});
 				}
 				
+				// update increate or reduce
+				if(updateByFindData) {
+					for(var i in updateByFindData) {
+						switch(updateByFindData[i]) {
+							case "increase_borrow_time":
+								data.borrow_time = result.borrow_time + 1;
+								break;
+							case "reduce_borrow_time":
+								data.borrow_time = result.borrow_time - 1;
+								break;
+							case "increase_current_quantity":
+								data.current_quantity = result.current_quantity + 1;
+								break;
+							case "reduce_current_quantity":
+								data.current_quantity = result.current_quantity - 1;
+								break;
+						}
+					}
+				}
+
 				// recalc quantity when increase quantity
 				if(!data.current_quantity) {
 					if(data.use_quantity > result.use_quantity){
@@ -86,15 +108,22 @@ module.exports = {
 					}
 				}
 
-				Book.update(id, data)
-					.exec(function(err, result){
+				Book.update({ id: id }, data)
+					.exec(function(err, updateResult){
 						if(err) return reject(err);
-						if(result && result.length){
-							return resolve(result[0]);
+						
+						if(updateResult && updateResult.length){
+							
+							var syncData = {
+								book: updateResult[0],
+								syncId: new Date().getTime()
+							};
+							
+							Service.sync("book", "update", syncData);
+
+							return resolve(syncData);
 						} else {
-							return reject({
-								message: "Cập nhật không thành công "
-							});
+							return resolve();
 						}
 					});				
 			});
@@ -117,7 +146,14 @@ module.exports = {
 				Book.create(data)
 					.exec(function(err, result){
 						if(err) return reject(err);
-						return resolve(result);
+						
+						var syncData = {
+							book: result,
+							syncId: new Date().getTime()
+						};
+						
+						Service.sync("book", "create", syncData);
+						return resolve(syncData);
 					});				
 			});
 		});
@@ -268,15 +304,5 @@ module.exports = {
 		}
 
 		return bookList;
-	},
-
-	afterCreate:function (value, cb) {
-  	Service.sync('book', "create", value);
-  	cb();
-  },
-
-  afterUpdate:function (value, cb) {
-    Service.sync('book', "update", value);
-  	cb();
-  }
+	}
 };

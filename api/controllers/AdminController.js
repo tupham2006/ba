@@ -83,62 +83,35 @@ module.exports = {
 					});
 
 				} else {
+					var updateData = {};
 
-					// create or update user to reader
-					Reader.findOne({mobile: qUpdate[0].mobile})
-						.then(function(findResult){
+					if(qUpdate[0].role) {
+						updateData.is_user = qUpdate[0].id;
+					
+					} else { // when kick user
+						updateData.is_user = 0;
+					}
 
-							if(findResult) { // has reader
-								var updateData = {};
-								if(qUpdate[0].role) {
-									updateData.is_user = qUpdate[0].id;
-								
-								} else { // when kick user
-									updateData.is_user = 0;
-								}
-
-								Reader.update({ id: findResult.id }, updateData)
-									.then(function(){
-										return res.json({
-					            error: CONST.ERROR.NO,
-					          });
-									})
-									.catch(function(err){
-										return Service.catch(req, res, err, "updateReader");
-									});
-
-							} else {
-
-								// when kick user
-								if(!qUpdate[0].role) {
-									return res.json({});
-								}
-
-								// create reader by user
-			        	Reader.create({
-			        		mobile: qUpdate[0].mobile,
-			        		name: qUpdate[0].name,
-			        		is_user: qUpdate[0].id
-			        	})
-			        	.then(function(){
-				          return res.json({
-				            error: CONST.ERROR.NO,
-				          });
-			        	})
-			        	.catch(function(err){
-									return Service.catch(req, res, err, "updateReader");
-								});
-							}
-						})
-						.catch(function(err){
-							return Service.catch(req, res, err, "updateReader");
-						});
+					Reader.findToUpdateOrCreate({
+						mobile: qUpdate[0].mobile
+					},
+					updateData,
+					{
+        		mobile: qUpdate[0].mobile,
+        		name: qUpdate[0].name,
+        		is_user: qUpdate[0].id
+        	})
+        	.then(function(){
+        		return res.json({});
+        	})
+        	.catch(function(err){
+        		return Service.catch(req, res, err, "setUserRole");
+        	});
 				}
 			})
 
 			.catch(function(err){
-				console.log("UserController :: setUserRole :: " + err.message);
-				return res.json(CONST.CATCH);
+				return Service.catch(req, res, err, "setUserRole");
 			});
 	},
 

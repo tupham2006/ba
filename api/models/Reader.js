@@ -1,4 +1,6 @@
-const CONST = require('../../const.js');
+var CONST = require('../../const.js');
+var moment = require('moment');
+
 module.exports = {
   schema: true,
   tableName: "reader",
@@ -85,7 +87,13 @@ module.exports = {
             Reader.create(data)
               .exec(function(err, result){
                 if(err) return reject(err);
-                return resolve(result);
+                var syncData = {
+                  reader: result,
+                  syncId: new Date().getTime()
+                };
+                Service.sync("reader", "create", syncData);
+
+                return resolve(syncData);
               });
           }          
         });
@@ -100,7 +108,7 @@ module.exports = {
     - update
    */
   
-  updateReader: function(id, data){
+  updateReader: function(id, data, updateAfterFind){
 
     var condition = {
       id: id,
@@ -118,36 +126,64 @@ module.exports = {
           // Not exist id. reject
           if(!reader || !Object.getOwnPropertyNames(reader).length){
             return reject({ message: " Thông tin bạn đọc không tồn tại "});
-          
-          } else { // Update
+          }
             
-            // Find exist mobile
-            Reader.findOne({
-              id: { "!": id }, 
-              mobile: data.mobile,
-              deleted: 0
-             })
-              .exec(function(err, reader){
+          Reader.getExistMobile(id, data.mobile)
+            .then(function(readerCheck){
+              if(readerCheck) throw new Error("Số điện thoại đã được đăng ký");
+              return;
 
-                if(err) return reject(err);
+            })
+            .then(function(){
+    
+              if(updateAfterFind) {
+                var i;
+                for(i in updateAfterFind) {
+                  switch(updateAfterFind[i]) {
+                    case "increase_borrow_time": data.borrow_time = reader.borrow_time + 1;
+                      break;
+                    case "reduce_borrow_time": data.borrow_time = reader.borrow_time - 1;
+                      break;
+                  }
+                }
+              }
 
-                // exist mobile. reject
-                if(reader && Object.getOwnPropertyNames(reader).length){
-                  return reject({ message: "Số điện thoại này đã được đăng ký"});
-                
-                } else { // Update by id
-                  Reader.update(condition, data)
-                    .exec(function(err, result){
-                      if(err) return reject(err);
+              Reader.update(condition, data)
+                .exec(function(err, result){
+                  if(err) return reject(err);
 
-                      if(result && result.length){
-                        return resolve(result[0]);
-                      }
-                      
-                    });
-                }          
-              });
-          }          
+                  if(!result.length){
+                    return reject({ message:"Cập nhật thất bại" });
+                  }
+
+                  var syncData = {
+                    reader: result[0],
+                    syncId: new Date().getTime()
+                  };
+                  Service.sync("reader", "update", syncData);
+
+                  return resolve(syncData);
+                  
+                });
+            })
+
+            .catch(function(err){
+              return reject(err);
+            });
+        });
+    });
+  },
+
+  getExistMobile: function(id, mobile) {
+    return new Promise(function(resolve, reject){
+      if(!mobile) return resolve();
+      Reader.findOne({
+        id: { "!": id }, 
+        mobile: mobile,
+        deleted: 0
+       })
+        .exec(function(err, readerFindExist){
+          return resolve(readerFindExist);
         });
     });
   },
@@ -183,18 +219,83 @@ module.exports = {
       Reader.update({id: id}, {deleted: 1})
         .exec(function (err, result) {
           if(err ) return reject(err);
-          return resolve(result);
+          if(result && result.length) {
+
+          } else {
+            return reject({
+              message: "Xóa không thành công!"
+            }) ;
+          }
+          var syncData = {
+            reader: result[0],
+            syncId: new Date().getTime()
+          };
+
+          Service.sync("reader", "delete", syncData);
+
+          return resolve(syncData);
         });
     });
   },
 
-  afterCreate:function (value, cb) {
-    Service.sync('reader', "create", value);
-    cb();
+  findOrCreateReader: function(condition, data) {
+    return new Promise(function( resolve, reject){
+      Reader.findOne(condition)
+        .exec(function(err, findData){
+          if(err) return reject(err);
+          if(findData){
+            return resolve({ reader: findData });
+
+          } else {
+            Reader.create(data)
+              .exec(function(err, result){
+                if(err) return reject(err);
+                var syncData = {
+                  reader: result,
+                  syncId: new Date().getTime()
+                };
+                Service.sync("reader", "create", syncData);
+
+                return resolve(syncData);
+              });
+          }
+        });
+    });
   },
 
-  afterUpdate:function (value, cb) {
-    Service.sync('reader', "update", value);
-    cb();
+  findToUpdateOrCreate: function (condition, updateData, createData) {
+    return new Promise(function(resolve, reject){
+      Reader.findOne(condition)
+        .exec(function(err, findData){
+          if(err) return reject(err);
+          if(findData){
+            Reader.update({ id: findData.id }, updateData)
+              .exec(function(err, updateResult){
+                if(err) return reject(err);
+
+                var syncData = {
+                  reader: updateResult[0],
+                  syncId: new Date().getTime()
+                };
+
+                Service.sync("reader", "update", syncData);
+                return resolve(syncData);
+              });
+
+          } else {
+            Reader.create(createData)
+              .exec(function(err, result){
+                if(err) return reject(err);
+                var syncData = {
+                  reader: result,
+                  syncId: new Date().getTime()
+                };
+                Service.sync("reader", "create", syncData);
+
+                return resolve(syncData);
+              });
+          }
+        });
+    });
   }
 };

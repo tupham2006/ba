@@ -65,9 +65,7 @@ module.exports = {
 		
 		Reader.createReader(data)
 			.then(function(reader){
-				return res.json({
-					reader: reader
-				});
+				return res.json(reader);
 			})
 
 			.catch(function(e){
@@ -107,9 +105,7 @@ module.exports = {
 
 		Reader.updateReader(id, data)
 			.then(function(reader){
-				return res.json({
-					reader: reader
-				});
+				return res.json(reader);
 			})
 
 			.catch(function(e){
@@ -127,15 +123,7 @@ module.exports = {
 
 		Reader.deleteReader(id)
 			.then(function(reader){ 
-				var returnData = {};
-
-				if(reader && reader.length) {
-					returnData = reader[0];
-				}
-
-				return res.json({
-					reader: returnData
-				});
+				return res.json(reader);
 			})
 
 			.catch(function(e){

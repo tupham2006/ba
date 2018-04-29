@@ -13,7 +13,7 @@ angular.module('ba')
 	  function($scope, Borrow, $rootScope, Dialog, $uibModal, Book, Reader, $timeout, BorrowBook, Store){
 	  	$rootScope.BAM.active_page = 'borrow';
 			$scope.borrowMobile = {};
-
+			
 	  	$scope.borrowList = [];
 
 	  	$scope.filter = {
@@ -99,7 +99,6 @@ angular.module('ba')
 	    };
 
 	    $scope.getBorrowList = function(id, action){
-	    	
 	    	var params = angular.copy($scope.filter);
 	    	var i, k;
 	    	if(action == "LOAD_MORE") {
@@ -141,8 +140,7 @@ angular.module('ba')
 
 								if(id != 'sync') {
 			    				$scope.showBorrowDetail(id);
-								}
-							
+								}							
 							});
 	    		})
 
@@ -152,7 +150,6 @@ angular.module('ba')
 	    };
 
 	    $scope.getBookList = function(action){
-	    	
 	    	var params = angular.copy($scope.bookFilter);
 					    	
 	    	if(action == "LOAD_MORE") {
@@ -163,10 +160,8 @@ angular.module('ba')
 
 	    	Book.getBookList(params)
 	    		.then(function(resBook){
-
 	    			$scope.bookList = $scope.bookList.concat(resBook.books);
 	    		})
-
 	    		.catch(function(err){
 	    			toastr.error(err);
 	    		});
@@ -176,6 +171,8 @@ angular.module('ba')
 	    $scope.getReaderList = function(){
 	    	Reader.getReaderList({})
 	    		.then(function(res){
+	    		})
+	    		.catch(function(e){
 	    		});
 	    };
 
@@ -446,38 +443,36 @@ angular.module('ba')
 		if (!io.socket.bookEventReady) {
     	io.socket.bookEventReady = true;
 			io.socket.on("book", function(res){
-				Store.bookTable.syncData(res.action, res.data);
+				Store.bookTable.syncData(res.action, res.data.book, res.data.syncId);
 				$scope.getBookList();
-			});
-  	}
-
-  	if (!io.socket.borrowBookEventReady) {
-    	io.socket.borrowBookEventReady = true;
-			io.socket.on("borrow_book", function(res){
-				if(res.action == "delete") {
-					var borrow_id = 0;
-					res.action = "delete_by_borrow";
-					if(res.data && res.data.length) borrow_id = res.data[0].borrow_id;
-					res.data = borrow_id;
-				}
-				
-				Store.borrowBookTable.syncData(res.action, res.data);
-				$scope.getBorrowList('sync');
 			});
   	}
 
   	if (!io.socket.borrowEventReady) {
     	io.socket.borrowEventReady = true;
 			io.socket.on("borrow", function(res){
-				Store.borrowTable.syncData(res.action, res.data);
+				if(res.action == "create") {
+					Store.borrowTable.syncData(res.action, res.data.borrows, res.data.syncId);
+					Store.borrowBookTable.syncData("create", res.data.borrow_books, res.data.syncId);
+
+				} else if(res.action == "update") {
+					Store.borrowTable.syncData(res.action, res.data.borrows, res.data.syncId);
+					Store.borrowBookTable.syncData("delete_by_borrow", res.data.borrows.id, res.data.syncId);
+					Store.borrowBookTable.syncData("create", res.data.borrow_books, res.data.syncId+1);
+
+				} else if(res.action == "delete") {
+					Store.borrowTable.syncData(res.action, res.data.borrows, res.data.syncId);
+					Store.borrowBookTable.syncData("delete_by_borrow", res.data.borrows.id, res.data.syncId);
+				}
+
 				$scope.getBorrowList('sync');
 			});
   	}
 
 		if (!io.socket.readerEventReady) {
-    	io.socket.readerEventReady = true;
 			io.socket.on("reader", function(res){
-				Store.readerTable.syncData(res.action, res.data);
+		  io.socket.readerEventReady = true;
+				Store.readerTable.syncData(res.action, res.data.reader, res.data.syncId);
 			});
 		}		
 
