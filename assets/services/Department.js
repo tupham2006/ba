@@ -68,7 +68,6 @@ function Department(Store, Request, $q){
 		var df = $q.defer();
 		Request.post("/department/save", params)
 			.then(function(res){
-				console.log("res", res);
 
 				if(res && !res.error && res.data){
 					if(params.id && res.data.length > 0) {

@@ -34,8 +34,10 @@ module.exports = {
 				 deleted: CONST.DELETED.NO,
 				},
 				limit: 5000,
-				skip: 0,
-				sort: "borrow_date desc"
+				skip: 0
+			}).sort({
+				borrow_date: "DESC",
+				status: "DESC"
 			})
 			.exec(function (err, result) {
 				if(err) return reject(err);
@@ -274,7 +276,6 @@ module.exports = {
 					// update borrow
 					Borrow.update(condition, updateData)
 						.exec(function(borrowUpdateErr, borrowUpdateResult){
-					console.log("updateData", updateData);
 							if(borrowUpdateErr) return reject(borrowUpdateErr);
 
 							if(!borrowUpdateResult || !borrowUpdateResult.length){

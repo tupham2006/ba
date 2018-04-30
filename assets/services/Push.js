@@ -13,7 +13,6 @@ function Push(Request, $q){
 		var endpoint;
 		navigator.serviceWorker.register('/libs/sw/sw.js')
 		.then(function(registration) {
-			console.log(registration);
 			 return registration.pushManager.getSubscription()
   			.then(function(subscription) {
 					if (subscription) {

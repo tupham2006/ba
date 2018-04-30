@@ -109,7 +109,6 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 		if(data.id){ // update
 			Request.post("/borrow/update", data)
 				.then(function(res){
-					console.log("res", res);
 					
 					if(res && !res.error){
 						Store.borrowTable.syncData("update", res.borrows, res.syncId);
