@@ -25,8 +25,10 @@ module.exports = {
 		}
 
 		// data
+		console.log("req.session.user", req.session.user);
 		data = {
-			user_id : parseInt(req.param("user_id")),
+			user_id : req.session.user ? req.session.user.id : 0,
+			user_name: req.session.user ? req.session.user.name : "",
 			reader_id : parseInt(req.param("reader_id")),
 			reader_mobile: (parseInt(req.param("reader_mobile")) ? req.param("reader_mobile") : "").toString().replace(/^0-9/g, ""),
 			reader_name: req.param("reader_name") ? req.param("reader_name") : "",
@@ -77,7 +79,6 @@ module.exports = {
 
 		// data
 		data = {
-			user_id : parseInt(req.param("user_id")),
 			note: req.param("note"),
 			deposit_id: parseInt(req.param("deposit_id")),
 			book: req.param("book"),

@@ -7,6 +7,7 @@ module.exports = {
 	attributes: {
 		id: { type: "integer", primaryKey: true, autoIncrement: true },
 		user_id: { type: "integer", required: true, defaultsTo: 0 },
+		user_name: { type: "string", required: true, defaultsTo: "" },
 		reader_id: { type: "integer", required: true, defaultsTo: 0 },
 		reader_name: { type: "string", required: true, defaultsTo: null },
 		reader_mobile: { type: "string", maxLength: 11, required: true, defaultsTo: '0' },

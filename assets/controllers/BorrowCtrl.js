@@ -240,7 +240,7 @@ angular.module('ba')
 		    		reader_mobile: "",
 		    		facutly_id: 1,
 		    		reader_gender: 0,
-		    		course: moment().get('years') - 1956
+		    		course: ""
 		    	};
     		}
 
@@ -312,7 +312,6 @@ angular.module('ba')
 	    		reader_mobile: $scope.borrowInfo.reader_mobile.replace(/ /g, ""),
 	    		book: $scope.borrowInfo.book,
 	    		status: $scope.borrowInfo.status,
-	    		user_id: $scope.user.id,
 	    		facutly_id: $scope.borrowInfo.facutly_id,
 	    		course: $scope.borrowInfo.course,
 	    		reader_gender: $scope.borrowInfo.reader_gender
