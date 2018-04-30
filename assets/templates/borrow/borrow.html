@@ -176,6 +176,7 @@
 								<b ng-show="!deleteLoading" class="fa fa-trash-o"></b>
 							</button>
 							<button type="button" title="Làm mới" ng-click="showBorrowDetail(borrowInfo.id)" class="btn btn-icon btn-label"><b class="fa fa-refresh"></b></button>
+							<button ng-show="borrowInfo.id" type="button" title="Lịch sử chỉnh sửa" ng-click="openBorrowHistory(borrowInfo.id)" class="btn btn-icon btn-label btn-blue"><b class="fa fa-history"></b></button>
 						</div>
 						<div class="col-md-3 pull-right">
 							<button class="btn btn-green pull-right" type="submit" ng-disabled="borrowForm.$invalid"><i class="fa fa-save"></i> Lưu</button>

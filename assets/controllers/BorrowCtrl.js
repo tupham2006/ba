@@ -423,19 +423,37 @@ angular.module('ba')
 	    };
 
 	    $scope.openReaderInfo = function (id) {
-			$scope.readerInfoInstance = $uibModal.open({
-				size: "lg",
-				scope: $scope,
-				templateUrl: "/templates/modal/reader-info.html",
-				controller: "ReaderInfoCtrl",
-				resolve: {
-					reader_id: function(){
-						return id;
+				$scope.readerInfoInstance = $uibModal.open({
+					size: "lg",
+					scope: $scope,
+					templateUrl: "/templates/modal/reader-info.html",
+					controller: "ReaderInfoCtrl",
+					resolve: {
+						reader_id: function(){
+							return id;
+						}
 					}
-				}
-			});
+				});
 
-			$scope.readerInfoInstance.result.then(function(){ }, function () {});
+				$scope.readerInfoInstance.result.then(function(){ }, function () {});
+			};
+
+		$scope.openBorrowHistory = function(borrow_id) {
+			$scope.borrowHistoryInstance = $uibModal.open({
+					size: "lg",
+					scope: $scope,
+					templateUrl: "/templates/borrow/borrow-history.html",
+				});
+
+			Borrow.getBorrowHistoryByBorrowId({ borrow_id: borrow_id })
+				.then(function(res){
+					$scope.borrowHistoryList = res;
+				})
+				.catch(function(err){
+					toastr.error(err);
+				});
+
+				$scope.borrowHistoryInstance.result.then(function(){ }, function () {});
 		};
 
 		// listen event

@@ -6,7 +6,8 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 	var service = {
 		getBorrowList: getBorrowList,
 		saveBorrow: saveBorrow,
-		deleteBorrow: deleteBorrow
+		deleteBorrow: deleteBorrow,
+		getBorrowHistoryByBorrowId: getBorrowHistoryByBorrowId
 	};
 	
 	var borrowList;
@@ -164,6 +165,22 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 
 			})
 
+			.catch(function(e){
+				df.reject(e.message);
+			});
+			return df.promise;
+	}
+
+	function getBorrowHistoryByBorrowId(params) {
+		var df = $q.defer();
+		Request.post("/borrow/getBorrowHistoryByBorrowId", params, "GET")
+			.then(function(res){
+				if(res && res.borrow_historys) {
+					df.resolve(res.borrow_historys);
+				} else {
+					df.reject(res.message);
+				}
+			})
 			.catch(function(e){
 				df.reject(e.message);
 			});

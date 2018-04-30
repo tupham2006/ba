@@ -188,6 +188,11 @@ module.exports.routes = {
     action: "deleteBorrow"
   },
 
+  'get /borrow/getBorrowHistoryByBorrowId': {
+    controller: "BorrowHistoryController",
+    action: "getBorrowHistoryByBorrowId"
+  },
+
   /*=====================================
   =            Borrow Book routes       =
   =====================================*/

@@ -25,7 +25,6 @@ module.exports = {
 		}
 
 		// data
-		console.log("req.session.user", req.session.user);
 		data = {
 			user_id : req.session.user ? req.session.user.id : 0,
 			user_name: req.session.user ? req.session.user.name : "",
@@ -79,6 +78,8 @@ module.exports = {
 
 		// data
 		data = {
+			update_user_id : req.session.user ? req.session.user.id : 0,
+			update_user_name: req.session.user ? req.session.user.name : "",
 			note: req.param("note"),
 			deposit_id: parseInt(req.param("deposit_id")),
 			book: req.param("book"),
@@ -117,9 +118,15 @@ module.exports = {
 		if(!parseInt(req.param("id"))) {
 			return Service.catch(req, res, { message: "Bạn cần nhập ID lượt mượn" }, "updateBorrow");
 		}
+
+		var updateData = {
+			update_user_id : req.session.user ? req.session.user.id : 0,
+			update_user_name: req.session.user ? req.session.user.name : "",
+			deleted: 1
+		};
 		
 		// console.log("data", data);
-		Borrow.deleteBorrow({id: parseInt(req.param("id"))})
+		Borrow.deleteBorrow({id: parseInt(req.param("id"))}, updateData)
 			.then(function(result){
 				return res.json(result);
 			})

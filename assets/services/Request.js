@@ -22,11 +22,11 @@ function request($http, $cookies, $rootScope, FileUploader, $q, blockUI){
       'authorization': 'Bearer ' + token
     },
 
-    post: function(url, data){
+    post: function(url, data, method){
     	blockUI.start();
     	if(!data) data = {};
     	var option = {
-    		method: "POST",
+    		method: method ? method : "POST",
     		url: url,
     		data: data,
     		headers: this.headers

@@ -8,6 +8,8 @@ module.exports = {
 		id: { type: "integer", primaryKey: true, autoIncrement: true },
 		user_id: { type: "integer", required: true, defaultsTo: 0 },
 		user_name: { type: "string", required: true, defaultsTo: "" },
+		update_user_name: { type: "string", defaultsTo: "" },
+		update_user_id: { type: "integer", defaultsTo: 0 },
 		reader_id: { type: "integer", required: true, defaultsTo: 0 },
 		reader_name: { type: "string", required: true, defaultsTo: null },
 		reader_mobile: { type: "string", maxLength: 11, required: true, defaultsTo: '0' },
@@ -97,13 +99,21 @@ module.exports = {
 														borrow_books: result,
 														syncId: new Date().getTime()
 													};
-
-													// create borrow book
-													Service.sync("borrow", "create", syncData);
-
-													// socket broadcast
-													return resolve(syncData);
+													return syncData;
 												});
+										})
+										.then(function(syncData){
+											return BorrowHistory.createBorrowHistory({id: borrow.id }, syncData.borrows, {}, syncData.borrow_books, 'create')
+												.then(function(){
+													return syncData;
+												});
+										})
+										.then(function(syncData){
+											// create borrow book
+											Service.sync("borrow", "create", syncData);
+
+											// socket broadcast
+											return resolve(syncData);
 										})
 										.catch(function(err){
 											return reject(err);
@@ -182,44 +192,67 @@ module.exports = {
 							message: "Lượt mượn không tồn tại"
 						});
 					}
-					// update borrow
-					Borrow.update(condition, data)
-						.exec(function(borrowUpdateErr, borrowUpdateResult){
-							if(borrowUpdateErr) return reject(borrowUpdateErr);
-							if(!borrowUpdateResult || !borrowUpdateResult.length){
+
+					// Find deposit
+					Deposit.findOne({id: data.deposit_id})
+						.exec(function(depositErr, deposit){
+							if(depositErr) return reject(depositErr);
+
+							if(!deposit){
 								return reject({
-									message: "Borrow update return result:: " + borrowUpdateResult
+									message: "Bạn chưa chọn loại đặt cọc"
 								});
 							}
 
-							// delete borrow book
-							BorrowBook.destroy({borrow_id: borrowUpdateResult[0].id})
-								.exec(function(destroyErr, destroyResult){
-									if(destroyErr) return reject(destroyErr);
+							data.deposit_name = deposit.name;
 
-									Borrow.whenBorrowBookDestroy(destroyResult)
-										.then(function(){
-											return;
-										})
-										.then(function(){
-											// create new
-											return Borrow.handleBookBorrow(borrowUpdateResult[0].id, data)
-												.then(function(result){
+							// update borrow
+							Borrow.update(condition, data)
+								.exec(function(borrowUpdateErr, borrowUpdateResult){
+									if(borrowUpdateErr) return reject(borrowUpdateErr);
+									if(!borrowUpdateResult || !borrowUpdateResult.length){
+										return reject({
+											message: "Borrow update return result:: " + borrowUpdateResult
+										});
+									}
 
-													var syncData = {
-														borrow_books: result,
-														borrows: borrowUpdateResult[0],
-														syncId: new Date().getTime()
-													};
+									// delete borrow book
+									BorrowBook.destroy({borrow_id: borrowUpdateResult[0].id})
+										.exec(function(destroyErr, destroyResult){
+											if(destroyErr) return reject(destroyErr);
+											
+											Borrow.whenBorrowBookDestroy(destroyResult)
+												.then(function(){
+													return;
+												})
+												.then(function(){
+													// create new
+													return Borrow.handleBookBorrow(borrowUpdateResult[0].id, data)
+														.then(function(result){
 
+															var syncData = {
+																borrow_books: result,
+																borrows: borrowUpdateResult[0],
+																syncId: new Date().getTime()
+															};
+															return syncData;													
+														});
+												})
+												.then(function(syncData){
+													return BorrowHistory.createBorrowHistory(findResult, data, destroyResult, syncData.borrow_books, 'update')
+														.then(function(){
+															return syncData;
+														});
+												})
+												.then(function(syncData){
 													Service.sync("borrow", "update", syncData);
 
 													// return to controller
 													return resolve(syncData);
+												})
+												.catch(function(e){
+													return reject(e);
 												});
-										})
-										.catch(function(e){
-											return reject(e);
 										});
 								});
 						});
@@ -227,7 +260,7 @@ module.exports = {
 		});
 	},
 
-	deleteBorrow: function(condition){
+	deleteBorrow: function(condition, updateData){
 		return new Promise(function(resolve, reject){
 			Borrow.findOne(condition)
 				.exec(function(err, findResult){
@@ -239,8 +272,9 @@ module.exports = {
 					}
 
 					// update borrow
-					Borrow.update(condition, { deleted: 1 })
+					Borrow.update(condition, updateData)
 						.exec(function(borrowUpdateErr, borrowUpdateResult){
+					console.log("updateData", updateData);
 							if(borrowUpdateErr) return reject(borrowUpdateErr);
 
 							if(!borrowUpdateResult || !borrowUpdateResult.length){
@@ -271,9 +305,19 @@ module.exports = {
 														syncId: new Date().getTime()
 													};
 
+													return syncData;
+												})
+												.then(function(syncData){
+													return BorrowHistory.createBorrowHistory({id: condition.id }, updateData, {}, {}, 'delete')
+														.then(function(){
+															return syncData;
+														});
+												})
+												.then(function(syncData){
 													Service.sync("borrow", "delete", syncData);
-														// return to controller
-														return resolve(syncData);
+
+													// return to controller
+													return resolve(syncData);
 												})
 												.catch(function(err){
 													reject(err);

@@ -1,0 +1,45 @@
+<div class="modal-header modal-primary">
+	<b>Lịch sử chỉnh sửa lượt mượn</b>
+	<button type="button" class="close" ng-click="borrowHistoryInstance.close()">&times;</button>
+</div>
+<div class="modal-body">
+	<div class="row" ng-repeat = "borrowHistory in borrowHistoryList">
+		<div class="label-control col-md-12 text-blue text-bold">
+			<i class="fa fa-info-circle"></i> {{ borrowHistory.createdAt | date:"HH:mm dd/MM/yyyy" }}:
+			{{ borrowHistory.user_name }} đã 
+			<span>
+				<span ng-if="borrowHistory.action == 'create'">tạo</span>
+				<span ng-if="borrowHistory.action == 'update'">chỉnh sửa</span>
+				<span ng-if="borrowHistory.action == 'delete'">xóa</span>
+			</span>
+			lượt mượn
+		</div>
+		<div class="label-control col-md-12">
+			<table class="table table-bordered table-striped">
+				<thead>
+					<th>Ngày mượn</th>
+					<th>Ngày trả</th>
+					<th>Trạng thái</th>
+					<th>Sách mượn</th>
+					<th>Ghi chú</th>
+					<th>Loại đặt cọc</th>
+				</thead>
+				<tbody>
+					<td ng-class="{'text-red': (borrowHistory.change_list_array.indexOf('borrow_date') > -1 && borrowHistory.action != 'create' )}">{{ borrowHistory.borrow_date | date: "dd/MM/yyyy" }}</td>
+					<td ng-class="{'text-red': (borrowHistory.change_list_array.indexOf('pay_date') > -1 && borrowHistory.action != 'create' )}">{{ borrowHistory.pay_date | date: "dd/MM/yyyy" }}</td>
+					<td ng-class="{'text-red': (borrowHistory.change_list_array.indexOf('status') > -1 && borrowHistory.action != 'create' )}">
+						<span ng-if="borrowHistory.status == 1">Mượn</span>
+						<span ng-if="borrowHistory.status == 0">Trả</span>
+					</td>
+					<td ng-class="{'text-red': (borrowHistory.change_list_array.indexOf('borrow_book') > -1 && borrowHistory.action != 'create' )}">
+						<span ng-repeat="borrow_book_array in borrowHistory.borrow_book_array track by $index">
+							{{ borrow_book_array.book_name }}<br>
+						</span>
+					</td>
+					<td ng-class="{'text-red': (borrowHistory.change_list_array.indexOf('note') > -1 && borrowHistory.action != 'create' )}">{{ borrowHistory.note }}</td>
+					<td ng-class="{'text-red': (borrowHistory.change_list_array.indexOf('deposit_name') > -1 && borrowHistory.action != 'create' )}">{{ borrowHistory.deposit_name }}</td>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
