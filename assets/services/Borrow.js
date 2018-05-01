@@ -95,7 +95,7 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 
 		// limit and skip, cut record
 		for(var j = 0; j < filterList.length; j++){
-			filterList[j].is_expired = getExpiryDate(filterList[j].borrow_date, filterList[j].expiry);
+			filterList[j].is_expired = getExpiryDate(filterList[j].borrow_date, filterList[j].expiry, filterList[j].pay_date, filterList[j].status);
 			
 			if(j >= skip && returnList.length < limit){
 				returnList.push(filterList[j]);
@@ -105,11 +105,14 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 		return returnList;
 	} 
 
-	function getExpiryDate(borrow_date, expiry) {
+	function getExpiryDate(borrow_date, expiry, pay_date, status) {
 		var number_expiry = 0;
-		if(moment().diff(moment(borrow_date).add(expiry, 'days'), "days") > 0) {
-			number_expiry = moment().diff(moment(borrow_date).add(expiry, 'days'), "days");
+		var compare_date = moment();
+		if(status == 0 && pay_date) { // Nếu đã trả sẽ tính thời hạn mượn theo ngày trả
+			compare_date = moment(pay_date);
 		}
+
+		number_expiry = Math.max(compare_date.diff(moment(borrow_date).add(expiry, 'days'), "days"), 0);
 		return number_expiry;
 	}
 
