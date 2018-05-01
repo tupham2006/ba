@@ -432,11 +432,7 @@ angular.module('ba')
 			};
 
 			$scope.calcExpiry = function(borrow_date, expiry) {
-				var number_expiry = 0;
-				if(moment().diff(moment(borrow_date).add(expiry, 'days'), "days") > 0) {
-					number_expiry = moment().diff(moment(borrow_date).add(expiry, 'days'), "days");
-				}
-				return (moment(borrow_date).add(expiry, 'days')).format('DD/MM/YYYY') + (number_expiry ? " (Quá hạn " + number_expiry + " ngày)" : "");
+				return (moment(borrow_date).add(expiry, 'days')).format('DD/MM/YYYY');
 			};
 
 		$scope.openBorrowHistory = function(borrow_id) {

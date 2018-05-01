@@ -85,6 +85,8 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 				}
 			} 
 
+
+
 			// push to list
 			if(!data[i].remove){
 				filterList.push(data[i]);
@@ -93,6 +95,7 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 
 		// limit and skip, cut record
 		for(var j = 0; j < filterList.length; j++){
+			filterList[j].is_expired = getExpiryDate(filterList[j].borrow_date, filterList[j].expiry);
 			
 			if(j >= skip && returnList.length < limit){
 				returnList.push(filterList[j]);
@@ -101,6 +104,14 @@ function Borrow($rootScope, Request, $q, BorrowBook, Store){
 
 		return returnList;
 	} 
+
+	function getExpiryDate(borrow_date, expiry) {
+		var number_expiry = 0;
+		if(moment().diff(moment(borrow_date).add(expiry, 'days'), "days") > 0) {
+			number_expiry = moment().diff(moment(borrow_date).add(expiry, 'days'), "days");
+		}
+		return number_expiry;
+	}
 
 	function saveBorrow(data){
 		var df = $q.defer();

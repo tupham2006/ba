@@ -37,6 +37,7 @@
 							<span class="ml-10">
 								<i class="fa fa-mobile"></i> {{ borrow.reader_mobile | tel }}
 							</span>
+							<span class="pull-right label"  ng-class="{'bg-red': book.status, 'bg-gray-69': !book.status }"  ng-if="borrow.is_expired">Quá hạn {{ borrow.is_expired }} ngày</span>
 						</div>
 					</div>
 				</div>
@@ -135,7 +136,9 @@
 					<div class="row mb-10">
 						<span class="label-control col-md-3">Hạn trả</span>
 						<div class="col-md-9 text-red div-form">
-							<i class="fa fa-warning"></i> Đến hết ngày {{ calcExpiry(borrowDate.date, borrowInfo.expiry) }}
+							<i class="fa fa-warning"></i> 
+							Đến hết ngày {{ calcExpiry(borrowDate.date, borrowInfo.expiry) }}
+							<span ng-if="borrowInfo.is_expired"> (Quá hạn {{ borrowInfo.is_expired }} ngày)</span>
 						</div>
 					</div>
 					<div class="row">
