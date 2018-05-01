@@ -29,3 +29,6 @@ CREATE TABLE `borrow_history` (
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER table `borrow`
+ADD COLUMN `expiry` int DEFAULT '7';

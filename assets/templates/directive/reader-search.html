@@ -1,5 +1,6 @@
 <div class="reader-search-parent">
 	<input type="text" ng-model="ngModel" class="form-control" placeholder="{{ option.placeholder }}" ng-change="getReaderList()">
+	<i class="fa fa-search search-icon"></i>
 	<div ng-show="readerList.length" class="reader-search-child">
 		<div class="reader-search" ng-repeat="reader in readerList track by $index" ng-click="selectReader(reader)">
 			<div>

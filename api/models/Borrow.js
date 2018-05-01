@@ -14,6 +14,7 @@ module.exports = {
 		reader_name: { type: "string", required: true, defaultsTo: null },
 		reader_mobile: { type: "string", maxLength: 11, required: true, defaultsTo: '0' },
 		status: { type: "integer", required: true, defaultsTo: 1 }, // 0: lended, 1: borrowing
+		expiry: { type: "integer", defaultsTo: 7 },
 		borrow_date: { type: "datetime", required: true, defaultsTo: null },
 		pay_date: { type: "datetime", defaultsTo: null },
 		note: { type: "string", size:10000, maxLength:10000, defaultsTo: "" },

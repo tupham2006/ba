@@ -51,42 +51,26 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div id="viewBorrow">
-					<div class="row mb-20">
-						<div class="col-xs-12" style="min-height: 34px">
-							<label class="text-green">
-								<span class="fa fa-info-circle"></span> Được tạo bởi: 
-								<span ng-if="borrowInfo.user_name"> {{ borrowInfo.user_name }}</span>
-								<span ng-if="!borrowInfo.user_name"> {{ user.name }}</span>
-							</label>
-							<button type="button" ng-show="borrowInfo.id && !BAM.isMobile" class="btn btn-blue pull-right" ng-click="showBorrowDetail()">Tạo mới</button>
-						</div>
-					</div>
 					<div ng-if="!borrowInfo.id">
 						<div class="row mb-10">
 							<div class="col-md-12">
 								<reader-search ng-model="readerName" option = "{ placeholder: 'Tìm kiếm bạn đọc' }" select-reader="addReaderToBorrow"></reader-search>
 							</div>
 						</div>
-						<div class="row mb-10">
-							<span class="label-control col-md-3 required-field">Số điện thoại</span>
-							<div class="col-md-9">
-								<input type="text" ng-disabled="existReader && borrowInfo.id" ng-change="findReaderByMobile()" ng-model="borrowInfo.reader_mobile" placeholder="Hệ thống sẽ tìm kiếm nếu số điện thoại tồn tại" name="readerMobile" minLength="10" mobile-format class="form-control" required>
-								<span class="validation-error-label" ng-show="borrowForm.readerMobile.$touched && borrowForm.readerMobile.$invalid"> Số điện thoại chưa đúng định dạng</span>
+						<div class="row">
+							<div class="col-md-6">
+								<input type="text" ng-disabled="existReader && borrowInfo.id" ng-change="findReaderByMobile()" ng-model="borrowInfo.reader_mobile" placeholder="Số điện thoại *" name="readerMobile" minLength="10" mobile-format class="form-control" required>
+								<span class="validation-error-label" ng-show="borrowForm.readerMobile.$touched && borrowForm.readerMobile.$invalid"> Vui lòng nhập SĐT</span>
+							</div>
+							<div class="col-md-9 col-md-6 mb-10">
+									<input type="text" placeholder="Tên bạn đọc *" ng-disabled="existReader" class="form-control text-cap-name" name="readerName" ng-model="borrowInfo.reader_name" required>
+									<span class="validation-error-label" ng-show="borrowForm.readerName.$touched && borrowForm.readerName.$invalid"> Vui lòng nhập tên bạn đọc </span>
 							</div>
 						</div>
 						<div class="row">
-							<span class="label-control col-md-3 required-field mb-10">Tên bạn đọc</span>
-							<div class="col-md-9 col-md-6 mb-10">
-									<input type="text" ng-disabled="existReader" class="form-control text-cap-name" name="readerName" ng-model="borrowInfo.reader_name" required>
-									<span class="validation-error-label" ng-show="borrowForm.readerName.$touched && borrowForm.readerName.$invalid"> Bạn chưa nhập tên bạn đọc </span>
-							</div>
-							<span ng-if="BAM.isMobile" class="col-xs-12 mb-10">Giới tính</span>
 							<div class="col-md-3">
 								<gender-select ng-model="borrowInfo.reader_gender" ng-disabled="existReader"></gender-select>
 							</div>
-						</div>
-						<div class="row">
-							<span class="label-control col-md-3 mb-10">Khoa</span>
 							<div class="col-md-5 mb-10">
 								<facutly-select ng-model="borrowInfo.facutly_id" ng-disabled="existReader" edit-mode="true"></facutly-select>
 							</div>
@@ -97,6 +81,16 @@
 						</div>
 					</div>
 					<div ng-if="borrowInfo.id">
+						<div class="row mb-20">
+							<div class="col-xs-12" style="min-height: 34px">
+								<label class="text-green">
+									<span class="fa fa-info-circle"></span> Được tạo bởi: 
+									<span ng-if="borrowInfo.user_name"> {{ borrowInfo.user_name }}</span>
+									<span ng-if="!borrowInfo.user_name"> {{ user.name }}</span>
+								</label>
+								<button type="button" ng-show="borrowInfo.id && !BAM.isMobile" class="btn btn-blue pull-right" ng-click="showBorrowDetail()">Tạo mới</button>
+							</div>
+						</div>
 						<div class="text-uppercase text-bold" ng-class="{'text-blue': (borrowInfo.reader_gender == 1), 'text-pink': (borrowInfo.reader_gender == 2)}">{{borrowInfo.reader_name}}</div>
 						<div><i class="fa fa-mobile"></i> {{ borrowInfo.reader_mobile | tel }}</div>
 						<div>
@@ -104,9 +98,9 @@
 							<a class="pull-right" href="javascript:void(0)" ng-click="openReaderInfo(borrowInfo.reader_id)">Lịch sử mượn sách</a>
 						</div>
 					</div>
-					<hr class="mt-20 mb-20">
+					<hr class="mt-10 mb-10">
 					<div class="row mb-10">
-						<span class="label-control col-md-3">Tên sách</span>
+						<span class="label-control col-md-3 required-field">Tên sách</span>
 						<div class="col-md-9">
 							<book-search ng-model="bookName" option = "{ status: 0, placeholder: 'Tìm tên sách' }" select-book="addBookToBorrow"></book-search>
 							<div class="mt-10"></div>
@@ -122,40 +116,37 @@
 							</span>
 						</div>
 					</div>
-					<div class="row mb-10">
-						<span class="label-control col-md-3">Trạng thái</span>
-						<div class="col-md-9">
-							<span class="mr-20">
-								<span class="cursor-pointer text-normal" for="status1">Mượn</span>
-								<input type="radio" class="cursor-pointer" id="status1" ng-click="whenChangeStatus()" ng-model="borrowInfo.status" name="status" ng-value="1">
-							</span> 
-							<span>
-								<span class="cursor-pointer text-normal" for="status0">Trả</span> 
-								<input type="radio" class="cursor-pointer" id="status0" ng-click="whenChangeStatus()" name="status" ng-model="borrowInfo.status" ng-value="0">
-							</span>
-						</div>
-					</div>
-					<div class="row mb-10">
+					<div class="row">
 						<span class="label-control col-md-3">Ngày mượn</span>
-						<div class="col-md-9">
+						<div class="col-md-5 mb-10">
+							<div class="input-group">
+								<label class="input-group-addon"><i class="fa fa-calendar"></i></label>
 								<input type="text" date-range-picker class="form-control date-picker" ng-readonly="true" ng-model="borrowDate.date" options="borrowDateOption">
-						</div>
-					</div>
-					<div ng-show="!borrowInfo.status">
-						<div class="row mb-10">
-							<span class="label-control col-md-3">Ngày trả</span>
-							<div class="col-md-9">
-								<input type="text" date-range-picker class="form-control date-picker" ng-readonly="true" ng-change="changePayDate()" ng-model="payDate.date" options="payDateOption">
 							</div>
 						</div>
-						<div class="row mb-10">
-							<div class="col-xs-12 col-md-8 col-md-push-3 text-red">
-								* Thời gian mượn sách:	{{ borrowInfo.warning_borrow_time | numberDay }}
-							</div>
+						<div class="col-md-4 mb-1"0>
+							<select ng-model="borrowInfo.expiry" ng-disabled="!borrowInfo.id" class="form-control" convert-to-number>
+								<option value="7">Mượn lần đầu</option>
+								<option value="14">Gia hạn lần 1</option>
+								<option value="21">Gia hạn lần 2</option>
+							</select>
 						</div>
 					</div>
-					<div>
-						
+					<div class="row mb-10">
+						<span class="label-control col-md-3">Hạn trả</span>
+						<div class="col-md-9 text-red div-form">
+							<i class="fa fa-warning"></i> Đến hết ngày {{ calcExpiry(borrowDate.date, borrowInfo.expiry) }}
+						</div>
+					</div>
+					<div class="row">
+						<span class="label-control col-md-3">Trạng thái</span>
+						<div class="col-md-5 mb-10">
+							<button type="button" ng-class="{'bg-blue': borrowInfo.status}" ng-click="whenChangeStatus(1)" class="form-control width-50 pull-left">Mượn</button>
+							<button type="button" class="form-control width-50" ng-click="whenChangeStatus(0)" ng-class="{'bg-blue': !borrowInfo.status}">Trả</button>
+						</div>
+						<div class="col-md-4 mb-10" ng-show="!borrowInfo.status">
+							<input type="text" date-range-picker class="form-control date-picker" ng-readonly="true" ng-change="changePayDate()" ng-model="payDate.date" options="payDateOption">
+						</div>
 					</div>
 					<div class="row mb-10">
 						<span class="label-control col-md-3">Đặt cọc</span>

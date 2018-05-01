@@ -197,7 +197,6 @@ angular.module('ba')
 	    	drops: "up",
 	    	eventHandlers: {
 		      'apply.daterangepicker': function(ev, picker) { // when user apply new date range
-	    			$scope.borrowInfo.warning_borrow_time = Math.max(0, moment($scope.payDate.date).diff(moment($scope.borrowDate.date), "milliseconds"));
 		      }
 		  	}
 	    };
@@ -207,7 +206,6 @@ angular.module('ba')
 	    	drops: "up",
 	    	eventHandlers: {
 		      'apply.daterangepicker': function(ev, picker) { // when user apply new date range							  	
-	    			$scope.borrowInfo.warning_borrow_time = Math.max(0, moment($scope.payDate.date).diff(moment($scope.borrowDate.date), "milliseconds"));
 		      }
 		  	}
 	    };
@@ -240,7 +238,8 @@ angular.module('ba')
 		    		reader_mobile: "",
 		    		facutly_id: 1,
 		    		reader_gender: 0,
-		    		course: ""
+		    		course: "",
+		    		expiry: 7
 		    	};
     		}
 
@@ -250,7 +249,6 @@ angular.module('ba')
 	    	if($scope.borrowInfo.pay_date){
 	    		$scope.payDate.date = moment(angular.copy($scope.borrowInfo.pay_date));
 	    		$scope.payDateOption = moment(angular.copy($scope.borrowInfo.pay_date));
-	    		$scope.calBorrowTime();
 	    	}
 	    	
 	    };
@@ -314,7 +312,8 @@ angular.module('ba')
 	    		status: $scope.borrowInfo.status,
 	    		facutly_id: $scope.borrowInfo.facutly_id,
 	    		course: $scope.borrowInfo.course,
-	    		reader_gender: $scope.borrowInfo.reader_gender
+	    		reader_gender: $scope.borrowInfo.reader_gender,
+	    		expiry: $scope.borrowInfo.expiry
 	    	};
 
 	    	if(type == "BORROW_NOW") params.status = 0;
@@ -401,25 +400,19 @@ angular.module('ba')
     			});
 	    };
 
-	    $scope.whenChangeStatus = function(){
-	    	
+	    $scope.whenChangeStatus = function(status){
+	    	$scope.borrowInfo.status = status;
 	    	if(!$scope.borrowInfo.status){
 
 	    		if(!$scope.borrowInfo.pay_date){
 	    			$scope.payDate.date = $scope.borrowInfo.pay_date = moment().startOf('days');
 	    		}
-	    		
-	    		$scope.calBorrowTime();
 
 	    	} else {
 	    		if($scope.borrowInfo.pay_date){
 	    			delete $scope.borrowInfo.pay_date;
 	    		}
 	    	}
-	    };
-
-	    $scope.calBorrowTime = function(){
-		    $scope.borrowInfo.warning_borrow_time = Math.max(0, moment($scope.payDate.date).diff(moment($scope.borrowDate.date), "milliseconds"));
 	    };
 
 	    $scope.openReaderInfo = function (id) {
@@ -436,6 +429,14 @@ angular.module('ba')
 				});
 
 				$scope.readerInfoInstance.result.then(function(){ }, function () {});
+			};
+
+			$scope.calcExpiry = function(borrow_date, expiry) {
+				var number_expiry = 0;
+				if(moment().diff(moment(borrow_date).add(expiry, 'days'), "days") > 0) {
+					number_expiry = moment().diff(moment(borrow_date).add(expiry, 'days'), "days");
+				}
+				return (moment(borrow_date).add(expiry, 'days')).format('DD/MM/YYYY') + (number_expiry ? " (Quá hạn " + number_expiry + " ngày)" : "");
 			};
 
 		$scope.openBorrowHistory = function(borrow_id) {

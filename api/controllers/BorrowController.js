@@ -38,9 +38,13 @@ module.exports = {
 			borrow_date: new Date(req.param("borrow_date")).toISOString(),
 			status: parseInt(req.param("status")) ? parseInt(req.param("status")) : 0,
 			facutly_id: req.param("facutly_id") ? req.param("facutly_id") : 1,
-			course: parseInt(req.param("course")) ? parseInt(req.param("course")) : moment().get('years') - 1956
+			expiry: 7
 		};
 		
+		if(parseInt(req.param("course"))) {
+			data.course = parseInt(req.param("course"));
+		}
+
 		if(!data.book || !Array.isArray(data.book) || !data.book.length){
 			return Service.catch(req, res, { message: "Bạn phải chọn sách mượn" }, "createBorrow");
 		}
@@ -86,6 +90,8 @@ module.exports = {
 			borrow_date: new Date(req.param("borrow_date")).toISOString(),
 			status: parseInt(req.param("status")) ? parseInt(req.param("status")) : 0,
 		};
+
+		if(parseInt(req.param("expiry"))) data.expiry = parseInt(req.param("expiry"));
 		
 		if(!data.book || !Array.isArray(data.book) || !data.book.length){
 			return Service.catch(req, res, { message: "Bạn phải chọn sách mượn" }, "updateBorrow");

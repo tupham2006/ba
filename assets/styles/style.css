@@ -322,8 +322,8 @@ button {
 
 #borrowLeft .borrow-info .reader-name{
 	text-transform: capitalize;
-	color: #d000ff;
-	font-size: 16px;
+	color: #27b527;
+	font-size: 18px;
 	position: relative;
 }
 
@@ -585,8 +585,9 @@ button {
 }
 
 .borrow-hightlight {
-	background: #FAC100 !important;
-	color: #000000 !important;
+	/*background: #FAC100 !important;*/
+	/*color: #000000 !important;*/
+	border-left: 7px solid #FAC100;
 }
 
 .validation-error-label,
@@ -671,6 +672,17 @@ button {
 	vertical-align: middle;
 	border-bottom: 1px solid #ccc;
 	position: relative;
+}
+
+.reader-search-parent {
+	position: relative;
+}
+
+.reader-search-parent .search-icon, .book-search-parent .search-icon {
+	position: absolute;
+	right: 10px;
+  top: 7px;
+  color: #CCC;
 }
 
 .reader-search-child {
