@@ -323,7 +323,7 @@ button {
 #borrowLeft .borrow-info .reader-name{
 	text-transform: capitalize;
 	color: #27b527;
-	font-size: 18px;
+	font-size: 16px;
 	position: relative;
 }
 

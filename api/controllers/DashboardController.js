@@ -23,8 +23,7 @@ module.exports = {
 				borrow_date: {
 					">=": new Date(startDate),
 					"<=": new Date(endDate)
-				},
-				limit: 3
+				}
 			})
 			.then(function(borrow_book_count){
 				returnData.borrow.borrow_book_count = borrow_book_count;
