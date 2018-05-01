@@ -37,7 +37,7 @@
 							<span class="ml-10">
 								<i class="fa fa-mobile"></i> {{ borrow.reader_mobile | tel }}
 							</span>
-							<span class="pull-right label"  ng-class="{'bg-red': book.status, 'bg-gray-69': !book.status }"  ng-if="borrow.is_expired">Quá hạn {{ borrow.is_expired }} ngày</span>
+							<span class="pull-right label" ng-class="{'bg-red': borrow.status, 'bg-gray-69': !borrow.status }"  ng-if="borrow.is_expired">Quá hạn {{ borrow.is_expired }} ngày</span>
 						</div>
 					</div>
 				</div>
