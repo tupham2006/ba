@@ -349,4 +349,9 @@ module.exports.routes = {
     controller: "NotificationController",
     action: "getNotificationList"
   },
+  
+  '/google8d882e14b98083a2.html': {
+    view: 'google8d882e14b98083a2'
+  },
+  
 };
